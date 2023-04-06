@@ -1,0 +1,6 @@
+.swagger-codegen-ignore
+.swagger-codegen
+node_modules
+dist
+git_push.sh
+api.ts
