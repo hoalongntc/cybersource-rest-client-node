@@ -1,6 +1,6 @@
 {
   "name": "cybersource-rest-client-typescript",
-  "version": "0.0.45-rc.1",
+  "version": "0.0.45",
   "description": "NodeJS client for cybersource-rest-client-typescript",
   "author": "developer@cybersource.com",
   "license": "CyberSource",
