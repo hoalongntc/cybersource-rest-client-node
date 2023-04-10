@@ -1,3 +1,4 @@
+.npmrc
 .swagger-codegen-ignore
 .swagger-codegen
 node_modules

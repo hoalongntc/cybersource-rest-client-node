@@ -173,6 +173,28 @@ export class CreateAccessTokenRequest {
   }
 }
 
+export class Accountupdaterv1batchesIncluded {
+  constructor() {}
+
+  'tokens'?: Array<Accountupdaterv1batchesIncludedTokens>;
+
+  static constructFromObject(data: Partial<Accountupdaterv1batchesIncluded>, obj?: Accountupdaterv1batchesIncluded): Accountupdaterv1batchesIncluded {
+    return new Accountupdaterv1batchesIncluded();
+  }
+}
+
+export class Accountupdaterv1batchesIncludedTokens {
+  constructor() {}
+
+  'id': string;
+  'expirationMonth'?: string;
+  'expirationYear'?: string;
+
+  static constructFromObject(data: Partial<Accountupdaterv1batchesIncludedTokens>, obj?: Accountupdaterv1batchesIncludedTokens): Accountupdaterv1batchesIncludedTokens {
+    return new Accountupdaterv1batchesIncludedTokens();
+  }
+}
+
 export class AddNegativeListRequest {
   constructor() {}
 
@@ -206,17 +228,18 @@ export class Body {
   constructor() {}
 
   /**
-   * Identifies the service requesting parsing
+   * Valid Values:   * oneOff   * amexRegistration
    */
-  'requestor': string;
+  'type'?: string;
+  'included': Accountupdaterv1batchesIncluded;
   /**
-   * Number of tags to parse for each EMV tag string provided.
+   * Reference used by merchant to identify batch.
    */
-  'parsedTagLimit'?: number;
+  'merchantReference'?: string;
   /**
-   * An array of objects, each containing a requestId and the corresponding emvRequestCombinedTags
+   * Email used to notify the batch status.
    */
-  'emvDetailsList': Array<Tssv2transactionsemvTagDetailsEmvDetailsList>;
+  'notificationEmail': string;
 
   static constructFromObject(data: Partial<Body>, obj?: Body): Body {
     return new Body();
@@ -421,6 +444,18 @@ export class CreatePaymentRequest {
   }
 }
 
+export class CreatePlanRequest {
+  constructor() {}
+
+  'clientReferenceInformation'?: Rbsv1plansClientReferenceInformation;
+  'planInformation'?: Rbsv1plansPlanInformation;
+  'orderInformation'?: Rbsv1plansOrderInformation;
+
+  static constructFromObject(data: Partial<CreatePlanRequest>, obj?: CreatePlanRequest): CreatePlanRequest {
+    return new CreatePlanRequest();
+  }
+}
+
 export class CreateReportSubscriptionRequest {
   constructor() {}
 
@@ -529,6 +564,21 @@ export class CreateSharedSecretKeysVerifiRequest {
   }
 }
 
+export class CreateSubscriptionRequest {
+  constructor() {}
+
+  'clientReferenceInformation'?: Rbsv1subscriptionsClientReferenceInformation;
+  'processingInformation'?: Rbsv1subscriptionsProcessingInformation;
+  'planInformation'?: Rbsv1subscriptionsPlanInformation;
+  'subscriptionInformation'?: Rbsv1subscriptionsSubscriptionInformation;
+  'paymentInformation'?: Rbsv1subscriptionsPaymentInformation;
+  'orderInformation'?: InlineResponse200OrderInformation;
+
+  static constructFromObject(data: Partial<CreateSubscriptionRequest>, obj?: CreateSubscriptionRequest): CreateSubscriptionRequest {
+    return new CreateSubscriptionRequest();
+  }
+}
+
 export class DeleteBulkP12KeysRequest {
   constructor() {}
 
@@ -551,140 +601,6 @@ export class DeleteBulkSymmetricKeysRequest {
   }
 }
 
-export class FlexV1KeysPost200Response {
-  constructor() {}
-
-  /**
-   * Unique identifier for the generated token. Used in the subsequent Tokenize Card request from your customer’s device or browser.
-   */
-  'keyId'?: string;
-  'der'?: FlexV1KeysPost200ResponseDer;
-  'jwk'?: FlexV1KeysPost200ResponseJwk;
-
-  static constructFromObject(data: Partial<FlexV1KeysPost200Response>, obj?: FlexV1KeysPost200Response): FlexV1KeysPost200Response {
-    return new FlexV1KeysPost200Response();
-  }
-}
-
-/**
- * The public key in DER format. Used to validate the response from the Tokenize Card request. Additionally this format is useful for client side encryption in Android and iOS implementations.
- */
-export class FlexV1KeysPost200ResponseDer {
-  constructor() {}
-
-  /**
-   * Specifies the format of the public key; currently X.509.
-   */
-  'format'?: string;
-  /**
-   * Algorithm used to encrypt the public key.
-   */
-  'algorithm'?: string;
-  /**
-   * Base64 encoded public key value.
-   */
-  'publicKey'?: string;
-
-  static constructFromObject(data: Partial<FlexV1KeysPost200ResponseDer>, obj?: FlexV1KeysPost200ResponseDer): FlexV1KeysPost200ResponseDer {
-    return new FlexV1KeysPost200ResponseDer();
-  }
-}
-
-/**
- * The public key in JSON Web Key (JWK) format. This format is useful for client side encryption in JavaScript based implementations.
- */
-export class FlexV1KeysPost200ResponseJwk {
-  constructor() {}
-
-  /**
-   * Algorithm used to encrypt the public key.
-   */
-  'kty'?: string;
-  /**
-   * Defines whether to use the key for encryption (enc) or verifying a signature (sig). Always returned as enc.
-   */
-  'use'?: string;
-  /**
-   * The key ID in JWK format.
-   */
-  'kid'?: string;
-  /**
-   * JWK RSA Modulus
-   */
-  'n'?: string;
-  /**
-   * JWK RSA Exponent
-   */
-  'e'?: string;
-
-  static constructFromObject(data: Partial<FlexV1KeysPost200ResponseJwk>, obj?: FlexV1KeysPost200ResponseJwk): FlexV1KeysPost200ResponseJwk {
-    return new FlexV1KeysPost200ResponseJwk();
-  }
-}
-
-export class FlexV1TokensPost200Response {
-  constructor() {}
-
-  /**
-   * The Key ID.
-   */
-  'keyId'?: string;
-  /**
-   * The generated token. The token replaces card data and is used as the Subscription ID in the CyberSource Simple Order API or SCMP API.
-   */
-  'token'?: string;
-  /**
-   * The masked card number displaying the first 6 digits and the last 4 digits.
-   */
-  'maskedPan'?: string;
-  /**
-   * The card type.
-   */
-  'cardType'?: string;
-  /**
-   * The UTC date and time in milliseconds at which the signature was generated.
-   */
-  'timestamp'?: number;
-  /**
-   * Indicates which fields from the response make up the data that is used when verifying the response signature. See the [sample code] (https://github.com/CyberSource/cybersource-flex-samples/blob/master/java/spring-boot/src/main/java/com/cybersource/flex/application/CheckoutController.java) on how to verify the signature.
-   */
-  'signedFields'?: string;
-  /**
-   * Flex-generated digital signature. To ensure the values have not been tampered with while passing through the client, verify this server-side using the public key generated from the /keys resource.
-   */
-  'signature'?: string;
-  'discoverableServices'?: { [key: string]: any };
-
-  static constructFromObject(data: Partial<FlexV1TokensPost200Response>, obj?: FlexV1TokensPost200Response): FlexV1TokensPost200Response {
-    return new FlexV1TokensPost200Response();
-  }
-}
-
-export class Flexv1tokensCardInfo {
-  constructor() {}
-
-  /**
-   * Encrypted or plain text card number. If the encryption type of “None” was used in the Generate Key request, this value can be set to the plaintext card number/Personal Account Number (PAN). If the encryption type of RsaOaep256 was used in the Generate Key request, this value needs to be the RSA OAEP 256 encrypted card number. The card number should be encrypted on the cardholders’ device. The [WebCrypto API] (https://github.com/CyberSource/cybersource-flex-samples/blob/master/java/spring-boot/src/main/resources/public/flex.js) can be used with the JWK obtained in the Generate Key request.
-   */
-  'cardNumber': string;
-  /**
-   * Two digit expiration month
-   */
-  'cardExpirationMonth'?: string;
-  /**
-   * Four digit expiration year
-   */
-  'cardExpirationYear'?: string;
-  /**
-   * Card Type. This field is required. Refer to the CyberSource Credit Card Services documentation for supported card types.
-   */
-  'cardType': string;
-
-  static constructFromObject(data: Partial<Flexv1tokensCardInfo>, obj?: Flexv1tokensCardInfo): Flexv1tokensCardInfo {
-    return new Flexv1tokensCardInfo();
-  }
-}
-
 export class FraudMarkingActionRequest {
   constructor() {}
 
@@ -696,20 +612,22 @@ export class FraudMarkingActionRequest {
   }
 }
 
-export class GeneratePublicKeyRequest {
+/**
+ * This is a server-to-server API request to generate the capture context that can be used to initiate instance of microform on a acceptance page.   The capture context is a digitally signed JWT that provides authentication, one-time keys, and the target origin to the Microform Integration application.
+ */
+export class GenerateCaptureContextRequest {
   constructor() {}
 
   /**
-   * How the card number should be encrypted in the subsequent Tokenize Card request. Possible values are RsaOaep256 or None (if using this value the card number must be in plain text when included in the Tokenize Card request). The Tokenize Card request uses a secure connection (TLS 1.2+) regardless of what encryption type is specified.
+   * The merchant origin domain (e.g. https://example.com) used to initiate microform Integration. Required to comply with CORS and CSP standards.
    */
-  'encryptionType': string;
-  /**
-   * The merchant origin (e.g. https://example.com) used to integrate with Flex API. Required to comply with CORS and CSP standards.
-   */
-  'targetOrigin'?: string;
+  'targetOrigins'?: Array<string>;
+  'allowedCardNetworks'?: Array<string>;
+  'clientVersion'?: string;
+  'checkoutApiInitialization'?: Microformv2sessionsCheckoutApiInitialization;
 
-  static constructFromObject(data: Partial<GeneratePublicKeyRequest>, obj?: GeneratePublicKeyRequest): GeneratePublicKeyRequest {
-    return new GeneratePublicKeyRequest();
+  static constructFromObject(data: Partial<GenerateCaptureContextRequest>, obj?: GenerateCaptureContextRequest): GenerateCaptureContextRequest {
+    return new GenerateCaptureContextRequest();
   }
 }
 
@@ -718,7 +636,7 @@ export class GenerateUnifiedCheckoutCaptureContextRequest {
 
   'targetOrigins'?: Array<string>;
   /**
-   * verson number of Unified Checkout being used
+   * version number of Unified Checkout being used
    */
   'clientVersion'?: string;
   'allowedCardNetworks'?: Array<string>;
@@ -754,10 +672,66 @@ export class IncrementAuthRequest {
   }
 }
 
+export class InlineResponse200 {
+  constructor() {}
+
+  'links'?: InlineResponse200Links;
+  /**
+   * Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by Cybersource for all services.
+   */
+  'submitTimeUtc'?: string;
+  /**
+   * total number of plans created
+   */
+  'totalCount'?: number;
+  'plans'?: Array<InlineResponse200Plans>;
+
+  static constructFromObject(data: Partial<InlineResponse200>, obj?: InlineResponse200): InlineResponse200 {
+    return new InlineResponse200();
+  }
+}
+
+export class InlineResponse2001 {
+  constructor() {}
+
+  'links'?: PtsV2IncrementalAuthorizationPatch201ResponseLinks;
+  /**
+   * An unique identification number generated by Cybersource to identify the submitted request. Returned by all services. It is also appended to the endpoint of the resource. On incremental authorizations, this value with be the same as the identification number returned in the original authorization response.
+   */
+  'id'?: string;
+  /**
+   * Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by Cybersource for all services.
+   */
+  'submitTimeUtc'?: string;
+  'planInformation'?: InlineResponse200PlanInformation;
+  'orderInformation'?: InlineResponse200OrderInformation;
+
+  static constructFromObject(data: Partial<InlineResponse2001>, obj?: InlineResponse2001): InlineResponse2001 {
+    return new InlineResponse2001();
+  }
+}
+
+export class InlineResponse20010 {
+  constructor() {}
+
+  /**
+   * Subscription code.
+   */
+  'code'?: string;
+  /**
+   * Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by Cybersource for all services.
+   */
+  'submitTimeUtc'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse20010>, obj?: InlineResponse20010): InlineResponse20010 {
+    return new InlineResponse20010();
+  }
+}
+
 /**
  * Successful searchKeysResponse
  */
-export class InlineResponse200 {
+export class InlineResponse20011 {
   constructor() {}
 
   /**
@@ -780,17 +754,17 @@ export class InlineResponse200 {
    * Specifies a comma separated list of field names based on which the result is sorted.
    */
   'sort'?: string;
-  'keys'?: Array<InlineResponse200Keys>;
+  'keys'?: Array<InlineResponse20011Keys>;
 
-  static constructFromObject(data: Partial<InlineResponse200>, obj?: InlineResponse200): InlineResponse200 {
-    return new InlineResponse200();
+  static constructFromObject(data: Partial<InlineResponse20011>, obj?: InlineResponse20011): InlineResponse20011 {
+    return new InlineResponse20011();
   }
 }
 
 /**
  * KeyResponseEntry
  */
-export class InlineResponse200Keys {
+export class InlineResponse20011Keys {
   constructor() {}
 
   /**
@@ -846,8 +820,984 @@ export class InlineResponse200Keys {
    */
   'issuerName'?: string;
 
-  static constructFromObject(data: Partial<InlineResponse200Keys>, obj?: InlineResponse200Keys): InlineResponse200Keys {
-    return new InlineResponse200Keys();
+  static constructFromObject(data: Partial<InlineResponse20011Keys>, obj?: InlineResponse20011Keys): InlineResponse20011Keys {
+    return new InlineResponse20011Keys();
+  }
+}
+
+export class InlineResponse20012 {
+  constructor() {}
+
+  'links'?: Array<InlineResponse20012Links>;
+  'object'?: string;
+  'offset'?: number;
+  'limit'?: number;
+  'count'?: number;
+  'total'?: number;
+  'embedded'?: InlineResponse20012Embedded;
+
+  static constructFromObject(data: Partial<InlineResponse20012>, obj?: InlineResponse20012): InlineResponse20012 {
+    return new InlineResponse20012();
+  }
+}
+
+export class InlineResponse20012Embedded {
+  constructor() {}
+
+  'batches'?: Array<InlineResponse20012EmbeddedBatches>;
+
+  static constructFromObject(data: Partial<InlineResponse20012Embedded>, obj?: InlineResponse20012Embedded): InlineResponse20012Embedded {
+    return new InlineResponse20012Embedded();
+  }
+}
+
+export class InlineResponse20012EmbeddedBatches {
+  constructor() {}
+
+  'links'?: InlineResponse20012EmbeddedLinks;
+  /**
+   * Unique identification number assigned to the submitted request.
+   */
+  'batchId'?: string;
+  /**
+   * ISO-8601 format: yyyy-MM-ddTHH:mm:ssZ
+   */
+  'batchCreatedDate'?: string;
+  /**
+   * ISO-8601 format: yyyy-MM-ddTHH:mm:ssZ
+   */
+  'batchModifiedDate'?: string;
+  /**
+   * Valid Values:   * SCHEDULER   * TOKEN_API   * CREDIT_CARD_FILE_UPLOAD   * AMEX_REGSITRY   * AMEX_REGISTRY_API   * AMEX_REGISTRY_API_SYNC   * AMEX_MAINTENANCE
+   */
+  'batchSource'?: string;
+  /**
+   * Valid Values:   * SECURE_STORAGE   * TMS   * CYBERSOURCE
+   */
+  'tokenSource'?: string;
+  /**
+   * Reference used by merchant to identify batch.
+   */
+  'merchantReference'?: string;
+  /**
+   * Valid Values:   * VISA   * MASTERCARD   * AMEX
+   */
+  'batchCaEndpoints'?: Array<string>;
+  /**
+   * Valid Values:   * REJECTED   * RECEIVED   * VALIDATED   * DECLINED   * PROCESSING   * COMPLETE
+   */
+  'status'?: string;
+  'totals'?: InlineResponse20012EmbeddedTotals;
+
+  static constructFromObject(data: Partial<InlineResponse20012EmbeddedBatches>, obj?: InlineResponse20012EmbeddedBatches): InlineResponse20012EmbeddedBatches {
+    return new InlineResponse20012EmbeddedBatches();
+  }
+}
+
+export class InlineResponse20012EmbeddedLinks {
+  constructor() {}
+
+  'reports'?: Array<InlineResponse20012EmbeddedLinksReports>;
+
+  static constructFromObject(data: Partial<InlineResponse20012EmbeddedLinks>, obj?: InlineResponse20012EmbeddedLinks): InlineResponse20012EmbeddedLinks {
+    return new InlineResponse20012EmbeddedLinks();
+  }
+}
+
+/**
+ * Retrieve the generated report of a batch when available.
+ */
+export class InlineResponse20012EmbeddedLinksReports {
+  constructor() {}
+
+  'href'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse20012EmbeddedLinksReports>, obj?: InlineResponse20012EmbeddedLinksReports): InlineResponse20012EmbeddedLinksReports {
+    return new InlineResponse20012EmbeddedLinksReports();
+  }
+}
+
+export class InlineResponse20012EmbeddedTotals {
+  constructor() {}
+
+  'acceptedRecords'?: number;
+  'rejectedRecords'?: number;
+  'updatedRecords'?: number;
+  'caResponses'?: number;
+  'caResponsesOmitted'?: number;
+
+  static constructFromObject(data: Partial<InlineResponse20012EmbeddedTotals>, obj?: InlineResponse20012EmbeddedTotals): InlineResponse20012EmbeddedTotals {
+    return new InlineResponse20012EmbeddedTotals();
+  }
+}
+
+export class InlineResponse20012Links {
+  constructor() {}
+
+  /**
+   * Valid Values:   * self   * first   * last   * prev   * next
+   */
+  'rel'?: string;
+  'href'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse20012Links>, obj?: InlineResponse20012Links): InlineResponse20012Links {
+    return new InlineResponse20012Links();
+  }
+}
+
+export class InlineResponse20013 {
+  constructor() {}
+
+  'links'?: InlineResponse20013Links;
+  /**
+   * Unique identification number assigned to the submitted request.
+   */
+  'batchId'?: string;
+  /**
+   * ISO-8601 format: yyyy-MM-ddTHH:mm:ssZ
+   */
+  'batchCreatedDate'?: string;
+  /**
+   * Valid Values:   * SCHEDULER   * TOKEN_API   * CREDIT_CARD_FILE_UPLOAD   * AMEX_REGSITRY   * AMEX_REGISTRY_API   * AMEX_MAINTENANCE
+   */
+  'batchSource'?: string;
+  /**
+   * Reference used by merchant to identify batch.
+   */
+  'merchantReference'?: string;
+  'batchCaEndpoints'?: string;
+  /**
+   * Valid Values:   * REJECTED   * RECEIVED   * VALIDATED   * DECLINED   * PROCESSING   * COMPLETED
+   */
+  'status'?: string;
+  'totals'?: InlineResponse20012EmbeddedTotals;
+  'billing'?: InlineResponse20013Billing;
+  'description'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse20013>, obj?: InlineResponse20013): InlineResponse20013 {
+    return new InlineResponse20013();
+  }
+}
+
+export class InlineResponse20013Billing {
+  constructor() {}
+
+  'nan'?: number;
+  'ned'?: number;
+  'acl'?: number;
+  'cch'?: number;
+
+  static constructFromObject(data: Partial<InlineResponse20013Billing>, obj?: InlineResponse20013Billing): InlineResponse20013Billing {
+    return new InlineResponse20013Billing();
+  }
+}
+
+export class InlineResponse20013Links {
+  constructor() {}
+
+  'self'?: InlineResponse2022LinksStatus;
+  'report'?: Array<InlineResponse20013LinksReport>;
+
+  static constructFromObject(data: Partial<InlineResponse20013Links>, obj?: InlineResponse20013Links): InlineResponse20013Links {
+    return new InlineResponse20013Links();
+  }
+}
+
+export class InlineResponse20013LinksReport {
+  constructor() {}
+
+  'href'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse20013LinksReport>, obj?: InlineResponse20013LinksReport): InlineResponse20013LinksReport {
+    return new InlineResponse20013LinksReport();
+  }
+}
+
+export class InlineResponse20014 {
+  constructor() {}
+
+  'version'?: string;
+  /**
+   * ISO-8601 format: yyyy-MM-ddTHH:mm:ssZ
+   */
+  'reportCreatedDate'?: string;
+  /**
+   * Unique identification number assigned to the submitted request.
+   */
+  'batchId'?: string;
+  /**
+   * Valid Values:   * SCHEDULER   * TOKEN_API   * CREDIT_CARD_FILE_UPLOAD   * AMEX_REGSITRY   * AMEX_REGISTRY_API   * AMEX_MAINTENANCE
+   */
+  'batchSource'?: string;
+  'batchCaEndpoints'?: string;
+  /**
+   * ISO-8601 format: yyyy-MM-ddTHH:mm:ssZ
+   */
+  'batchCreatedDate'?: string;
+  /**
+   * Reference used by merchant to identify batch.
+   */
+  'merchantReference'?: string;
+  'totals'?: InlineResponse20012EmbeddedTotals;
+  'billing'?: InlineResponse20013Billing;
+  'records'?: Array<InlineResponse20014Records>;
+
+  static constructFromObject(data: Partial<InlineResponse20014>, obj?: InlineResponse20014): InlineResponse20014 {
+    return new InlineResponse20014();
+  }
+}
+
+export class InlineResponse20014Records {
+  constructor() {}
+
+  'id'?: string;
+  'sourceRecord'?: InlineResponse20014SourceRecord;
+  'responseRecord'?: InlineResponse20014ResponseRecord;
+
+  static constructFromObject(data: Partial<InlineResponse20014Records>, obj?: InlineResponse20014Records): InlineResponse20014Records {
+    return new InlineResponse20014Records();
+  }
+}
+
+export class InlineResponse20014ResponseRecord {
+  constructor() {}
+
+  /**
+   * Valid Values:   * NAN   * NED   * ACL   * CCH   * CUR   * NUP   * UNA   * ERR   * DEC
+   */
+  'response'?: string;
+  'reason'?: string;
+  'token'?: string;
+  'instrumentIdentifierId'?: string;
+  /**
+   * Valid Values:   * true   * false
+   */
+  'instrumentIdentifierCreated'?: string;
+  'cardNumber'?: string;
+  'cardExpiryMonth'?: string;
+  'cardExpiryYear'?: string;
+  'cardType'?: string;
+  'additionalUpdates'?: Array<InlineResponse20014ResponseRecordAdditionalUpdates>;
+
+  static constructFromObject(data: Partial<InlineResponse20014ResponseRecord>, obj?: InlineResponse20014ResponseRecord): InlineResponse20014ResponseRecord {
+    return new InlineResponse20014ResponseRecord();
+  }
+}
+
+export class InlineResponse20014ResponseRecordAdditionalUpdates {
+  constructor() {}
+
+  'customerId'?: string;
+  'paymentInstrumentId'?: string;
+  'creator'?: string;
+  /**
+   * Valid Values:   * ACTIVE   * CLOSED
+   */
+  'state'?: string;
+  'message'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse20014ResponseRecordAdditionalUpdates>, obj?: InlineResponse20014ResponseRecordAdditionalUpdates): InlineResponse20014ResponseRecordAdditionalUpdates {
+    return new InlineResponse20014ResponseRecordAdditionalUpdates();
+  }
+}
+
+export class InlineResponse20014SourceRecord {
+  constructor() {}
+
+  'token'?: string;
+  'customerId'?: string;
+  'paymentInstrumentId'?: string;
+  'instrumentIdentifierId'?: string;
+  'cardNumber'?: string;
+  'cardExpiryMonth'?: string;
+  'cardExpiryYear'?: string;
+  'cardType'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse20014SourceRecord>, obj?: InlineResponse20014SourceRecord): InlineResponse20014SourceRecord {
+    return new InlineResponse20014SourceRecord();
+  }
+}
+
+export class InlineResponse2002 {
+  constructor() {}
+
+  /**
+   * Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by Cybersource for all services.
+   */
+  'submitTimeUtc'?: string;
+  /**
+   * The status of the submitted transaction.  Possible values:  - COMPLETED
+   */
+  'status'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse2002>, obj?: InlineResponse2002): InlineResponse2002 {
+    return new InlineResponse2002();
+  }
+}
+
+export class InlineResponse2003 {
+  constructor() {}
+
+  'links'?: PtsV2IncrementalAuthorizationPatch201ResponseLinks;
+  /**
+   * An unique identification number generated by Cybersource to identify the submitted request. Returned by all services. It is also appended to the endpoint of the resource. On incremental authorizations, this value with be the same as the identification number returned in the original authorization response.
+   */
+  'id'?: string;
+  /**
+   * Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by Cybersource for all services.
+   */
+  'submitTimeUtc'?: string;
+  /**
+   * The status of the submitted transaction.  Possible values:  - COMPLETED
+   */
+  'status'?: string;
+  'planInformation'?: InlineResponse2003PlanInformation;
+
+  static constructFromObject(data: Partial<InlineResponse2003>, obj?: InlineResponse2003): InlineResponse2003 {
+    return new InlineResponse2003();
+  }
+}
+
+export class InlineResponse2003PlanInformation {
+  constructor() {}
+
+  /**
+   * Plan code
+   */
+  'code'?: string;
+  /**
+   * Plan Status:  - `DRAFT`  - `ACTIVE`  - `INACTIVE`
+   */
+  'status'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse2003PlanInformation>, obj?: InlineResponse2003PlanInformation): InlineResponse2003PlanInformation {
+    return new InlineResponse2003PlanInformation();
+  }
+}
+
+export class InlineResponse2004 {
+  constructor() {}
+
+  'links'?: PtsV2IncrementalAuthorizationPatch201ResponseLinks;
+  /**
+   * An unique identification number generated by Cybersource to identify the submitted request. Returned by all services. It is also appended to the endpoint of the resource. On incremental authorizations, this value with be the same as the identification number returned in the original authorization response.
+   */
+  'id'?: string;
+  /**
+   * Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by Cybersource for all services.
+   */
+  'submitTimeUtc'?: string;
+  /**
+   * The status of the submitted transaction.  Possible values:  - COMPLETED
+   */
+  'status'?: string;
+  'planInformation'?: InlineResponse2003PlanInformation;
+
+  static constructFromObject(data: Partial<InlineResponse2004>, obj?: InlineResponse2004): InlineResponse2004 {
+    return new InlineResponse2004();
+  }
+}
+
+export class InlineResponse2005 {
+  constructor() {}
+
+  /**
+   * Plan code
+   */
+  'code'?: string;
+  /**
+   * Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by Cybersource for all services.
+   */
+  'submitTimeUtc'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse2005>, obj?: InlineResponse2005): InlineResponse2005 {
+    return new InlineResponse2005();
+  }
+}
+
+export class InlineResponse2006 {
+  constructor() {}
+
+  'links'?: InlineResponse200Links;
+  /**
+   * Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by Cybersource for all services.
+   */
+  'submitTimeUtc'?: string;
+  /**
+   * total number of subscriptions created
+   */
+  'totalCount'?: number;
+  'subscriptions'?: Array<InlineResponse2006Subscriptions>;
+
+  static constructFromObject(data: Partial<InlineResponse2006>, obj?: InlineResponse2006): InlineResponse2006 {
+    return new InlineResponse2006();
+  }
+}
+
+export class InlineResponse2006Links {
+  constructor() {}
+
+  'self'?: PtsV2PaymentsPost201ResponseLinksSelf;
+  'cancel'?: PtsV2PaymentsPost201ResponseLinksSelf;
+  'suspend'?: PtsV2PaymentsPost201ResponseLinksSelf;
+  'activate'?: PtsV2PaymentsPost201ResponseLinksSelf;
+
+  static constructFromObject(data: Partial<InlineResponse2006Links>, obj?: InlineResponse2006Links): InlineResponse2006Links {
+    return new InlineResponse2006Links();
+  }
+}
+
+export class InlineResponse2006OrderInformation {
+  constructor() {}
+
+  'amountDetails'?: InlineResponse200OrderInformationAmountDetails;
+  'billTo'?: InlineResponse2006OrderInformationBillTo;
+
+  static constructFromObject(data: Partial<InlineResponse2006OrderInformation>, obj?: InlineResponse2006OrderInformation): InlineResponse2006OrderInformation {
+    return new InlineResponse2006OrderInformation();
+  }
+}
+
+export class InlineResponse2006OrderInformationBillTo {
+  constructor() {}
+
+  /**
+   * Customer’s first name.
+   */
+  'firstName'?: string;
+  /**
+   * Customer’s last name.
+   */
+  'lastName'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse2006OrderInformationBillTo>, obj?: InlineResponse2006OrderInformationBillTo): InlineResponse2006OrderInformationBillTo {
+    return new InlineResponse2006OrderInformationBillTo();
+  }
+}
+
+export class InlineResponse2006PaymentInformation {
+  constructor() {}
+
+  'customer'?: InlineResponse2006PaymentInformationCustomer;
+
+  static constructFromObject(data: Partial<InlineResponse2006PaymentInformation>, obj?: InlineResponse2006PaymentInformation): InlineResponse2006PaymentInformation {
+    return new InlineResponse2006PaymentInformation();
+  }
+}
+
+export class InlineResponse2006PaymentInformationCustomer {
+  constructor() {}
+
+  /**
+   * Unique identifier for the Customer token used in the transaction. When you include this value in your request, many of the fields that are normally required for an authorization or credit become optional.
+   */
+  'id'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse2006PaymentInformationCustomer>, obj?: InlineResponse2006PaymentInformationCustomer): InlineResponse2006PaymentInformationCustomer {
+    return new InlineResponse2006PaymentInformationCustomer();
+  }
+}
+
+export class InlineResponse2006PlanInformation {
+  constructor() {}
+
+  /**
+   * Plan code
+   */
+  'code'?: string;
+  /**
+   * Plan name
+   */
+  'name'?: string;
+  'billingPeriod'?: InlineResponse200PlanInformationBillingPeriod;
+  'billingCycles'?: InlineResponse2006PlanInformationBillingCycles;
+
+  static constructFromObject(data: Partial<InlineResponse2006PlanInformation>, obj?: InlineResponse2006PlanInformation): InlineResponse2006PlanInformation {
+    return new InlineResponse2006PlanInformation();
+  }
+}
+
+export class InlineResponse2006PlanInformationBillingCycles {
+  constructor() {}
+
+  /**
+   * Describe total number of billing cycles
+   */
+  'total'?: string;
+  /**
+   * Current billing cycle
+   */
+  'current'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse2006PlanInformationBillingCycles>, obj?: InlineResponse2006PlanInformationBillingCycles): InlineResponse2006PlanInformationBillingCycles {
+    return new InlineResponse2006PlanInformationBillingCycles();
+  }
+}
+
+export class InlineResponse2006SubscriptionInformation {
+  constructor() {}
+
+  /**
+   * Subscription code.
+   */
+  'code'?: string;
+  /**
+   * Plan Id.
+   */
+  'planId'?: string;
+  /**
+   * Subscription Name
+   */
+  'name'?: string;
+  /**
+   * Start date of the Subscription  Start date will be in UTC. Format: YYYY-MM-DDThh:mm:ssZ The T separates the date and the time. The Z indicates UTC.  **Example** 2022-08-11T22:47:57Z equals August 11, 2022, at 22:47:57 (10:47:57 p.m.).
+   */
+  'startDate'?: string;
+  /**
+   * Subscription Status: - `PENDING` - `ACTIVE` - `FAILED` - `COMPLETED` - `DELINQUENT` - `SUSPENDED` - `CANCELLED`
+   */
+  'status'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse2006SubscriptionInformation>, obj?: InlineResponse2006SubscriptionInformation): InlineResponse2006SubscriptionInformation {
+    return new InlineResponse2006SubscriptionInformation();
+  }
+}
+
+/**
+ * Subscription list
+ */
+export class InlineResponse2006Subscriptions {
+  constructor() {}
+
+  'links'?: InlineResponse2006Links;
+  /**
+   * An unique identification number generated by Cybersource to identify the submitted request. Returned by all services. It is also appended to the endpoint of the resource. On incremental authorizations, this value with be the same as the identification number returned in the original authorization response.
+   */
+  'id'?: string;
+  'planInformation'?: InlineResponse2006PlanInformation;
+  'subscriptionInformation'?: InlineResponse2006SubscriptionInformation;
+  'paymentInformation'?: InlineResponse2006PaymentInformation;
+  'orderInformation'?: InlineResponse2006OrderInformation;
+
+  static constructFromObject(data: Partial<InlineResponse2006Subscriptions>, obj?: InlineResponse2006Subscriptions): InlineResponse2006Subscriptions {
+    return new InlineResponse2006Subscriptions();
+  }
+}
+
+export class InlineResponse2007 {
+  constructor() {}
+
+  'links'?: InlineResponse2006Links;
+  /**
+   * An unique identification number generated by Cybersource to identify the submitted request. Returned by all services. It is also appended to the endpoint of the resource. On incremental authorizations, this value with be the same as the identification number returned in the original authorization response.
+   */
+  'id'?: string;
+  /**
+   * Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by Cybersource for all services.
+   */
+  'submitTimeUtc'?: string;
+  'planInformation'?: InlineResponse2006PlanInformation;
+  'subscriptionInformation'?: InlineResponse2006SubscriptionInformation;
+  'paymentInformation'?: InlineResponse2006PaymentInformation;
+  'orderInformation'?: InlineResponse2006OrderInformation;
+
+  static constructFromObject(data: Partial<InlineResponse2007>, obj?: InlineResponse2007): InlineResponse2007 {
+    return new InlineResponse2007();
+  }
+}
+
+export class InlineResponse2008 {
+  constructor() {}
+
+  'links'?: InlineResponse2006Links;
+  /**
+   * An unique identification number generated by Cybersource to identify the submitted request. Returned by all services. It is also appended to the endpoint of the resource. On incremental authorizations, this value with be the same as the identification number returned in the original authorization response.
+   */
+  'id'?: string;
+  /**
+   * Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by Cybersource for all services.
+   */
+  'submitTimeUtc'?: string;
+  /**
+   * The status of the submitted transaction.  Possible values:  - COMPLETED  - PENDING_REVIEW  - DECLINED  - INVALID_REQUEST
+   */
+  'status'?: string;
+  'subscriptionInformation'?: InlineResponse2011SubscriptionInformation;
+
+  static constructFromObject(data: Partial<InlineResponse2008>, obj?: InlineResponse2008): InlineResponse2008 {
+    return new InlineResponse2008();
+  }
+}
+
+export class InlineResponse2009 {
+  constructor() {}
+
+  'links'?: PtsV2IncrementalAuthorizationPatch201ResponseLinks;
+  /**
+   * An unique identification number generated by Cybersource to identify the submitted request. Returned by all services. It is also appended to the endpoint of the resource. On incremental authorizations, this value with be the same as the identification number returned in the original authorization response.
+   */
+  'id'?: string;
+  /**
+   * Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by Cybersource for all services.
+   */
+  'submitTimeUtc'?: string;
+  /**
+   * The status of the submitted transaction.  Possible values:  - COMPLETED
+   */
+  'status'?: string;
+  'subscriptionInformation'?: InlineResponse2009SubscriptionInformation;
+
+  static constructFromObject(data: Partial<InlineResponse2009>, obj?: InlineResponse2009): InlineResponse2009 {
+    return new InlineResponse2009();
+  }
+}
+
+export class InlineResponse2009SubscriptionInformation {
+  constructor() {}
+
+  /**
+   * Subscription code.
+   */
+  'code'?: string;
+  /**
+   * Subscription Status: - `ACTIVE`
+   */
+  'status'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse2009SubscriptionInformation>, obj?: InlineResponse2009SubscriptionInformation): InlineResponse2009SubscriptionInformation {
+    return new InlineResponse2009SubscriptionInformation();
+  }
+}
+
+export class InlineResponse200Links {
+  constructor() {}
+
+  'self'?: PtsV2PaymentsPost201ResponseLinksSelf;
+  'next'?: PtsV2PaymentsPost201ResponseLinksSelf;
+  'previous'?: PtsV2PaymentsPost201ResponseLinksSelf;
+
+  static constructFromObject(data: Partial<InlineResponse200Links>, obj?: InlineResponse200Links): InlineResponse200Links {
+    return new InlineResponse200Links();
+  }
+}
+
+export class InlineResponse200OrderInformation {
+  constructor() {}
+
+  'amountDetails'?: InlineResponse200OrderInformationAmountDetails;
+
+  static constructFromObject(data: Partial<InlineResponse200OrderInformation>, obj?: InlineResponse200OrderInformation): InlineResponse200OrderInformation {
+    return new InlineResponse200OrderInformation();
+  }
+}
+
+export class InlineResponse200OrderInformationAmountDetails {
+  constructor() {}
+
+  /**
+   * Currency used for the order. Use the three-character [ISO Standard Currency Codes.](http://apps.cybersource.com/library/documentation/sbc/quickref/currencies.pdf)  #### Used by **Authorization** Required field.  **Authorization Reversal** For an authorization reversal (`reversalInformation`) or a capture (`processingOptions.capture` is set to `true`), you must use the same currency that you used in your payment authorization request.  #### PIN Debit Currency for the amount you requested for the PIN debit purchase. This value is returned for partial authorizations. The issuing bank can approve a partial amount if the balance on the debit card is less than the requested transaction amount. For the possible values, see the [ISO Standard Currency Codes](https://developer.cybersource.com/library/documentation/sbc/quickref/currencies.pdf). Returned by PIN debit purchase.  For PIN debit reversal requests, you must use the same currency that was used for the PIN debit purchase or PIN debit credit that you are reversing. For the possible values, see the [ISO Standard Currency Codes](https://developer.cybersource.com/library/documentation/sbc/quickref/currencies.pdf).  Required field for PIN Debit purchase and PIN Debit credit requests. Optional field for PIN Debit reversal requests.  #### GPX This field is optional for reversing an authorization or credit.  #### DCC for First Data Your local currency. For details, see the `currency` field description in [Dynamic Currency Conversion For First Data Using the SCMP API](http://apps.cybersource.com/library/documentation/dev_guides/DCC_FirstData_SCMP/DCC_FirstData_SCMP_API.pdf).  #### Tax Calculation Required for international tax and value added tax only. Optional for U.S. and Canadian taxes. Your local currency.
+   */
+  'currency'?: string;
+  /**
+   * Billing amount for the billing period.
+   */
+  'billingAmount'?: string;
+  /**
+   * Subscription setup fee
+   */
+  'setupFee'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse200OrderInformationAmountDetails>, obj?: InlineResponse200OrderInformationAmountDetails): InlineResponse200OrderInformationAmountDetails {
+    return new InlineResponse200OrderInformationAmountDetails();
+  }
+}
+
+export class InlineResponse200PlanInformation {
+  constructor() {}
+
+  /**
+   * Plan code
+   */
+  'code'?: string;
+  /**
+   * Plan Status:  - `DRAFT`  - `ACTIVE`  - `INACTIVE`
+   */
+  'status'?: string;
+  /**
+   * Plan name
+   */
+  'name'?: string;
+  /**
+   * Plan description
+   */
+  'description'?: string;
+  'billingPeriod'?: InlineResponse200PlanInformationBillingPeriod;
+  'billingCycles'?: InlineResponse200PlanInformationBillingCycles;
+
+  static constructFromObject(data: Partial<InlineResponse200PlanInformation>, obj?: InlineResponse200PlanInformation): InlineResponse200PlanInformation {
+    return new InlineResponse200PlanInformation();
+  }
+}
+
+export class InlineResponse200PlanInformationBillingCycles {
+  constructor() {}
+
+  /**
+   * Describe total number of billing cycles
+   */
+  'total'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse200PlanInformationBillingCycles>, obj?: InlineResponse200PlanInformationBillingCycles): InlineResponse200PlanInformationBillingCycles {
+    return new InlineResponse200PlanInformationBillingCycles();
+  }
+}
+
+/**
+ * Billing Frequency
+ */
+export class InlineResponse200PlanInformationBillingPeriod {
+  constructor() {}
+
+  /**
+   * Example: - If length=1 & unit=month then charge every month - If length=7 & unit=day then charge every 7th day
+   */
+  'length'?: string;
+  /**
+   * Calendar unit values.   possible values:   - `D` - day   - `M` - month   - `W` - week   - `Y` - year
+   */
+  'unit'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse200PlanInformationBillingPeriod>, obj?: InlineResponse200PlanInformationBillingPeriod): InlineResponse200PlanInformationBillingPeriod {
+    return new InlineResponse200PlanInformationBillingPeriod();
+  }
+}
+
+/**
+ * Plan list.
+ */
+export class InlineResponse200Plans {
+  constructor() {}
+
+  'links'?: PtsV2IncrementalAuthorizationPatch201ResponseLinks;
+  /**
+   * An unique identification number generated by Cybersource to identify the submitted request. Returned by all services. It is also appended to the endpoint of the resource. On incremental authorizations, this value with be the same as the identification number returned in the original authorization response.
+   */
+  'id'?: string;
+  'planInformation'?: InlineResponse200PlanInformation;
+  'orderInformation'?: InlineResponse200OrderInformation;
+
+  static constructFromObject(data: Partial<InlineResponse200Plans>, obj?: InlineResponse200Plans): InlineResponse200Plans {
+    return new InlineResponse200Plans();
+  }
+}
+
+export class InlineResponse201 {
+  constructor() {}
+
+  'links'?: PtsV2IncrementalAuthorizationPatch201ResponseLinks;
+  /**
+   * An unique identification number generated by Cybersource to identify the submitted request. Returned by all services. It is also appended to the endpoint of the resource. On incremental authorizations, this value with be the same as the identification number returned in the original authorization response.
+   */
+  'id'?: string;
+  /**
+   * Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by Cybersource for all services.
+   */
+  'submitTimeUtc'?: string;
+  /**
+   * The status of the submitted transaction.  Possible values:  - COMPLETED
+   */
+  'status'?: string;
+  'planInformation'?: InlineResponse201PlanInformation;
+
+  static constructFromObject(data: Partial<InlineResponse201>, obj?: InlineResponse201): InlineResponse201 {
+    return new InlineResponse201();
+  }
+}
+
+export class InlineResponse2011 {
+  constructor() {}
+
+  'links'?: InlineResponse2011Links;
+  /**
+   * An unique identification number generated by Cybersource to identify the submitted request. Returned by all services. It is also appended to the endpoint of the resource. On incremental authorizations, this value with be the same as the identification number returned in the original authorization response.
+   */
+  'id'?: string;
+  /**
+   * Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by Cybersource for all services.
+   */
+  'submitTimeUtc'?: string;
+  /**
+   * The status of the submitted transaction.  Possible values:  - COMPLETED  - PENDING_REVIEW  - DECLINED  - INVALID_REQUEST
+   */
+  'status'?: string;
+  'subscriptionInformation'?: InlineResponse2011SubscriptionInformation;
+
+  static constructFromObject(data: Partial<InlineResponse2011>, obj?: InlineResponse2011): InlineResponse2011 {
+    return new InlineResponse2011();
+  }
+}
+
+export class InlineResponse2011Links {
+  constructor() {}
+
+  'self'?: PtsV2PaymentsPost201ResponseLinksSelf;
+  'update'?: PtsV2PaymentsPost201ResponseLinksSelf;
+  'cancel'?: PtsV2PaymentsPost201ResponseLinksSelf;
+  'suspend'?: PtsV2PaymentsPost201ResponseLinksSelf;
+  'activate'?: PtsV2PaymentsPost201ResponseLinksSelf;
+
+  static constructFromObject(data: Partial<InlineResponse2011Links>, obj?: InlineResponse2011Links): InlineResponse2011Links {
+    return new InlineResponse2011Links();
+  }
+}
+
+export class InlineResponse2011SubscriptionInformation {
+  constructor() {}
+
+  /**
+   * Subscription code.
+   */
+  'code'?: string;
+  /**
+   * Subscription Status:  - `PENDING`  - `ACTIVE`  - `FAILED`
+   */
+  'status'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse2011SubscriptionInformation>, obj?: InlineResponse2011SubscriptionInformation): InlineResponse2011SubscriptionInformation {
+    return new InlineResponse2011SubscriptionInformation();
+  }
+}
+
+export class InlineResponse201PlanInformation {
+  constructor() {}
+
+  /**
+   * Plan code
+   */
+  'code'?: string;
+  /**
+   * Plan Status:  - `DRAFT`  - `ACTIVE`
+   */
+  'status'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse201PlanInformation>, obj?: InlineResponse201PlanInformation): InlineResponse201PlanInformation {
+    return new InlineResponse201PlanInformation();
+  }
+}
+
+export class InlineResponse202 {
+  constructor() {}
+
+  'links'?: PtsV2IncrementalAuthorizationPatch201ResponseLinks;
+  /**
+   * An unique identification number generated by Cybersource to identify the submitted request. Returned by all services. It is also appended to the endpoint of the resource. On incremental authorizations, this value with be the same as the identification number returned in the original authorization response.
+   */
+  'id'?: string;
+  /**
+   * Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by Cybersource for all services.
+   */
+  'submitTimeUtc'?: string;
+  /**
+   * The status of the submitted transaction.  Possible values:  - ACCEPTED
+   */
+  'status'?: string;
+  'subscriptionInformation'?: InlineResponse202SubscriptionInformation;
+
+  static constructFromObject(data: Partial<InlineResponse202>, obj?: InlineResponse202): InlineResponse202 {
+    return new InlineResponse202();
+  }
+}
+
+export class InlineResponse2021 {
+  constructor() {}
+
+  'links'?: PtsV2IncrementalAuthorizationPatch201ResponseLinks;
+  /**
+   * An unique identification number generated by Cybersource to identify the submitted request. Returned by all services. It is also appended to the endpoint of the resource. On incremental authorizations, this value with be the same as the identification number returned in the original authorization response.
+   */
+  'id'?: string;
+  /**
+   * Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by Cybersource for all services.
+   */
+  'submitTimeUtc'?: string;
+  /**
+   * The status of the submitted transaction.  Possible values:  - ACCEPTED
+   */
+  'status'?: string;
+  'subscriptionInformation'?: InlineResponse2021SubscriptionInformation;
+
+  static constructFromObject(data: Partial<InlineResponse2021>, obj?: InlineResponse2021): InlineResponse2021 {
+    return new InlineResponse2021();
+  }
+}
+
+export class InlineResponse2021SubscriptionInformation {
+  constructor() {}
+
+  /**
+   * Subscription code.
+   */
+  'code'?: string;
+  /**
+   * Subscription Status: - `SUSPENDED`
+   */
+  'status'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse2021SubscriptionInformation>, obj?: InlineResponse2021SubscriptionInformation): InlineResponse2021SubscriptionInformation {
+    return new InlineResponse2021SubscriptionInformation();
+  }
+}
+
+export class InlineResponse2022 {
+  constructor() {}
+
+  'links'?: InlineResponse2022Links;
+  /**
+   * Unique identification number assigned to the submitted request.
+   */
+  'batchId'?: string;
+  'batchItemCount'?: number;
+
+  static constructFromObject(data: Partial<InlineResponse2022>, obj?: InlineResponse2022): InlineResponse2022 {
+    return new InlineResponse2022();
+  }
+}
+
+export class InlineResponse2022Links {
+  constructor() {}
+
+  'self'?: InlineResponse401LinksSelf;
+  'status'?: Array<InlineResponse2022LinksStatus>;
+
+  static constructFromObject(data: Partial<InlineResponse2022Links>, obj?: InlineResponse2022Links): InlineResponse2022Links {
+    return new InlineResponse2022Links();
+  }
+}
+
+export class InlineResponse2022LinksStatus {
+  constructor() {}
+
+  'href'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse2022LinksStatus>, obj?: InlineResponse2022LinksStatus): InlineResponse2022LinksStatus {
+    return new InlineResponse2022LinksStatus();
+  }
+}
+
+export class InlineResponse202SubscriptionInformation {
+  constructor() {}
+
+  /**
+   * Subscription code.
+   */
+  'code'?: string;
+  /**
+   * Subscription Status: - `CANCELLED`
+   */
+  'status'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse202SubscriptionInformation>, obj?: InlineResponse202SubscriptionInformation): InlineResponse202SubscriptionInformation {
+    return new InlineResponse202SubscriptionInformation();
   }
 }
 
@@ -861,10 +1811,62 @@ export class InlineResponse400 {
   }
 }
 
+export class InlineResponse4001 {
+  constructor() {}
+
+  /**
+   * Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by Cybersource for all services.
+   */
+  'submitTimeUtc'?: string;
+  /**
+   * The status of the submitted transaction.  Possible values:  - INVALID_REQUEST
+   */
+  'status'?: string;
+  /**
+   * The reason of the status.  Possible values:  - MISSING_FIELD  - INVALID_DATA  - DUPLICATE_REQUEST  - INVALID_MERCHANT_CONFIGURATION
+   */
+  'reason'?: string;
+  /**
+   * The detail message related to the status and reason listed above.
+   */
+  'message'?: string;
+  'details'?: Array<PtsV2PaymentsPost201ResponseErrorInformationDetails>;
+
+  static constructFromObject(data: Partial<InlineResponse4001>, obj?: InlineResponse4001): InlineResponse4001 {
+    return new InlineResponse4001();
+  }
+}
+
+export class InlineResponse4002 {
+  constructor() {}
+
+  /**
+   * Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by Cybersource for all services.
+   */
+  'submitTimeUtc'?: string;
+  /**
+   * The status of the submitted transaction.  Possible values:  - INVALID_REQUEST
+   */
+  'status'?: string;
+  /**
+   * The reason of the status.  Possible values:  - MISSING_FIELD  - INVALID_DATA  - DUPLICATE_REQUEST  - INVALID_CARD  - CARD_TYPE_NOT_ACCEPTED  - INVALID_MERCHANT_CONFIGURATION  - PROCESSOR_UNAVAILABLE  - INVALID_CARD_TYPE
+   */
+  'reason'?: string;
+  /**
+   * The detail message related to the status and reason listed above.
+   */
+  'message'?: string;
+  'details'?: Array<PtsV2PaymentsPost201ResponseErrorInformationDetails>;
+
+  static constructFromObject(data: Partial<InlineResponse4002>, obj?: InlineResponse4002): InlineResponse4002 {
+    return new InlineResponse4002();
+  }
+}
+
 /**
  * Error Bean
  */
-export class InlineResponse4001 {
+export class InlineResponse4003 {
   constructor() {}
 
   /**
@@ -890,17 +1892,17 @@ export class InlineResponse4001 {
   /**
    * Error fields List
    */
-  'fields'?: Array<InlineResponse4001Fields>;
+  'fields'?: Array<InlineResponse4003Fields>;
 
-  static constructFromObject(data: Partial<InlineResponse4001>, obj?: InlineResponse4001): InlineResponse4001 {
-    return new InlineResponse4001();
+  static constructFromObject(data: Partial<InlineResponse4003>, obj?: InlineResponse4003): InlineResponse4003 {
+    return new InlineResponse4003();
   }
 }
 
 /**
  * Provide validation failed input field details
  */
-export class InlineResponse4001Fields {
+export class InlineResponse4003Fields {
   constructor() {}
 
   /**
@@ -916,12 +1918,12 @@ export class InlineResponse4001Fields {
    */
   'localizationKey'?: string;
 
-  static constructFromObject(data: Partial<InlineResponse4001Fields>, obj?: InlineResponse4001Fields): InlineResponse4001Fields {
-    return new InlineResponse4001Fields();
+  static constructFromObject(data: Partial<InlineResponse4003Fields>, obj?: InlineResponse4003Fields): InlineResponse4003Fields {
+    return new InlineResponse4003Fields();
   }
 }
 
-export class InlineResponse4002 {
+export class InlineResponse4004 {
   constructor() {}
 
   /**
@@ -945,12 +1947,12 @@ export class InlineResponse4002 {
    */
   'statusCode'?: string;
 
-  static constructFromObject(data: Partial<InlineResponse4002>, obj?: InlineResponse4002): InlineResponse4002 {
-    return new InlineResponse4002();
+  static constructFromObject(data: Partial<InlineResponse4004>, obj?: InlineResponse4004): InlineResponse4004 {
+    return new InlineResponse4004();
   }
 }
 
-export class InlineResponse4003 {
+export class InlineResponse4005 {
   constructor() {}
 
   /**
@@ -971,26 +1973,26 @@ export class InlineResponse4003 {
   'message'?: string;
   'details'?: Array<PtsV2PaymentsPost201ResponseErrorInformationDetails>;
 
-  static constructFromObject(data: Partial<InlineResponse4003>, obj?: InlineResponse4003): InlineResponse4003 {
-    return new InlineResponse4003();
+  static constructFromObject(data: Partial<InlineResponse4005>, obj?: InlineResponse4005): InlineResponse4005 {
+    return new InlineResponse4005();
   }
 }
 
-export class InlineResponse4004 {
+export class InlineResponse4006 {
   constructor() {}
 
   'correlationId'?: string;
-  'details'?: Array<InlineResponse4004Details>;
+  'details'?: Array<InlineResponse4006Details>;
   'informationLink'?: string;
   'message': string;
-  'reason': InlineResponse4004.ReasonEnum;
+  'reason': InlineResponse4006.ReasonEnum;
 
-  static constructFromObject(data: Partial<InlineResponse4004>, obj?: InlineResponse4004): InlineResponse4004 {
-    return new InlineResponse4004();
+  static constructFromObject(data: Partial<InlineResponse4006>, obj?: InlineResponse4006): InlineResponse4006 {
+    return new InlineResponse4006();
   }
 }
 
-export namespace InlineResponse4004 {
+export namespace InlineResponse4006 {
   export enum ReasonEnum {
     INVALIDAPIKEY = <any>'INVALID_APIKEY',
     INVALIDSHIPPINGINPUTPARAMS = <any>'INVALID_SHIPPING_INPUT_PARAMS',
@@ -1009,14 +2011,14 @@ export namespace InlineResponse4004 {
     SHOWPAYMENTTIMEOUT = <any>'SHOW_PAYMENT_TIMEOUT',
   }
 }
-export class InlineResponse4004Details {
+export class InlineResponse4006Details {
   constructor() {}
 
   'location'?: string;
   'message'?: string;
 
-  static constructFromObject(data: Partial<InlineResponse4004Details>, obj?: InlineResponse4004Details): InlineResponse4004Details {
-    return new InlineResponse4004Details();
+  static constructFromObject(data: Partial<InlineResponse4006Details>, obj?: InlineResponse4006Details): InlineResponse4006Details {
+    return new InlineResponse4006Details();
   }
 }
 
@@ -1041,11 +2043,11 @@ export class InlineResponse400Errors {
   constructor() {}
 
   /**
-   * The type of error.
+   * The type of error.  Possible Values:   - invalidHeaders   - missingHeaders   - invalidFields   - missingFields   - unsupportedPaymentMethodModification   - invalidCombination
    */
   'type'?: string;
   /**
-   * The detailed message related to the type stated above.
+   * The detailed message related to the type.
    */
   'message'?: string;
   'details'?: Array<InlineResponse400Details>;
@@ -1055,7 +2057,226 @@ export class InlineResponse400Errors {
   }
 }
 
+export class InlineResponse401 {
+  constructor() {}
+
+  'links'?: InlineResponse401Links;
+  /**
+   * Valid Values:   * FORBIDDEN_RESPONSE   * VALIDATION_ERROR   * UNSUPPORTED_MEDIA_TYPE   * MALFORMED_PAYLOAD_ERROR   * SERVER_ERROR
+   */
+  'code'?: string;
+  'correlationId'?: string;
+  'detail'?: string;
+  'fields'?: Array<InlineResponse401Fields>;
+  /**
+   * Valid Values:   * cybsapi.forbidden.response   * cybsapi.validation.error   * cybsapi.media.notsupported
+   */
+  'localizationKey'?: string;
+  'message'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse401>, obj?: InlineResponse401): InlineResponse401 {
+    return new InlineResponse401();
+  }
+}
+
+export class InlineResponse401Fields {
+  constructor() {}
+
+  'path'?: string;
+  'message'?: string;
+  /**
+   * Valid Values:   * cybsapi.ondemand.batch.email.null
+   */
+  'localizationKey'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse401Fields>, obj?: InlineResponse401Fields): InlineResponse401Fields {
+    return new InlineResponse401Fields();
+  }
+}
+
+export class InlineResponse401Links {
+  constructor() {}
+
+  'self'?: InlineResponse401LinksSelf;
+
+  static constructFromObject(data: Partial<InlineResponse401Links>, obj?: InlineResponse401Links): InlineResponse401Links {
+    return new InlineResponse401Links();
+  }
+}
+
+export class InlineResponse401LinksSelf {
+  constructor() {}
+
+  'href'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse401LinksSelf>, obj?: InlineResponse401LinksSelf): InlineResponse401LinksSelf {
+    return new InlineResponse401LinksSelf();
+  }
+}
+
+export class InlineResponse403 {
+  constructor() {}
+
+  'errors'?: Array<InlineResponse403Errors>;
+
+  static constructFromObject(data: Partial<InlineResponse403>, obj?: InlineResponse403): InlineResponse403 {
+    return new InlineResponse403();
+  }
+}
+
+export class InlineResponse403Errors {
+  constructor() {}
+
+  /**
+   * The type of error.  Possible Values:   - forbidden
+   */
+  'type'?: string;
+  /**
+   * The detailed message related to the type.
+   */
+  'message'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse403Errors>, obj?: InlineResponse403Errors): InlineResponse403Errors {
+    return new InlineResponse403Errors();
+  }
+}
+
+export class InlineResponse404 {
+  constructor() {}
+
+  /**
+   * Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by Cybersource for all services.
+   */
+  'submitTimeUtc'?: string;
+  /**
+   * The status of the submitted transaction.  Possible values:  - NOT_FOUND
+   */
+  'status'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse404>, obj?: InlineResponse404): InlineResponse404 {
+    return new InlineResponse404();
+  }
+}
+
+export class InlineResponse409 {
+  constructor() {}
+
+  'errors'?: Array<InlineResponse409Errors>;
+
+  static constructFromObject(data: Partial<InlineResponse409>, obj?: InlineResponse409): InlineResponse409 {
+    return new InlineResponse409();
+  }
+}
+
+export class InlineResponse409Errors {
+  constructor() {}
+
+  /**
+   * The type of error.  Possible Values:   - instrumentIdentifierDeletionError   - tokenIdConflict   - conflict
+   */
+  'type'?: string;
+  /**
+   * The detailed message related to the type.
+   */
+  'message'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse409Errors>, obj?: InlineResponse409Errors): InlineResponse409Errors {
+    return new InlineResponse409Errors();
+  }
+}
+
+export class InlineResponse410 {
+  constructor() {}
+
+  'errors'?: Array<InlineResponse410Errors>;
+
+  static constructFromObject(data: Partial<InlineResponse410>, obj?: InlineResponse410): InlineResponse410 {
+    return new InlineResponse410();
+  }
+}
+
+export class InlineResponse410Errors {
+  constructor() {}
+
+  /**
+   * The type of error.  Possible Values:   - notAvailable
+   */
+  'type'?: string;
+  /**
+   * The detailed message related to the type.
+   */
+  'message'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse410Errors>, obj?: InlineResponse410Errors): InlineResponse410Errors {
+    return new InlineResponse410Errors();
+  }
+}
+
+export class InlineResponse412 {
+  constructor() {}
+
+  'errors'?: Array<InlineResponse412Errors>;
+
+  static constructFromObject(data: Partial<InlineResponse412>, obj?: InlineResponse412): InlineResponse412 {
+    return new InlineResponse412();
+  }
+}
+
+export class InlineResponse412Errors {
+  constructor() {}
+
+  /**
+   * The type of error.  Possible Values:   - conflict
+   */
+  'type'?: string;
+  /**
+   * The detailed message related to the type.
+   */
+  'message'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse412Errors>, obj?: InlineResponse412Errors): InlineResponse412Errors {
+    return new InlineResponse412Errors();
+  }
+}
+
+export class InlineResponse424 {
+  constructor() {}
+
+  'errors'?: Array<InlineResponse424Errors>;
+
+  static constructFromObject(data: Partial<InlineResponse424>, obj?: InlineResponse424): InlineResponse424 {
+    return new InlineResponse424();
+  }
+}
+
+export class InlineResponse424Errors {
+  constructor() {}
+
+  /**
+   * The type of error.  Possible Values:   - notFound
+   */
+  'type'?: string;
+  /**
+   * The detailed message related to the type.
+   */
+  'message'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse424Errors>, obj?: InlineResponse424Errors): InlineResponse424Errors {
+    return new InlineResponse424Errors();
+  }
+}
+
 export class InlineResponse500 {
+  constructor() {}
+
+  'errors'?: Array<InlineResponse500Errors>;
+
+  static constructFromObject(data: Partial<InlineResponse500>, obj?: InlineResponse500): InlineResponse500 {
+    return new InlineResponse500();
+  }
+}
+
+export class InlineResponse5001 {
   constructor() {}
 
   /**
@@ -1075,8 +2296,25 @@ export class InlineResponse500 {
    */
   'message'?: string;
 
-  static constructFromObject(data: Partial<InlineResponse500>, obj?: InlineResponse500): InlineResponse500 {
-    return new InlineResponse500();
+  static constructFromObject(data: Partial<InlineResponse5001>, obj?: InlineResponse5001): InlineResponse5001 {
+    return new InlineResponse5001();
+  }
+}
+
+export class InlineResponse500Errors {
+  constructor() {}
+
+  /**
+   * The type of error.  Possible Values:   - internalError
+   */
+  'type'?: string;
+  /**
+   * The detailed message related to the type.
+   */
+  'message'?: string;
+
+  static constructFromObject(data: Partial<InlineResponse500Errors>, obj?: InlineResponse500Errors): InlineResponse500Errors {
+    return new InlineResponse500Errors();
   }
 }
 
@@ -1278,7 +2516,7 @@ export class InvoicingV2InvoiceSettingsGet200ResponseInvoiceSettingsInformationH
 export class InvoicingV2InvoicesAllGet200Response {
   constructor() {}
 
-  'links'?: InvoicingV2InvoicesAllGet200ResponseLinks;
+  'links'?: InlineResponse200Links;
   /**
    * Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by Cybersource for all services.
    */
@@ -1327,7 +2565,7 @@ export class InvoicingV2InvoicesAllGet200ResponseInvoiceInformation {
 export class InvoicingV2InvoicesAllGet200ResponseInvoices {
   constructor() {}
 
-  'links'?: InvoicingV2InvoicesAllGet200ResponseLinks1;
+  'links'?: InvoicingV2InvoicesAllGet200ResponseLinks;
   /**
    * An unique identification number generated by Cybersource to identify the submitted request. Returned by all services. It is also appended to the endpoint of the resource. On incremental authorizations, this value with be the same as the identification number returned in the original authorization response.
    */
@@ -1349,24 +2587,12 @@ export class InvoicingV2InvoicesAllGet200ResponseLinks {
   constructor() {}
 
   'self'?: PtsV2PaymentsPost201ResponseLinksSelf;
-  'next'?: PtsV2PaymentsPost201ResponseLinksSelf;
-  'previous'?: PtsV2PaymentsPost201ResponseLinksSelf;
-
-  static constructFromObject(data: Partial<InvoicingV2InvoicesAllGet200ResponseLinks>, obj?: InvoicingV2InvoicesAllGet200ResponseLinks): InvoicingV2InvoicesAllGet200ResponseLinks {
-    return new InvoicingV2InvoicesAllGet200ResponseLinks();
-  }
-}
-
-export class InvoicingV2InvoicesAllGet200ResponseLinks1 {
-  constructor() {}
-
-  'self'?: PtsV2PaymentsPost201ResponseLinksSelf;
   'update'?: PtsV2PaymentsPost201ResponseLinksSelf;
   'deliver'?: PtsV2PaymentsPost201ResponseLinksSelf;
   'cancel'?: PtsV2PaymentsPost201ResponseLinksSelf;
 
-  static constructFromObject(data: Partial<InvoicingV2InvoicesAllGet200ResponseLinks1>, obj?: InvoicingV2InvoicesAllGet200ResponseLinks1): InvoicingV2InvoicesAllGet200ResponseLinks1 {
-    return new InvoicingV2InvoicesAllGet200ResponseLinks1();
+  static constructFromObject(data: Partial<InvoicingV2InvoicesAllGet200ResponseLinks>, obj?: InvoicingV2InvoicesAllGet200ResponseLinks): InvoicingV2InvoicesAllGet200ResponseLinks {
+    return new InvoicingV2InvoicesAllGet200ResponseLinks();
   }
 }
 
@@ -1480,7 +2706,7 @@ export class InvoicingV2InvoicesAllGet502Response {
 export class InvoicingV2InvoicesGet200Response {
   constructor() {}
 
-  'links'?: InvoicingV2InvoicesAllGet200ResponseLinks1;
+  'links'?: InvoicingV2InvoicesAllGet200ResponseLinks;
   /**
    * An unique identification number generated by Cybersource to identify the submitted request. Returned by all services. It is also appended to the endpoint of the resource. On incremental authorizations, this value with be the same as the identification number returned in the original authorization response.
    */
@@ -1544,7 +2770,7 @@ export class InvoicingV2InvoicesGet200ResponseTransactionDetails {
 export class InvoicingV2InvoicesPost201Response {
   constructor() {}
 
-  'links'?: InvoicingV2InvoicesAllGet200ResponseLinks1;
+  'links'?: InvoicingV2InvoicesAllGet200ResponseLinks;
   /**
    * An unique identification number generated by Cybersource to identify the submitted request. Returned by all services. It is also appended to the endpoint of the resource. On incremental authorizations, this value with be the same as the identification number returned in the original authorization response.
    */
@@ -2420,6 +3646,25 @@ export namespace Kmsv2keyssymverifiKeyInformation {
     HMACSHA2 = <any>'HMACSHA2',
   }
 }
+export class Microformv2sessionsCheckoutApiInitialization {
+  constructor() {}
+
+  'profileId'?: string;
+  'accessKey'?: string;
+  'referenceNumber'?: string;
+  'transactionUuid'?: string;
+  'transactionType'?: string;
+  'currency'?: string;
+  'amount'?: string;
+  'locale'?: string;
+  'overrideCustomReceiptPage'?: string;
+  'unsignedFieldNames'?: string;
+
+  static constructFromObject(data: Partial<Microformv2sessionsCheckoutApiInitialization>, obj?: Microformv2sessionsCheckoutApiInitialization): Microformv2sessionsCheckoutApiInitialization {
+    return new Microformv2sessionsCheckoutApiInitialization();
+  }
+}
+
 export class MitReversalRequest {
   constructor() {}
 
@@ -2468,21 +3713,25 @@ export class PatchCustomerPaymentInstrumentRequest {
 
   'links'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentLinks;
   /**
-   * The id of the Payment Instrument Token.
+   * The Id of the Payment Instrument Token.
    */
   'id'?: string;
   /**
-   * The type of token.  Valid values: - paymentInstrument
+   * The type.  Possible Values: - paymentInstrument
    */
   'object'?: string;
   /**
-   * Flag that indicates whether customer payment instrument is the dafault. Valid values:  - `true`: Payment instrument is customer's default.  - `false`: Payment instrument is not customer's default.
+   * Flag that indicates whether customer payment instrument is the dafault. Possible Values:  - `true`: Payment instrument is customer's default.  - `false`: Payment instrument is not customer's default.
    */
   '_default'?: boolean;
   /**
-   * Issuers state for the card number. Valid values: - ACTIVE - CLOSED : The account has been closed.
+   * Issuers state for the card number. Possible Values: - ACTIVE - CLOSED : The account has been closed.
    */
   'state'?: string;
+  /**
+   * The type of Payment Instrument. Possible Values: - cardHash
+   */
+  'type'?: string;
   'bankAccount'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentBankAccount;
   'card'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentCard;
   'buyerInformation'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentBuyerInformation;
@@ -2503,7 +3752,7 @@ export class PatchCustomerRequest {
 
   'links'?: Tmsv2customersLinks;
   /**
-   * The id of the Customer Token.
+   * The Id of the Customer Token.
    */
   'id'?: string;
   'objectInformation'?: Tmsv2customersObjectInformation;
@@ -2528,11 +3777,11 @@ export class PatchCustomerShippingAddressRequest {
 
   'links'?: Tmsv2customersEmbeddedDefaultShippingAddressLinks;
   /**
-   * The id of the Shipping Address Token.
+   * The Id of the Shipping Address Token.
    */
   'id'?: string;
   /**
-   * Flag that indicates whether customer shipping address is the dafault. Valid values:  - `true`: Shipping Address is customer's default.  - `false`: Shipping Address is not customer's default.
+   * Flag that indicates whether customer shipping address is the dafault. Possible Values:  - `true`: Shipping Address is customer's default.  - `false`: Shipping Address is not customer's default.
    */
   '_default'?: boolean;
   'shipTo'?: Tmsv2customersEmbeddedDefaultShippingAddressShipTo;
@@ -2548,19 +3797,19 @@ export class PatchInstrumentIdentifierRequest {
 
   'links'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbeddedInstrumentIdentifierLinks;
   /**
-   * The id of the Instrument Identifier Token.
+   * The Id of the Instrument Identifier Token.
    */
   'id'?: string;
   /**
-   * The type of token.  Valid values: - instrumentIdentifier
+   * The type.  Possible Values: - instrumentIdentifier
    */
   'object'?: string;
   /**
-   * Issuers state for the card number. Valid values: - ACTIVE - CLOSED : The account has been closed.
+   * Issuers state for the card number. Possible Values: - ACTIVE - CLOSED : The account has been closed.
    */
   'state'?: string;
   /**
-   * The type of Instrument Identifier. Valid values: - enrollable card
+   * The type of Instrument Identifier. Possible Values: - enrollable card
    */
   'type'?: string;
   'card'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbeddedInstrumentIdentifierCard;
@@ -2581,21 +3830,25 @@ export class PatchPaymentInstrumentRequest {
 
   'links'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentLinks;
   /**
-   * The id of the Payment Instrument Token.
+   * The Id of the Payment Instrument Token.
    */
   'id'?: string;
   /**
-   * The type of token.  Valid values: - paymentInstrument
+   * The type.  Possible Values: - paymentInstrument
    */
   'object'?: string;
   /**
-   * Flag that indicates whether customer payment instrument is the dafault. Valid values:  - `true`: Payment instrument is customer's default.  - `false`: Payment instrument is not customer's default.
+   * Flag that indicates whether customer payment instrument is the dafault. Possible Values:  - `true`: Payment instrument is customer's default.  - `false`: Payment instrument is not customer's default.
    */
   '_default'?: boolean;
   /**
-   * Issuers state for the card number. Valid values: - ACTIVE - CLOSED : The account has been closed.
+   * Issuers state for the card number. Possible Values: - ACTIVE - CLOSED : The account has been closed.
    */
   'state'?: string;
+  /**
+   * The type of Payment Instrument. Possible Values: - cardHash
+   */
+  'type'?: string;
   'bankAccount'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentBankAccount;
   'card'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentCard;
   'buyerInformation'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentBuyerInformation;
@@ -2692,7 +3945,7 @@ export class PaymentInstrumentList1Embedded {
 }
 
 /**
- * Additional resources for the Payment Instrument token.
+ * Additional resources for the Payment Instrument.
  */
 export class PaymentInstrumentList1EmbeddedEmbedded {
   constructor() {}
@@ -2709,21 +3962,25 @@ export class PaymentInstrumentList1EmbeddedPaymentInstruments {
 
   'links'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentLinks;
   /**
-   * The id of the Payment Instrument Token.
+   * The Id of the Payment Instrument Token.
    */
   'id'?: string;
   /**
-   * The type of token.  Valid values: - paymentInstrument
+   * The type.  Possible Values: - paymentInstrument
    */
   'object'?: string;
   /**
-   * Flag that indicates whether customer payment instrument is the dafault. Valid values:  - `true`: Payment instrument is customer's default.  - `false`: Payment instrument is not customer's default.
+   * Flag that indicates whether customer payment instrument is the dafault. Possible Values:  - `true`: Payment instrument is customer's default.  - `false`: Payment instrument is not customer's default.
    */
   '_default'?: boolean;
   /**
-   * Issuers state for the card number. Valid values: - ACTIVE - CLOSED : The account has been closed.
+   * Issuers state for the card number. Possible Values: - ACTIVE - CLOSED : The account has been closed.
    */
   'state'?: string;
+  /**
+   * The type of Payment Instrument. Possible Values: - cardHash
+   */
+  'type'?: string;
   'bankAccount'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentBankAccount;
   'card'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentCard;
   'buyerInformation'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentBuyerInformation;
@@ -2836,21 +4093,25 @@ export class PostCustomerPaymentInstrumentRequest {
 
   'links'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentLinks;
   /**
-   * The id of the Payment Instrument Token.
+   * The Id of the Payment Instrument Token.
    */
   'id'?: string;
   /**
-   * The type of token.  Valid values: - paymentInstrument
+   * The type.  Possible Values: - paymentInstrument
    */
   'object'?: string;
   /**
-   * Flag that indicates whether customer payment instrument is the dafault. Valid values:  - `true`: Payment instrument is customer's default.  - `false`: Payment instrument is not customer's default.
+   * Flag that indicates whether customer payment instrument is the dafault. Possible Values:  - `true`: Payment instrument is customer's default.  - `false`: Payment instrument is not customer's default.
    */
   '_default'?: boolean;
   /**
-   * Issuers state for the card number. Valid values: - ACTIVE - CLOSED : The account has been closed.
+   * Issuers state for the card number. Possible Values: - ACTIVE - CLOSED : The account has been closed.
    */
   'state'?: string;
+  /**
+   * The type of Payment Instrument. Possible Values: - cardHash
+   */
+  'type'?: string;
   'bankAccount'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentBankAccount;
   'card'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentCard;
   'buyerInformation'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentBuyerInformation;
@@ -2871,7 +4132,7 @@ export class PostCustomerRequest {
 
   'links'?: Tmsv2customersLinks;
   /**
-   * The id of the Customer Token.
+   * The Id of the Customer Token.
    */
   'id'?: string;
   'objectInformation'?: Tmsv2customersObjectInformation;
@@ -2896,11 +4157,11 @@ export class PostCustomerShippingAddressRequest {
 
   'links'?: Tmsv2customersEmbeddedDefaultShippingAddressLinks;
   /**
-   * The id of the Shipping Address Token.
+   * The Id of the Shipping Address Token.
    */
   'id'?: string;
   /**
-   * Flag that indicates whether customer shipping address is the dafault. Valid values:  - `true`: Shipping Address is customer's default.  - `false`: Shipping Address is not customer's default.
+   * Flag that indicates whether customer shipping address is the dafault. Possible Values:  - `true`: Shipping Address is customer's default.  - `false`: Shipping Address is not customer's default.
    */
   '_default'?: boolean;
   'shipTo'?: Tmsv2customersEmbeddedDefaultShippingAddressShipTo;
@@ -2916,19 +4177,19 @@ export class PostInstrumentIdentifierEnrollmentRequest {
 
   'links'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbeddedInstrumentIdentifierLinks;
   /**
-   * The id of the Instrument Identifier Token.
+   * The Id of the Instrument Identifier Token.
    */
   'id'?: string;
   /**
-   * The type of token.  Valid values: - instrumentIdentifier
+   * The type.  Possible Values: - instrumentIdentifier
    */
   'object'?: string;
   /**
-   * Issuers state for the card number. Valid values: - ACTIVE - CLOSED : The account has been closed.
+   * Issuers state for the card number. Possible Values: - ACTIVE - CLOSED : The account has been closed.
    */
   'state'?: string;
   /**
-   * The type of Instrument Identifier. Valid values: - enrollable card
+   * The type of Instrument Identifier. Possible Values: - enrollable card
    */
   'type'?: string;
   'card'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbeddedInstrumentIdentifierCard;
@@ -2949,19 +4210,19 @@ export class PostInstrumentIdentifierRequest {
 
   'links'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbeddedInstrumentIdentifierLinks;
   /**
-   * The id of the Instrument Identifier Token.
+   * The Id of the Instrument Identifier Token.
    */
   'id'?: string;
   /**
-   * The type of token.  Valid values: - instrumentIdentifier
+   * The type.  Possible Values: - instrumentIdentifier
    */
   'object'?: string;
   /**
-   * Issuers state for the card number. Valid values: - ACTIVE - CLOSED : The account has been closed.
+   * Issuers state for the card number. Possible Values: - ACTIVE - CLOSED : The account has been closed.
    */
   'state'?: string;
   /**
-   * The type of Instrument Identifier. Valid values: - enrollable card
+   * The type of Instrument Identifier. Possible Values: - enrollable card
    */
   'type'?: string;
   'card'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbeddedInstrumentIdentifierCard;
@@ -2982,21 +4243,25 @@ export class PostPaymentInstrumentRequest {
 
   'links'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentLinks;
   /**
-   * The id of the Payment Instrument Token.
+   * The Id of the Payment Instrument Token.
    */
   'id'?: string;
   /**
-   * The type of token.  Valid values: - paymentInstrument
+   * The type.  Possible Values: - paymentInstrument
    */
   'object'?: string;
   /**
-   * Flag that indicates whether customer payment instrument is the dafault. Valid values:  - `true`: Payment instrument is customer's default.  - `false`: Payment instrument is not customer's default.
+   * Flag that indicates whether customer payment instrument is the dafault. Possible Values:  - `true`: Payment instrument is customer's default.  - `false`: Payment instrument is not customer's default.
    */
   '_default'?: boolean;
   /**
-   * Issuers state for the card number. Valid values: - ACTIVE - CLOSED : The account has been closed.
+   * Issuers state for the card number. Possible Values: - ACTIVE - CLOSED : The account has been closed.
    */
   'state'?: string;
+  /**
+   * The type of Payment Instrument. Possible Values: - cardHash
+   */
+  'type'?: string;
   'bankAccount'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentBankAccount;
   'card'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentCard;
   'buyerInformation'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentBuyerInformation;
@@ -3505,7 +4770,7 @@ export class PtsV2IncrementalAuthorizationPatch400Response {
    */
   'status'?: string;
   /**
-   * The reason of the status.  Possible values:  - MISSING_FIELD  - INVALID_DATA  - DUPLICATE_REQUEST  - INVALID_CARD  - CARD_TYPE_NOT_ACCEPTED  - INVALID_MERCHANT_CONFIGURATION  - PROCESSOR_UNAVAILABLE  - INVALID_PAYMENT_ID
+   * The reason of the status.  Possible values:  - MISSING_FIELD  - INVALID_DATA  - DUPLICATE_REQUEST  - INVALID_CARD  - CARD_TYPE_NOT_ACCEPTED  - INVALID_MERCHANT_CONFIGURATION  - PROCESSOR_UNAVAILABLE  - INVALID_PAYMENT_ID  - NOT_SUPPORTED
    */
   'reason'?: string;
   /**
@@ -3658,7 +4923,7 @@ export class PtsV2PaymentsCapturesPost400Response {
    */
   'status'?: string;
   /**
-   * The reason of the status.  Possible values:  - MISSING_FIELD  - INVALID_DATA  - DUPLICATE_REQUEST  - INVALID_MERCHANT_CONFIGURATION  - EXCEEDS_AUTH_AMOUNT  - AUTH_ALREADY_REVERSED  - TRANSACTION_ALREADY_SETTLED  - INVALID_AMOUNT  - MISSING_AUTH  - TRANSACTION_ALREADY_REVERSED_OR_SETTLED
+   * The reason of the status.  Possible values:  - MISSING_FIELD  - INVALID_DATA  - DUPLICATE_REQUEST  - INVALID_MERCHANT_CONFIGURATION  - EXCEEDS_AUTH_AMOUNT  - AUTH_ALREADY_REVERSED  - TRANSACTION_ALREADY_SETTLED  - INVALID_AMOUNT  - MISSING_AUTH  - TRANSACTION_ALREADY_REVERSED_OR_SETTLED  - NOT_SUPPORTED
    */
   'reason'?: string;
   /**
@@ -3830,7 +5095,7 @@ export class PtsV2PaymentsPost201Response1OrderInformationShipTo {
    */
   'locality'?: string;
   /**
-   * State or province of the shipping address. Use the [State, Province, and Territory Codes for the United States and Canada](https://developer.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf)  Required field for authorization if any shipping address information is included in the request and shipping to the U.S. or Canada; otherwise, optional.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. Billing address objects will be used to determine the cardholder’s location when shipTo objects are not present.
+   * State or province of the shipping address. Use the [State, Province, and Territory Codes for the United States and Canada](https://developer.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf) (maximum length: 2)   Required field for authorization if any shipping address information is included in the request and shipping to the U.S. or Canada; otherwise, optional.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. Billing address objects will be used to determine the cardholder’s location when shipTo objects are not present.
    */
   'administrativeArea'?: string;
   /**
@@ -4574,7 +5839,7 @@ export class PtsV2PaymentsPost201ResponsePaymentAccountInformationCard {
    */
   'expirationYear'?: string;
   /**
-   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
+   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay - '070': EFTPOS  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
    */
   'type'?: string;
   /**
@@ -4790,7 +6055,7 @@ export class PtsV2PaymentsPost201ResponsePaymentInformationTokenizedCard {
    */
   'suffix'?: string;
   /**
-   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
+   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay - '070': EFTPOS  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
    */
   'type'?: string;
   /**
@@ -5608,7 +6873,7 @@ export class PtsV2PaymentsPost400Response {
    */
   'status'?: string;
   /**
-   * The reason of the status.  Possible values:  - MISSING_FIELD  - INVALID_DATA  - DUPLICATE_REQUEST  - INVALID_CARD  - CARD_TYPE_NOT_ACCEPTED  - INVALID_MERCHANT_CONFIGURATION  - PROCESSOR_UNAVAILABLE  - INVALID_AMOUNT  - INVALID_CARD_TYPE  - INVALID_PAYMENT_ID
+   * The reason of the status.  Possible values:  - MISSING_FIELD  - INVALID_DATA  - DUPLICATE_REQUEST  - INVALID_CARD  - CARD_TYPE_NOT_ACCEPTED  - INVALID_MERCHANT_CONFIGURATION  - PROCESSOR_UNAVAILABLE  - INVALID_AMOUNT  - INVALID_CARD_TYPE  - INVALID_PAYMENT_ID  - NOT_SUPPORTED
    */
   'reason'?: string;
   /**
@@ -5791,7 +7056,7 @@ export class PtsV2PaymentsRefundPost400Response {
    */
   'status'?: string;
   /**
-   * The reason of the status.  Possible values:  - MISSING_FIELD  - INVALID_DATA  - DUPLICATE_REQUEST  - INVALID_CARD  - INVALID_MERCHANT_CONFIGURATION  - INVALID_AMOUNT  - CAPTURE_ALREADY_VOIDED  - ACCOUNT_NOT_ALLOWED_CREDIT
+   * The reason of the status.  Possible values:  - MISSING_FIELD  - INVALID_DATA  - DUPLICATE_REQUEST  - INVALID_CARD  - INVALID_MERCHANT_CONFIGURATION  - INVALID_AMOUNT  - CAPTURE_ALREADY_VOIDED  - ACCOUNT_NOT_ALLOWED_CREDIT  - NOT_SUPPORTED
    */
   'reason'?: string;
   /**
@@ -5937,7 +7202,7 @@ export class PtsV2PaymentsReversalsPost400Response {
    */
   'status'?: string;
   /**
-   * The reason of the status.  Possible values:  - MISSING_FIELD  - INVALID_DATA  - DUPLICATE_REQUEST  - INVALID_MERCHANT_CONFIGURATION  - PROCESSOR_UNAVAILABLE  - AUTH_ALREADY_REVERSED  - TRANSACTION_ALREADY_SETTLED  - INVALID_AMOUNT  - MISSING_AUTH  - TRANSACTION_ALREADY_REVERSED_OR_SETTLED
+   * The reason of the status.  Possible values:  - MISSING_FIELD  - INVALID_DATA  - DUPLICATE_REQUEST  - INVALID_MERCHANT_CONFIGURATION  - PROCESSOR_UNAVAILABLE  - AUTH_ALREADY_REVERSED  - TRANSACTION_ALREADY_SETTLED  - INVALID_AMOUNT  - MISSING_AUTH  - TRANSACTION_ALREADY_REVERSED_OR_SETTLED  - NOT_SUPPORTED
    */
   'reason'?: string;
   /**
@@ -6022,7 +7287,7 @@ export class PtsV2PaymentsVoidsPost400Response {
    */
   'status'?: string;
   /**
-   * The reason of the status.  Possible values:  - MISSING_FIELD  - INVALID_DATA  - DUPLICATE_REQUEST  - INVALID_MERCHANT_CONFIGURATION  - NOT_VOIDABLE
+   * The reason of the status.  Possible values:  - MISSING_FIELD  - INVALID_DATA  - DUPLICATE_REQUEST  - INVALID_MERCHANT_CONFIGURATION  - NOT_VOIDABLE  - NOT_SUPPORTED
    */
   'reason'?: string;
   /**
@@ -8377,7 +9642,7 @@ export class Ptsv2paymentsOrderInformationLineItems {
   constructor() {}
 
   /**
-   * Type of product. The value for this field is used to identify the product category (electronic, handling, physical, service, or shipping). The default value is `default`.  If you are performing an authorization transaction (`processingOptions.capture` is set to `false`), and you set this field to a value other than `default` or one of the values related to shipping and/or handling, then `orderInformation.lineItems[].quantity`, `orderInformation.lineItems[].productName`, and `orderInformation.lineItems[].productSku` fields are required.  Optional field.  For details, see the `product_code` field description in the [Credit Card Services Using the SCMP API Guide](https://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html/).  #### Tax Calculation Optional field for U.S., Canadian, international tax, and value added taxes.  To use the tax calculation service, use values listed in the Tax Product Code Guide. For information about this document, contact customer support. See \"Product Codes,\" page 14, for more information.
+   * Type of product. The value for this field is used to identify the product category (electronic, handling, physical, service, or shipping). The default value is `default`.  If you are performing an authorization transaction (`processingOptions.capture` is set to `false`), and you set this field to a value other than `default` or one of the values related to shipping and/or handling, then `orderInformation.lineItems[].quantity`, `orderInformation.lineItems[].productName`, and `orderInformation.lineItems[].productSku` fields are required.  Optional field.  For details, see the `product_code` field description in the [Credit Card Services Using the SCMP API Guide](https://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html/).  #### Tax Calculation Optional field for U.S., Canadian, international tax, and value added taxes.  The Product Codes for the tax service are located in the Cybersource Tax Codes guide. Contact Customer Support to request the guide. If you don’t send a tax service Product Code in your tax request, product-based rules or exemptions will not be applied and the transaction will default to fully taxable in the locations where you’ve indicated you need to collect tax [by way of nexus, no nexus, or seller registration number fields].
    */
   'productCode'?: string;
   /**
@@ -8576,7 +9841,7 @@ export class Ptsv2paymentsOrderInformationShipTo {
    */
   'locality'?: string;
   /**
-   * State or province of the shipping address. Use the [State, Province, and Territory Codes for the United States and Canada](https://developer.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf)  Required field for authorization if any shipping address information is included in the request and shipping to the U.S. or Canada; otherwise, optional.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. Billing address objects will be used to determine the cardholder’s location when shipTo objects are not present.
+   * State or province of the shipping address. Use the [State, Province, and Territory Codes for the United States and Canada](https://developer.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf) (maximum length: 2)   Required field for authorization if any shipping address information is included in the request and shipping to the U.S. or Canada; otherwise, optional.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. Billing address objects will be used to determine the cardholder’s location when shipTo objects are not present.
    */
   'administrativeArea'?: string;
   /**
@@ -8648,14 +9913,6 @@ export class Ptsv2paymentsOrderInformationShippingDetails {
 export class Ptsv2paymentsPaymentInformation {
   constructor() {}
 
-  /**
-   * Intent.
-   */
-  'intent'?: string;
-  /**
-   * Country code.
-   */
-  'countryCode'?: string;
   'card'?: Ptsv2paymentsPaymentInformationCard;
   'tokenizedCard'?: Ptsv2paymentsPaymentInformationTokenizedCard;
   'fluidData'?: Ptsv2paymentsPaymentInformationFluidData;
@@ -8748,7 +10005,7 @@ export class Ptsv2paymentsPaymentInformationCard {
    */
   'expirationYear'?: string;
   /**
-   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
+   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay - '070': EFTPOS  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
    */
   'type'?: string;
   /**
@@ -8955,7 +10212,7 @@ export class Ptsv2paymentsPaymentInformationTokenizedCard {
    */
   'expirationYear'?: string;
   /**
-   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
+   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay - '070': EFTPOS  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
    */
   'type'?: string;
   /**
@@ -9057,9 +10314,13 @@ export class Ptsv2paymentsPointOfSaleInformation {
    */
   'terminalOutputCapability'?: string;
   /**
-   * Maximum PIN length that the terminal can capture.  Possible values: -  0: No PIN capture capability -  1: PIN capture capability unknown -  4: Four characters -  5: Five characters -  6: Six characters -  7: Seven characters -  8: Eight characters -  9: Nine characters - 10: Ten characters - 11: Eleven characters - 12: Twelve characters  This field is supported for authorizations and credits only on the following processors: - American Express Direct - Credit Mutuel-CIC - OmniPay Direct - SIX  Required field for authorization or credit of PIN transactions.
+   * Maximum PIN length that the terminal can capture.  Possible values: -  0: No PIN capture capability -  1: PIN capture capability unknown -  2: PIN Pad down -  4: Four characters -  5: Five characters -  6: Six characters -  7: Seven characters -  8: Eight characters -  9: Nine characters - 10: Ten characters - 11: Eleven characters - 12: Twelve characters  This field is supported for authorizations and credits only on the following processors: - American Express Direct - Credit Mutuel-CIC - OmniPay Direct - SIX  Required field for authorization or credit of PIN transactions.
    */
   'terminalPinCapability'?: number;
+  /**
+   * This field will contain the type of Pin Pad the terminal has.  Possible values: -   PCI-SPoC: Where the pin is being put on screen -   PCI-PTS: Where the pin is being put on actual hardware pin pad
+   */
+  'pinEntrySolution'?: string;
   /**
    * Value created by the client software that uniquely identifies the POS device. This value is provided by the client software that is installed on the POS terminal.  CyberSource does not forward this value to the processor. Instead, the value is forwarded to the CyberSource reporting functionality.  This field is supported only on American Express Direct, FDC Nashville Global, and SIX.
    */
@@ -11332,7 +12593,7 @@ export class Ptsv2paymentsidcapturesOrderInformationShipTo {
   constructor() {}
 
   /**
-   * State or province of the shipping address. Use the [State, Province, and Territory Codes for the United States and Canada](https://developer.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf)  Required field for authorization if any shipping address information is included in the request and shipping to the U.S. or Canada; otherwise, optional.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. Billing address objects will be used to determine the cardholder’s location when shipTo objects are not present.
+   * State or province of the shipping address. Use the [State, Province, and Territory Codes for the United States and Canada](https://developer.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf) (maximum length: 2)   Required field for authorization if any shipping address information is included in the request and shipping to the U.S. or Canada; otherwise, optional.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. Billing address objects will be used to determine the cardholder’s location when shipTo objects are not present.
    */
   'administrativeArea'?: string;
   /**
@@ -11595,7 +12856,7 @@ export class Ptsv2paymentsidrefundsOrderInformationLineItems {
   constructor() {}
 
   /**
-   * Type of product. The value for this field is used to identify the product category (electronic, handling, physical, service, or shipping). The default value is `default`.  If you are performing an authorization transaction (`processingOptions.capture` is set to `false`), and you set this field to a value other than `default` or one of the values related to shipping and/or handling, then `orderInformation.lineItems[].quantity`, `orderInformation.lineItems[].productName`, and `orderInformation.lineItems[].productSku` fields are required.  Optional field.  For details, see the `product_code` field description in the [Credit Card Services Using the SCMP API Guide](https://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html/).  #### Tax Calculation Optional field for U.S., Canadian, international tax, and value added taxes.  To use the tax calculation service, use values listed in the Tax Product Code Guide. For information about this document, contact customer support. See \"Product Codes,\" page 14, for more information.
+   * Type of product. The value for this field is used to identify the product category (electronic, handling, physical, service, or shipping). The default value is `default`.  If you are performing an authorization transaction (`processingOptions.capture` is set to `false`), and you set this field to a value other than `default` or one of the values related to shipping and/or handling, then `orderInformation.lineItems[].quantity`, `orderInformation.lineItems[].productName`, and `orderInformation.lineItems[].productSku` fields are required.  Optional field.  For details, see the `product_code` field description in the [Credit Card Services Using the SCMP API Guide](https://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html/).  #### Tax Calculation Optional field for U.S., Canadian, international tax, and value added taxes.  The Product Codes for the tax service are located in the Cybersource Tax Codes guide. Contact Customer Support to request the guide. If you don’t send a tax service Product Code in your tax request, product-based rules or exemptions will not be applied and the transaction will default to fully taxable in the locations where you’ve indicated you need to collect tax [by way of nexus, no nexus, or seller registration number fields].
    */
   'productCode'?: string;
   /**
@@ -11735,7 +12996,7 @@ export class Ptsv2paymentsidrefundsPaymentInformationCard {
    */
   'expirationYear'?: string;
   /**
-   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
+   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay - '070': EFTPOS  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
    */
   'type'?: string;
   /**
@@ -12293,7 +13554,7 @@ export class Ptsv2payoutsPaymentInformationCard {
   constructor() {}
 
   /**
-   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
+   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay - '070': EFTPOS  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
    */
   'type'?: string;
   /**
@@ -13088,6 +14349,344 @@ export class PushFundsRequest {
 
   static constructFromObject(data: Partial<PushFundsRequest>, obj?: PushFundsRequest): PushFundsRequest {
     return new PushFundsRequest();
+  }
+}
+
+export class Rbsv1plansClientReferenceInformation {
+  constructor() {}
+
+  /**
+   * Brief description of the order or any comment you wish to add to the order.
+   */
+  'comments'?: string;
+  'partner'?: Riskv1decisionsClientReferenceInformationPartner;
+  /**
+   * The name of the Connection Method client (such as Virtual Terminal or SOAP Toolkit API) that the merchant uses to send a transaction request to CyberSource.
+   */
+  'applicationName'?: string;
+  /**
+   * Version of the CyberSource application or integration used for a transaction.
+   */
+  'applicationVersion'?: string;
+  /**
+   * The entity that is responsible for running the transaction and submitting the processing request to CyberSource. This could be a person, a system, or a connection method.
+   */
+  'applicationUser'?: string;
+
+  static constructFromObject(data: Partial<Rbsv1plansClientReferenceInformation>, obj?: Rbsv1plansClientReferenceInformation): Rbsv1plansClientReferenceInformation {
+    return new Rbsv1plansClientReferenceInformation();
+  }
+}
+
+export class Rbsv1plansOrderInformation {
+  constructor() {}
+
+  'amountDetails'?: Rbsv1plansOrderInformationAmountDetails;
+
+  static constructFromObject(data: Partial<Rbsv1plansOrderInformation>, obj?: Rbsv1plansOrderInformation): Rbsv1plansOrderInformation {
+    return new Rbsv1plansOrderInformation();
+  }
+}
+
+export class Rbsv1plansOrderInformationAmountDetails {
+  constructor() {}
+
+  /**
+   * Currency used for the order. Use the three-character [ISO Standard Currency Codes.](http://apps.cybersource.com/library/documentation/sbc/quickref/currencies.pdf)  #### Used by **Authorization** Required field.  **Authorization Reversal** For an authorization reversal (`reversalInformation`) or a capture (`processingOptions.capture` is set to `true`), you must use the same currency that you used in your payment authorization request.  #### PIN Debit Currency for the amount you requested for the PIN debit purchase. This value is returned for partial authorizations. The issuing bank can approve a partial amount if the balance on the debit card is less than the requested transaction amount. For the possible values, see the [ISO Standard Currency Codes](https://developer.cybersource.com/library/documentation/sbc/quickref/currencies.pdf). Returned by PIN debit purchase.  For PIN debit reversal requests, you must use the same currency that was used for the PIN debit purchase or PIN debit credit that you are reversing. For the possible values, see the [ISO Standard Currency Codes](https://developer.cybersource.com/library/documentation/sbc/quickref/currencies.pdf).  Required field for PIN Debit purchase and PIN Debit credit requests. Optional field for PIN Debit reversal requests.  #### GPX This field is optional for reversing an authorization or credit.  #### DCC for First Data Your local currency. For details, see the `currency` field description in [Dynamic Currency Conversion For First Data Using the SCMP API](http://apps.cybersource.com/library/documentation/dev_guides/DCC_FirstData_SCMP/DCC_FirstData_SCMP_API.pdf).  #### Tax Calculation Required for international tax and value added tax only. Optional for U.S. and Canadian taxes. Your local currency.
+   */
+  'currency': string;
+  /**
+   * Billing amount for the billing period.
+   */
+  'billingAmount': string;
+  /**
+   * Subscription setup fee
+   */
+  'setupFee'?: string;
+
+  static constructFromObject(data: Partial<Rbsv1plansOrderInformationAmountDetails>, obj?: Rbsv1plansOrderInformationAmountDetails): Rbsv1plansOrderInformationAmountDetails {
+    return new Rbsv1plansOrderInformationAmountDetails();
+  }
+}
+
+export class Rbsv1plansPlanInformation {
+  constructor() {}
+
+  /**
+   * Plan code is an optional field, If not provided system generates and assign one
+   */
+  'code'?: string;
+  /**
+   * Plan name
+   */
+  'name': string;
+  /**
+   * Plan description
+   */
+  'description'?: string;
+  /**
+   * Plan Status:  - `DRAFT`  - `ACTIVE` (default)
+   */
+  'status'?: string;
+  'billingPeriod': InlineResponse200PlanInformationBillingPeriod;
+  'billingCycles'?: Rbsv1plansPlanInformationBillingCycles;
+
+  static constructFromObject(data: Partial<Rbsv1plansPlanInformation>, obj?: Rbsv1plansPlanInformation): Rbsv1plansPlanInformation {
+    return new Rbsv1plansPlanInformation();
+  }
+}
+
+/**
+ * Number of times customer is going to be billed
+ */
+export class Rbsv1plansPlanInformationBillingCycles {
+  constructor() {}
+
+  /**
+   * Describe total number of billing cycles
+   */
+  'total'?: string;
+
+  static constructFromObject(data: Partial<Rbsv1plansPlanInformationBillingCycles>, obj?: Rbsv1plansPlanInformationBillingCycles): Rbsv1plansPlanInformationBillingCycles {
+    return new Rbsv1plansPlanInformationBillingCycles();
+  }
+}
+
+export class Rbsv1plansidPlanInformation {
+  constructor() {}
+
+  /**
+   * Plan code is an optional field, If not provided system generates and assign one
+   */
+  'code'?: string;
+  /**
+   * Plan name
+   */
+  'name'?: string;
+  /**
+   * Plan description
+   */
+  'description'?: string;
+  /**
+   * Updating to `DRAFT` is not allowed from `ACTIVE` and `INACTIVE` status.  Plan Status:  - `DRAFT`  - `ACTIVE`  - `INACTIVE`
+   */
+  'status'?: string;
+  'billingPeriod'?: InlineResponse200PlanInformationBillingPeriod;
+  'billingCycles'?: Rbsv1plansPlanInformationBillingCycles;
+
+  static constructFromObject(data: Partial<Rbsv1plansidPlanInformation>, obj?: Rbsv1plansidPlanInformation): Rbsv1plansidPlanInformation {
+    return new Rbsv1plansidPlanInformation();
+  }
+}
+
+export class Rbsv1plansidProcessingInformation {
+  constructor() {}
+
+  'subscriptionBillingOptions'?: Rbsv1plansidProcessingInformationSubscriptionBillingOptions;
+
+  static constructFromObject(data: Partial<Rbsv1plansidProcessingInformation>, obj?: Rbsv1plansidProcessingInformation): Rbsv1plansidProcessingInformation {
+    return new Rbsv1plansidProcessingInformation();
+  }
+}
+
+export class Rbsv1plansidProcessingInformationSubscriptionBillingOptions {
+  constructor() {}
+
+  /**
+   * Valid Values: - `ALL` - Change applied to all Subscriptions (Existing + New) - `NEW` - Change applied to New Subsciptions only
+   */
+  'applyTo'?: string;
+
+  static constructFromObject(data: Partial<Rbsv1plansidProcessingInformationSubscriptionBillingOptions>, obj?: Rbsv1plansidProcessingInformationSubscriptionBillingOptions): Rbsv1plansidProcessingInformationSubscriptionBillingOptions {
+    return new Rbsv1plansidProcessingInformationSubscriptionBillingOptions();
+  }
+}
+
+export class Rbsv1subscriptionsClientReferenceInformation {
+  constructor() {}
+
+  /**
+   * Merchant-generated order reference or tracking number. It is recommended that you send a unique value for each transaction so that you can perform meaningful searches for the transaction.  #### Used by **Authorization** Required field.  #### PIN Debit Requests for PIN debit reversals need to use the same merchant reference number that was used in the transaction that is being reversed.  Required field for all PIN Debit requests (purchase, credit, and reversal).  #### FDC Nashville Global Certain circumstances can cause the processor to truncate this value to 15 or 17 characters for Level II and Level III processing, which can cause a discrepancy between the value you submit and the value included in some processor reports.
+   */
+  'code'?: string;
+  /**
+   * Brief description of the order or any comment you wish to add to the order.
+   */
+  'comments'?: string;
+  'partner'?: Riskv1decisionsClientReferenceInformationPartner;
+  /**
+   * The name of the Connection Method client (such as Virtual Terminal or SOAP Toolkit API) that the merchant uses to send a transaction request to CyberSource.
+   */
+  'applicationName'?: string;
+  /**
+   * Version of the CyberSource application or integration used for a transaction.
+   */
+  'applicationVersion'?: string;
+  /**
+   * The entity that is responsible for running the transaction and submitting the processing request to CyberSource. This could be a person, a system, or a connection method.
+   */
+  'applicationUser'?: string;
+
+  static constructFromObject(data: Partial<Rbsv1subscriptionsClientReferenceInformation>, obj?: Rbsv1subscriptionsClientReferenceInformation): Rbsv1subscriptionsClientReferenceInformation {
+    return new Rbsv1subscriptionsClientReferenceInformation();
+  }
+}
+
+export class Rbsv1subscriptionsPaymentInformation {
+  constructor() {}
+
+  'customer'?: Rbsv1subscriptionsPaymentInformationCustomer;
+
+  static constructFromObject(data: Partial<Rbsv1subscriptionsPaymentInformation>, obj?: Rbsv1subscriptionsPaymentInformation): Rbsv1subscriptionsPaymentInformation {
+    return new Rbsv1subscriptionsPaymentInformation();
+  }
+}
+
+export class Rbsv1subscriptionsPaymentInformationCustomer {
+  constructor() {}
+
+  /**
+   * Unique identifier for the Customer token used in the transaction. When you include this value in your request, many of the fields that are normally required for an authorization or credit become optional.
+   */
+  'id': string;
+
+  static constructFromObject(data: Partial<Rbsv1subscriptionsPaymentInformationCustomer>, obj?: Rbsv1subscriptionsPaymentInformationCustomer): Rbsv1subscriptionsPaymentInformationCustomer {
+    return new Rbsv1subscriptionsPaymentInformationCustomer();
+  }
+}
+
+export class Rbsv1subscriptionsPlanInformation {
+  constructor() {}
+
+  'billingPeriod'?: InlineResponse200PlanInformationBillingPeriod;
+  'billingCycles'?: Rbsv1plansPlanInformationBillingCycles;
+
+  static constructFromObject(data: Partial<Rbsv1subscriptionsPlanInformation>, obj?: Rbsv1subscriptionsPlanInformation): Rbsv1subscriptionsPlanInformation {
+    return new Rbsv1subscriptionsPlanInformation();
+  }
+}
+
+export class Rbsv1subscriptionsProcessingInformation {
+  constructor() {}
+
+  /**
+   * Commerce Indicator is a way to identify the type of transaction. Some payment card companies use this information when determining discount rates.  Valid values: - `MOTO` - `RECURRING`
+   */
+  'commerceIndicator'?: string;
+  'authorizationOptions'?: Rbsv1subscriptionsProcessingInformationAuthorizationOptions;
+
+  static constructFromObject(data: Partial<Rbsv1subscriptionsProcessingInformation>, obj?: Rbsv1subscriptionsProcessingInformation): Rbsv1subscriptionsProcessingInformation {
+    return new Rbsv1subscriptionsProcessingInformation();
+  }
+}
+
+export class Rbsv1subscriptionsProcessingInformationAuthorizationOptions {
+  constructor() {}
+
+  'initiator'?: Rbsv1subscriptionsProcessingInformationAuthorizationOptionsInitiator;
+
+  static constructFromObject(data: Partial<Rbsv1subscriptionsProcessingInformationAuthorizationOptions>, obj?: Rbsv1subscriptionsProcessingInformationAuthorizationOptions): Rbsv1subscriptionsProcessingInformationAuthorizationOptions {
+    return new Rbsv1subscriptionsProcessingInformationAuthorizationOptions();
+  }
+}
+
+export class Rbsv1subscriptionsProcessingInformationAuthorizationOptionsInitiator {
+  constructor() {}
+
+  /**
+   * This field indicates whether the transaction is a merchant-initiated transaction or customer-initiated transaction.  Valid values: - **customer** - **merchant**
+   */
+  'type'?: string;
+
+  static constructFromObject(data: Partial<Rbsv1subscriptionsProcessingInformationAuthorizationOptionsInitiator>, obj?: Rbsv1subscriptionsProcessingInformationAuthorizationOptionsInitiator): Rbsv1subscriptionsProcessingInformationAuthorizationOptionsInitiator {
+    return new Rbsv1subscriptionsProcessingInformationAuthorizationOptionsInitiator();
+  }
+}
+
+export class Rbsv1subscriptionsSubscriptionInformation {
+  constructor() {}
+
+  /**
+   * Subscription code is an optional field, If not provided system generates and assign one
+   */
+  'code'?: string;
+  /**
+   * Plan Id. Use Plan Id from Create Plan Service.
+   */
+  'planId'?: string;
+  /**
+   * Subscription Name
+   */
+  'name': string;
+  /**
+   * Start date of the Subscription  Start date must be in UTC. Format: YYYY-MM-DDThh:mm:ssZ The T separates the date and the time. The Z indicates UTC.  Note: Subscription starts on the day provided in UTC.  **Example** 2022-08-11T22:47:57Z equals August 11, 2022, at 22:47:57 (10:47:57 p.m.). Subscription will start on August 11,2022.
+   */
+  'startDate': string;
+
+  static constructFromObject(data: Partial<Rbsv1subscriptionsSubscriptionInformation>, obj?: Rbsv1subscriptionsSubscriptionInformation): Rbsv1subscriptionsSubscriptionInformation {
+    return new Rbsv1subscriptionsSubscriptionInformation();
+  }
+}
+
+export class Rbsv1subscriptionsidOrderInformation {
+  constructor() {}
+
+  'amountDetails'?: Rbsv1subscriptionsidOrderInformationAmountDetails;
+
+  static constructFromObject(data: Partial<Rbsv1subscriptionsidOrderInformation>, obj?: Rbsv1subscriptionsidOrderInformation): Rbsv1subscriptionsidOrderInformation {
+    return new Rbsv1subscriptionsidOrderInformation();
+  }
+}
+
+export class Rbsv1subscriptionsidOrderInformationAmountDetails {
+  constructor() {}
+
+  /**
+   * Billing amount for the billing period.
+   */
+  'billingAmount'?: string;
+  /**
+   * Subscription setup fee
+   */
+  'setupFee'?: string;
+
+  static constructFromObject(data: Partial<Rbsv1subscriptionsidOrderInformationAmountDetails>, obj?: Rbsv1subscriptionsidOrderInformationAmountDetails): Rbsv1subscriptionsidOrderInformationAmountDetails {
+    return new Rbsv1subscriptionsidOrderInformationAmountDetails();
+  }
+}
+
+export class Rbsv1subscriptionsidPlanInformation {
+  constructor() {}
+
+  'billingCycles'?: Rbsv1plansPlanInformationBillingCycles;
+
+  static constructFromObject(data: Partial<Rbsv1subscriptionsidPlanInformation>, obj?: Rbsv1subscriptionsidPlanInformation): Rbsv1subscriptionsidPlanInformation {
+    return new Rbsv1subscriptionsidPlanInformation();
+  }
+}
+
+export class Rbsv1subscriptionsidSubscriptionInformation {
+  constructor() {}
+
+  /**
+   * Subscription code is an optional field, If not provided system generates and assign one
+   */
+  'code'?: string;
+  /**
+   * Plan Id. Use Plan Id from Create Plan Service.
+   */
+  'planId'?: string;
+  /**
+   * Subscription Name
+   */
+  'name'?: string;
+  /**
+   * Start date of the Subscription  Start date must be in UTC. Format: YYYY-MM-DDThh:mm:ssZ The T separates the date and the time. The Z indicates UTC.  Note: Subscription starts on the day provided in UTC.  **Example** 2022-08-11T22:47:57Z equals August 11, 2022, at 22:47:57 (10:47:57 p.m.). Subscription will start on August 11,2022.
+   */
+  'startDate'?: string;
+
+  static constructFromObject(data: Partial<Rbsv1subscriptionsidSubscriptionInformation>, obj?: Rbsv1subscriptionsidSubscriptionInformation): Rbsv1subscriptionsidSubscriptionInformation {
+    return new Rbsv1subscriptionsidSubscriptionInformation();
   }
 }
 
@@ -15264,6 +16863,30 @@ export class RiskV1DecisionsPost201ResponseConsumerAuthenticationInformation {
    * The Directory Server Transaction ID is generated by the Mastercard Directory Server during the authentication transaction and passed back to the merchant with the authentication results. For Cybersource Through Visanet Gateway: The value for this field corresponds to the following data in the TC 33 capture file3: Record: CP01 TCR7, Position: 114-149, Field: MC AVV Verification—Directory Server Transaction ID
    */
   'directoryServerTransactionId'?: string;
+  /**
+   * Directory Server assigned ACS identifier.
+   */
+  'acsOperatorID'?: number;
+  /**
+   * Unique identifier assigned by the EMVCo Secretariat upon Testing and Approval.
+   */
+  'acsReferenceNumber'?: string;
+  /**
+   * Decision on the Risk Assessment from Mastercard.
+   */
+  'idciDecision'?: string;
+  /**
+   * ReasonCode from Mastercard
+   */
+  'idciReasonCode1'?: string;
+  /**
+   * ReasonCode from Mastercard
+   */
+  'idciReasonCode2'?: string;
+  /**
+   * Risk Assessment from Mastercard
+   */
+  'idciScore'?: number;
 
   static constructFromObject(data: Partial<RiskV1DecisionsPost201ResponseConsumerAuthenticationInformation>, obj?: RiskV1DecisionsPost201ResponseConsumerAuthenticationInformation): RiskV1DecisionsPost201ResponseConsumerAuthenticationInformation {
     return new RiskV1DecisionsPost201ResponseConsumerAuthenticationInformation();
@@ -15618,7 +17241,7 @@ export class Riskv1addressverificationsOrderInformationLineItems {
    */
   'productName'?: string;
   /**
-   * Type of product. The value for this field is used to identify the product category (electronic, handling, physical, service, or shipping). The default value is `default`.  If you are performing an authorization transaction (`processingOptions.capture` is set to `false`), and you set this field to a value other than `default` or one of the values related to shipping and/or handling, then `orderInformation.lineItems[].quantity`, `orderInformation.lineItems[].productName`, and `orderInformation.lineItems[].productSku` fields are required.  Optional field.  For details, see the `product_code` field description in the [Credit Card Services Using the SCMP API Guide](https://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html/).  #### Tax Calculation Optional field for U.S., Canadian, international tax, and value added taxes.  To use the tax calculation service, use values listed in the Tax Product Code Guide. For information about this document, contact customer support. See \"Product Codes,\" page 14, for more information.
+   * Type of product. The value for this field is used to identify the product category (electronic, handling, physical, service, or shipping). The default value is `default`.  If you are performing an authorization transaction (`processingOptions.capture` is set to `false`), and you set this field to a value other than `default` or one of the values related to shipping and/or handling, then `orderInformation.lineItems[].quantity`, `orderInformation.lineItems[].productName`, and `orderInformation.lineItems[].productSku` fields are required.  Optional field.  For details, see the `product_code` field description in the [Credit Card Services Using the SCMP API Guide](https://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html/).  #### Tax Calculation Optional field for U.S., Canadian, international tax, and value added taxes.  The Product Codes for the tax service are located in the Cybersource Tax Codes guide. Contact Customer Support to request the guide. If you don’t send a tax service Product Code in your tax request, product-based rules or exemptions will not be applied and the transaction will default to fully taxable in the locations where you’ve indicated you need to collect tax [by way of nexus, no nexus, or seller registration number fields].
    */
   'productCode'?: string;
 
@@ -15647,7 +17270,7 @@ export class Riskv1addressverificationsOrderInformationShipTo {
    */
   'address4'?: string;
   /**
-   * State or province of the shipping address. Use the [State, Province, and Territory Codes for the United States and Canada](https://developer.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf)  Required field for authorization if any shipping address information is included in the request and shipping to the U.S. or Canada; otherwise, optional.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. Billing address objects will be used to determine the cardholder’s location when shipTo objects are not present.
+   * State or province of the shipping address. Use the [State, Province, and Territory Codes for the United States and Canada](https://developer.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf) (maximum length: 2)   Required field for authorization if any shipping address information is included in the request and shipping to the U.S. or Canada; otherwise, optional.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. Billing address objects will be used to determine the cardholder’s location when shipTo objects are not present.
    */
   'administrativeArea'?: string;
   /**
@@ -15707,6 +17330,10 @@ export class Riskv1authenticationresultsConsumerAuthenticationInformation {
    * Enables the communication of trusted beneficiary/whitelist status between the ACS, the DS and the 3DS Requestor.  Possible Values:  Y - 3DS Requestor is whitelisted by cardholder  N - 3DS Requestor is not whitelisted by cardholder
    */
   'whiteListStatus'?: string;
+  /**
+   * A flag to indicate if the passed credential has been encrypted by the Merchant.
+   */
+  'credentialEncrypted'?: string;
 
   static constructFromObject(data: Partial<Riskv1authenticationresultsConsumerAuthenticationInformation>, obj?: Riskv1authenticationresultsConsumerAuthenticationInformation): Riskv1authenticationresultsConsumerAuthenticationInformation {
     return new Riskv1authenticationresultsConsumerAuthenticationInformation();
@@ -15799,7 +17426,7 @@ export class Riskv1authenticationresultsPaymentInformationCard {
    */
   'bin'?: string;
   /**
-   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
+   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay - '070': EFTPOS  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
    */
   'type'?: string;
   /**
@@ -15853,7 +17480,7 @@ export class Riskv1authenticationresultsPaymentInformationTokenizedCard {
    */
   'transactionType'?: string;
   /**
-   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
+   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay - '070': EFTPOS  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
    */
   'type'?: string;
   /**
@@ -15889,6 +17516,10 @@ export class Riskv1authenticationsBuyerInformation {
    * Cardholder’s mobile phone number. **Important** Required for Visa Secure transactions in Brazil. Do not use this request field for any other types of transactions.
    */
   'mobilePhone': number;
+  /**
+   * Cardholder's work phone number.
+   */
+  'workPhone'?: number;
 
   static constructFromObject(data: Partial<Riskv1authenticationsBuyerInformation>, obj?: Riskv1authenticationsBuyerInformation): Riskv1authenticationsBuyerInformation {
     return new Riskv1authenticationsBuyerInformation();
@@ -16013,6 +17644,10 @@ export class Riskv1authenticationsOrderInformationBillTo {
    */
   'address2'?: string;
   /**
+   * Additional address information (third line of the billing address)
+   */
+  'address3'?: string;
+  /**
    * State or province of the billing address. Use the [State, Province, and Territory Codes for the United States and Canada](https://developer.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf).  For Payouts: This field may be sent only for FDC Compass.  ##### CyberSource through VisaNet Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  **Important** It is your responsibility to determine whether a field is required for the transaction you are requesting.  #### Chase Paymentech Solutions Optional field.  ####  Credit Mutuel-CIC Optional field.  #### OmniPay Direct Optional field.  #### SIX Optional field.  #### TSYS Acquiring Solutions Required when `processingInformation.billPaymentOptions.billPayment=true` and `pointOfSaleInformation.entryMode=keyed`.  #### Worldpay VAP Optional field.  #### All other processors Not used.
    */
   'administrativeArea': string;
@@ -16090,6 +17725,46 @@ export class Riskv1authenticationsOrderInformationLineItems {
    * Total tax to apply to the product. This value cannot be negative. The tax amount and the offer amount must be in the same currency. The tax amount field is additive.  The following example uses a two-exponent currency such as USD:   1. You include each line item in your request.  ..- 1st line item has amount=10.00, quantity=1, and taxAmount=0.80  ..- 2nd line item has amount=20.00, quantity=1, and taxAmount=1.60  2. The total amount authorized will be 32.40, not 30.00 with 2.40 of tax included.  Optional field.  #### Airlines processing Tax portion of the order amount. This value cannot exceed 99999999999999 (fourteen 9s). Format: English characters only. Optional request field for a line item.  #### Tax Calculation Optional field for U.S., Canadian, international tax, and value added taxes.  Note if you send this field in your tax request, the value in the field will override the tax engine
    */
   'taxAmount'?: string;
+  /**
+   * Address where item will be shipped
+   */
+  'shippingAddress1'?: string;
+  /**
+   * Address where item will be shipped
+   */
+  'shippingAddress2'?: string;
+  /**
+   * City where item will be shipped
+   */
+  'shippingCity'?: string;
+  /**
+   * Country where item will be shipped
+   */
+  'shippingCountryCode'?: string;
+  /**
+   * Customer's first name
+   */
+  'shippingFirstName'?: string;
+  /**
+   * Customer's last name
+   */
+  'shippingLastName'?: string;
+  /**
+   * Customer's middle name
+   */
+  'shippingMiddleName'?: string;
+  /**
+   * Phone number where item will be shipped
+   */
+  'shippingPhone'?: number;
+  /**
+   * Postal code where item will be shipped
+   */
+  'shippingPostalCode'?: number;
+  /**
+   * State where item will be shipped
+   */
+  'shippingState'?: string;
 
   static constructFromObject(data: Partial<Riskv1authenticationsOrderInformationLineItems>, obj?: Riskv1authenticationsOrderInformationLineItems): Riskv1authenticationsOrderInformationLineItems {
     return new Riskv1authenticationsOrderInformationLineItems();
@@ -16117,7 +17792,7 @@ export class Riskv1authenticationsPaymentInformationCard {
    */
   'bin'?: string;
   /**
-   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
+   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay - '070': EFTPOS  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
    */
   'type': string;
   /**
@@ -16146,7 +17821,7 @@ export class Riskv1authenticationsPaymentInformationTokenizedCard {
    */
   'transactionType': string;
   /**
-   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
+   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay - '070': EFTPOS  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
    */
   'type': string;
   /**
@@ -16217,7 +17892,7 @@ export class Riskv1authenticationsetupsPaymentInformationCard {
   constructor() {}
 
   /**
-   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
+   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay - '070': EFTPOS  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
    */
   'type'?: string;
   /**
@@ -16284,7 +17959,7 @@ export class Riskv1authenticationsetupsPaymentInformationTokenizedCard {
    */
   'transactionType': string;
   /**
-   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
+   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay - '070': EFTPOS  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
    */
   'type': string;
   /**
@@ -16567,6 +18242,10 @@ export class Riskv1decisionsConsumerAuthenticationInformation {
    * Enables the communication of trusted beneficiary/whitelist status between the ACS, the DS and the 3DS Requestor.  Possible Values:  Y - 3DS Requestor is whitelisted by cardholder  N - 3DS Requestor is not whitelisted by cardholder
    */
   'whiteListStatus'?: string;
+  /**
+   * Risk Assessment from Mastercard. This is to be sent by merchant if they would like to request a score
+   */
+  'scoreRequest'?: number;
 
   static constructFromObject(data: Partial<Riskv1decisionsConsumerAuthenticationInformation>, obj?: Riskv1decisionsConsumerAuthenticationInformation): Riskv1decisionsConsumerAuthenticationInformation {
     return new Riskv1decisionsConsumerAuthenticationInformation();
@@ -16856,7 +18535,7 @@ export class Riskv1decisionsOrderInformationLineItems {
    */
   'productName'?: string;
   /**
-   * Type of product. The value for this field is used to identify the product category (electronic, handling, physical, service, or shipping). The default value is `default`.  If you are performing an authorization transaction (`processingOptions.capture` is set to `false`), and you set this field to a value other than `default` or one of the values related to shipping and/or handling, then `orderInformation.lineItems[].quantity`, `orderInformation.lineItems[].productName`, and `orderInformation.lineItems[].productSku` fields are required.  Optional field.  For details, see the `product_code` field description in the [Credit Card Services Using the SCMP API Guide](https://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html/).  #### Tax Calculation Optional field for U.S., Canadian, international tax, and value added taxes.  To use the tax calculation service, use values listed in the Tax Product Code Guide. For information about this document, contact customer support. See \"Product Codes,\" page 14, for more information.
+   * Type of product. The value for this field is used to identify the product category (electronic, handling, physical, service, or shipping). The default value is `default`.  If you are performing an authorization transaction (`processingOptions.capture` is set to `false`), and you set this field to a value other than `default` or one of the values related to shipping and/or handling, then `orderInformation.lineItems[].quantity`, `orderInformation.lineItems[].productName`, and `orderInformation.lineItems[].productSku` fields are required.  Optional field.  For details, see the `product_code` field description in the [Credit Card Services Using the SCMP API Guide](https://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html/).  #### Tax Calculation Optional field for U.S., Canadian, international tax, and value added taxes.  The Product Codes for the tax service are located in the Cybersource Tax Codes guide. Contact Customer Support to request the guide. If you don’t send a tax service Product Code in your tax request, product-based rules or exemptions will not be applied and the transaction will default to fully taxable in the locations where you’ve indicated you need to collect tax [by way of nexus, no nexus, or seller registration number fields].
    */
   'productCode'?: string;
   /**
@@ -16894,7 +18573,11 @@ export class Riskv1decisionsOrderInformationShipTo {
    */
   'address2'?: string;
   /**
-   * State or province of the shipping address. Use the [State, Province, and Territory Codes for the United States and Canada](https://developer.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf)  Required field for authorization if any shipping address information is included in the request and shipping to the U.S. or Canada; otherwise, optional.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. Billing address objects will be used to determine the cardholder’s location when shipTo objects are not present.
+   * Third line of the shipping address.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. Billing address objects will be used to determine the cardholder’s location when shipTo objects are not present.
+   */
+  'address3'?: string;
+  /**
+   * State or province of the shipping address. Use the [State, Province, and Territory Codes for the United States and Canada](https://developer.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf) (maximum length: 2)   Required field for authorization if any shipping address information is included in the request and shipping to the U.S. or Canada; otherwise, optional.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. Billing address objects will be used to determine the cardholder’s location when shipTo objects are not present.
    */
   'administrativeArea'?: string;
   /**
@@ -16917,6 +18600,10 @@ export class Riskv1decisionsOrderInformationShipTo {
    * Last name of the recipient.  #### Litle Maximum length: 25  #### All other processors Maximum length: 60  Optional field.
    */
   'lastName'?: string;
+  /**
+   * Middle name of the recipient.  #### Litle Maximum length: 25  #### All other processors Maximum length: 60  Optional field.
+   */
+  'middleName'?: string;
   /**
    * Phone number associated with the shipping address.
    */
@@ -16990,7 +18677,7 @@ export class Riskv1decisionsPaymentInformationCard {
    */
   'number'?: string;
   /**
-   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
+   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay - '070': EFTPOS  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
    */
   'type'?: string;
   /**
@@ -17022,7 +18709,7 @@ export class Riskv1decisionsPaymentInformationTokenizedCard {
    */
   'transactionType'?: string;
   /**
-   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
+   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay - '070': EFTPOS  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
    */
   'type'?: string;
   /**
@@ -17390,7 +19077,7 @@ export class Riskv1exportcomplianceinquiriesOrderInformationLineItems {
    */
   'productName'?: string;
   /**
-   * Type of product. The value for this field is used to identify the product category (electronic, handling, physical, service, or shipping). The default value is `default`.  If you are performing an authorization transaction (`processingOptions.capture` is set to `false`), and you set this field to a value other than `default` or one of the values related to shipping and/or handling, then `orderInformation.lineItems[].quantity`, `orderInformation.lineItems[].productName`, and `orderInformation.lineItems[].productSku` fields are required.  Optional field.  For details, see the `product_code` field description in the [Credit Card Services Using the SCMP API Guide](https://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html/).  #### Tax Calculation Optional field for U.S., Canadian, international tax, and value added taxes.  To use the tax calculation service, use values listed in the Tax Product Code Guide. For information about this document, contact customer support. See \"Product Codes,\" page 14, for more information.
+   * Type of product. The value for this field is used to identify the product category (electronic, handling, physical, service, or shipping). The default value is `default`.  If you are performing an authorization transaction (`processingOptions.capture` is set to `false`), and you set this field to a value other than `default` or one of the values related to shipping and/or handling, then `orderInformation.lineItems[].quantity`, `orderInformation.lineItems[].productName`, and `orderInformation.lineItems[].productSku` fields are required.  Optional field.  For details, see the `product_code` field description in the [Credit Card Services Using the SCMP API Guide](https://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html/).  #### Tax Calculation Optional field for U.S., Canadian, international tax, and value added taxes.  The Product Codes for the tax service are located in the Cybersource Tax Codes guide. Contact Customer Support to request the guide. If you don’t send a tax service Product Code in your tax request, product-based rules or exemptions will not be applied and the transaction will default to fully taxable in the locations where you’ve indicated you need to collect tax [by way of nexus, no nexus, or seller registration number fields].
    */
   'productCode'?: string;
 
@@ -17601,7 +19288,7 @@ export class Riskv1liststypeentriesOrderInformationShipTo {
    */
   'address2'?: string;
   /**
-   * State or province of the shipping address. Use the [State, Province, and Territory Codes for the United States and Canada](https://developer.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf)  Required field for authorization if any shipping address information is included in the request and shipping to the U.S. or Canada; otherwise, optional.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. Billing address objects will be used to determine the cardholder’s location when shipTo objects are not present.
+   * State or province of the shipping address. Use the [State, Province, and Territory Codes for the United States and Canada](https://developer.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf) (maximum length: 2)   Required field for authorization if any shipping address information is included in the request and shipping to the U.S. or Canada; otherwise, optional.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. Billing address objects will be used to determine the cardholder’s location when shipTo objects are not present.
    */
   'administrativeArea'?: string;
   /**
@@ -17672,7 +19359,7 @@ export class Riskv1liststypeentriesPaymentInformationCard {
    */
   'number'?: string;
   /**
-   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
+   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay - '070': EFTPOS  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
    */
   'type'?: string;
   /**
@@ -17918,7 +19605,7 @@ export class Tmsv2customersDefaultPaymentInstrument {
   constructor() {}
 
   /**
-   * The id of the Customers default Payment Instrument
+   * The Id of the Customers default Payment Instrument
    */
   'id'?: string;
 
@@ -17931,7 +19618,7 @@ export class Tmsv2customersDefaultShippingAddress {
   constructor() {}
 
   /**
-   * The id of the Customers default Shipping Address
+   * The Id of the Customers default Shipping Address
    */
   'id'?: string;
 
@@ -17941,7 +19628,7 @@ export class Tmsv2customersDefaultShippingAddress {
 }
 
 /**
- * Additional resources for the Customer token.
+ * Additional resources for the Customer.
  */
 export class Tmsv2customersEmbedded {
   constructor() {}
@@ -17959,21 +19646,25 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrument {
 
   'links'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentLinks;
   /**
-   * The id of the Payment Instrument Token.
+   * The Id of the Payment Instrument Token.
    */
   'id'?: string;
   /**
-   * The type of token.  Valid values: - paymentInstrument
+   * The type.  Possible Values: - paymentInstrument
    */
   'object'?: string;
   /**
-   * Flag that indicates whether customer payment instrument is the dafault. Valid values:  - `true`: Payment instrument is customer's default.  - `false`: Payment instrument is not customer's default.
+   * Flag that indicates whether customer payment instrument is the dafault. Possible Values:  - `true`: Payment instrument is customer's default.  - `false`: Payment instrument is not customer's default.
    */
   '_default'?: boolean;
   /**
-   * Issuers state for the card number. Valid values: - ACTIVE - CLOSED : The account has been closed.
+   * Issuers state for the card number. Possible Values: - ACTIVE - CLOSED : The account has been closed.
    */
   'state'?: string;
+  /**
+   * The type of Payment Instrument. Possible Values: - cardHash
+   */
+  'type'?: string;
   'bankAccount'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentBankAccount;
   'card'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentCard;
   'buyerInformation'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentBuyerInformation;
@@ -17993,7 +19684,7 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentBankAccount {
   constructor() {}
 
   /**
-   * Account type.  Valid values:  - checking : C  - general ledger : G This value is supported only on Wells Fargo ACH  - savings : S (U.S. dollars only)  - corporate checking : X (U.S. dollars only)
+   * Account type.  Possible Values:  - checking : C  - general ledger : G This value is supported only on Wells Fargo ACH  - savings : S (U.S. dollars only)  - corporate checking : X (U.S. dollars only)
    */
   'type'?: string;
 
@@ -18098,7 +19789,7 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentBuyerInformationPerso
    */
   'id'?: string;
   /**
-   * The type of the identification.  Valid values:   - driver license
+   * The type of the identification.  Possible Values:   - driver license
    */
   'type'?: string;
   'issuedBy'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentBuyerInformationIssuedBy;
@@ -18115,7 +19806,7 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentCard {
   constructor() {}
 
   /**
-   * Two-digit month in which the payment card expires.  Format: `MM`.  Valid values: `01` through `12`.
+   * Two-digit month in which the payment card expires.  Format: `MM`.  Possible Values: `01` through `12`.
    */
   'expirationMonth'?: string;
   /**
@@ -18123,7 +19814,7 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentCard {
    */
   'expirationYear'?: string;
   /**
-   * Value that indicates the card type. Valid v2 : v1 - description values:   * 001 : visa   * 002 : mastercard - Eurocard—European regional brand of Mastercard   * 003 : american express   * 004 : discover   * 005 : diners club   * 006 : carte blanche   * 007 : jcb   * 008 : optima   * 011 : twinpay credit   * 012 : twinpay debit   * 013 : walmart   * 014 : enRoute   * 015 : lowes consumer   * 016 : home depot consumer   * 017 : mbna   * 018 : dicks sportswear   * 019 : casual corner   * 020 : sears   * 021 : jal   * 023 : disney   * 024 : maestro uk domestic   * 025 : sams club consumer   * 026 : sams club business   * 028 : bill me later   * 029 : bebe   * 030 : restoration hardware   * 031 : delta online — use this value only for Ingenico ePayments. For other processors, use 001 for all Visa card types.   * 032 : solo   * 033 : visa electron   * 034 : dankort   * 035 : laser   * 036 : carte bleue — formerly Cartes Bancaires   * 037 : carta si   * 038 : pinless debit   * 039 : encoded account   * 040 : uatp   * 041 : household   * 042 : maestro international   * 043 : ge money uk   * 044 : korean cards   * 045 : style   * 046 : jcrew   * 047 : payease china processing ewallet   * 048 : payease china processing bank transfer   * 049 : meijer private label   * 050 : hipercard — supported only by the Comercio Latino processor.   * 051 : aura — supported only by the Comercio Latino processor.   * 052 : redecard   * 054 : elo — supported only by the Comercio Latino processor.   * 055 : capital one private label   * 056 : synchrony private label   * 057 : costco private label   * 060 : mada   * 062 : china union pay   * 063 : falabella private label
+   * Value that indicates the card type. Possible Values v2 : v1:   * 001 : visa   * 002 : mastercard - Eurocard—European regional brand of Mastercard   * 003 : american express   * 004 : discover   * 005 : diners club   * 006 : carte blanche   * 007 : jcb   * 008 : optima   * 011 : twinpay credit   * 012 : twinpay debit   * 013 : walmart   * 014 : enRoute   * 015 : lowes consumer   * 016 : home depot consumer   * 017 : mbna   * 018 : dicks sportswear   * 019 : casual corner   * 020 : sears   * 021 : jal   * 023 : disney   * 024 : maestro uk domestic   * 025 : sams club consumer   * 026 : sams club business   * 028 : bill me later   * 029 : bebe   * 030 : restoration hardware   * 031 : delta online — use this value only for Ingenico ePayments. For other processors, use 001 for all Visa card types.   * 032 : solo   * 033 : visa electron   * 034 : dankort   * 035 : laser   * 036 : carte bleue — formerly Cartes Bancaires   * 037 : carta si   * 038 : pinless debit   * 039 : encoded account   * 040 : uatp   * 041 : household   * 042 : maestro international   * 043 : ge money uk   * 044 : korean cards   * 045 : style   * 046 : jcrew   * 047 : payease china processing ewallet   * 048 : payease china processing bank transfer   * 049 : meijer private label   * 050 : hipercard — supported only by the Comercio Latino processor.   * 051 : aura — supported only by the Comercio Latino processor.   * 052 : redecard   * 054 : elo — supported only by the Comercio Latino processor.   * 055 : capital one private label   * 056 : synchrony private label   * 057 : costco private label   * 060 : mada   * 062 : china union pay   * 063 : falabella private label
    */
   'type'?: string;
   /**
@@ -18131,7 +19822,7 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentCard {
    */
   'issueNumber'?: string;
   /**
-   * Month of the start of the Maestro (UK Domestic) card validity period. Do not include the field, even with a blank value, if the card is not a Maestro (UK Domestic) card. `Format: MM`. Valid values: 01 through 12.  **Note** The start date is not required for Maestro (UK Domestic) transactions.
+   * Month of the start of the Maestro (UK Domestic) card validity period. Do not include the field, even with a blank value, if the card is not a Maestro (UK Domestic) card. `Format: MM`. Possible Values: 01 through 12.  **Note** The start date is not required for Maestro (UK Domestic) transactions.
    */
   'startMonth'?: string;
   /**
@@ -18142,6 +19833,10 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentCard {
    * 'Payment Instrument was created / updated as part of a pinless debit transaction.'
    */
   'useAs'?: string;
+  /**
+   * Hash value representing the card.
+   */
+  'hash'?: string;
   'tokenizedInformation'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentCardTokenizedInformation;
 
   static constructFromObject(data: Partial<Tmsv2customersEmbeddedDefaultPaymentInstrumentCard>, obj?: Tmsv2customersEmbeddedDefaultPaymentInstrumentCard): Tmsv2customersEmbeddedDefaultPaymentInstrumentCard {
@@ -18153,7 +19848,7 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentCardTokenizedInformat
   constructor() {}
 
   /**
-   * Value that identifies your business and indicates that the cardholder’s account number is tokenized. This value is assigned by the token service provider and is unique within the token service provider’s database.  **Note** This field is supported only for **CyberSource through VisaNet** and **FDC Nashville Global**.
+   * Value that identifies your business and indicates that the cardholder’s account number is tokenized. This value is assigned by the token service provider and is unique within the token service provider’s database.  **Note** This field is supported only through **VisaNet** and **FDC Nashville Global**.
    */
   'requestorID'?: string;
   /**
@@ -18167,7 +19862,7 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentCardTokenizedInformat
 }
 
 /**
- * Additional resources for the Payment Instrument token.
+ * Additional resources for the Payment Instrument.
  */
 export class Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbedded {
   constructor() {}
@@ -18184,19 +19879,19 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbeddedInstrumentIde
 
   'links'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbeddedInstrumentIdentifierLinks;
   /**
-   * The id of the Instrument Identifier Token.
+   * The Id of the Instrument Identifier Token.
    */
   'id'?: string;
   /**
-   * The type of token.  Valid values: - instrumentIdentifier
+   * The type.  Possible Values: - instrumentIdentifier
    */
   'object'?: string;
   /**
-   * Issuers state for the card number. Valid values: - ACTIVE - CLOSED : The account has been closed.
+   * Issuers state for the card number. Possible Values: - ACTIVE - CLOSED : The account has been closed.
    */
   'state'?: string;
   /**
-   * The type of Instrument Identifier. Valid values: - enrollable card
+   * The type of Instrument Identifier. Possible Values: - enrollable card
    */
   'type'?: string;
   'card'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbeddedInstrumentIdentifierCard;
@@ -18233,7 +19928,7 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbeddedInstrumentIde
 }
 
 /**
- * This information is sent to the issuer as part of network token enrollment and is not stored under the Instrument Identifier token.
+ * This information is sent to the issuer as part of network token enrollment and is not stored under the Instrument Identifier.
  */
 export class Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbeddedInstrumentIdentifierBillTo {
   constructor() {}
@@ -18269,7 +19964,7 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbeddedInstrumentIde
 }
 
 /**
- * The expirationMonth, expirationYear and securityCode is sent to the issuer as part of network token enrollment and is not stored under the Instrument Identifier token.
+ * The expirationMonth, expirationYear and securityCode is sent to the issuer as part of network token enrollment and is not stored under the Instrument Identifier.
  */
 export class Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbeddedInstrumentIdentifierCard {
   constructor() {}
@@ -18279,7 +19974,7 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbeddedInstrumentIde
    */
   'number'?: string;
   /**
-   * Two-digit month in which the payment card expires.  Format: `MM`.  Valid values: `01` through `12`.
+   * Two-digit month in which the payment card expires.  Format: `MM`.  Possible Values: `01` through `12`.
    */
   'expirationMonth'?: string;
   /**
@@ -18287,7 +19982,7 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbeddedInstrumentIde
    */
   'expirationYear'?: string;
   /**
-   * Card Verification Number.
+   * Card Verification Code.  This value is sent to the issuer to support the approval of a network token provision. It is not persisted against the Instrument Identifier.
    */
   'securityCode'?: string;
 
@@ -18356,7 +20051,7 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbeddedInstrumentIde
   constructor() {}
 
   /**
-   * The creator of the Instrument Identifier token.
+   * The creator of the Instrument Identifier.
    */
   'creator'?: string;
 
@@ -18414,6 +20109,10 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbeddedInstrumentIde
    * Network transaction identifier that was returned in the payment response field _processorInformation.transactionID_ in the reply message for either the original merchant-initiated payment in the series or the previous merchant-initiated payment in the series.
    */
   'previousTransactionId'?: string;
+  /**
+   * Amount of the original authorization.
+   */
+  'originalAuthorizedAmount'?: string;
 
   static constructFromObject(
     data: Partial<Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbeddedInstrumentIdentifierProcessingInformationAuthorizationOptionsInitiatorMerchantInitiatedTransaction>,
@@ -18427,19 +20126,23 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbeddedInstrumentIde
   constructor() {}
 
   /**
-   * The network token card association brand Valid values: - visa - mastercard
+   * The network token card association brand Possible Values: - visa - mastercard
    */
   'type'?: string;
   /**
-   * Issuers state for the network token Valid values: - ACTIVE - SUSPENDED : This state can change to ACTIVE or DELETED. - DELETED : This is a final state for the network token.
+   * State of the network token or network token provision Possible Values: - ACTIVE : Network token is active. - SUSPENDED : Network token is suspended. This state can change back to ACTIVE. - DELETED : This is a final state for a network token instance. - UNPROVISIONED : A previous network token provision was unsuccessful.
    */
   'state'?: string;
   /**
-   * The token requestors customer’s payment network token
+   * Issuers state for the network token Possible Values: - INVALID_REQUEST : The network token provision request contained invalid data. - CARD_VERIFICATION_FAILED : The network token provision request contained data that could not be verified. - CARD_NOT_ELIGIBLE : Card can currently not be used with issuer for tokenization. - CARD_NOT_ALLOWED : Card can currently not be used with card association for tokenization. - DECLINED : Card can currently not be used with issuer for tokenization. - SERVICE_UNAVAILABLE : The network token service was unavailable or timed out. - SYSTEM_ERROR : An unexpected error occurred with network token service, check configuration.
+   */
+  'reason'?: string;
+  /**
+   * The token requestors network token
    */
   'number'?: string;
   /**
-   * Two-digit month in which the network token expires.  Format: `MM`.  Valid values: `01` through `12`.
+   * Two-digit month in which the network token expires.  Format: `MM`.  Possible Values: `01` through `12`.
    */
   'expirationMonth'?: string;
   /**
@@ -18471,7 +20174,7 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentEmbeddedInstrumentIde
    */
   'suffix'?: string;
   /**
-   *  Two-digit month in which the customer’s latest payment card expires.  Format: `MM`.  Valid values: `01` through `12`.
+   *  Two-digit month in which the customer’s latest payment card expires.  Format: `MM`.  Possible Values: `01` through `12`.
    */
   'expirationMonth'?: string;
   /**
@@ -18491,7 +20194,7 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentInstrumentIdentifier 
   constructor() {}
 
   /**
-   * The id of the Instrument Identifier token linked to the Payment Instrument.
+   * The Id of the Instrument Identifier linked to the Payment Instrument.
    */
   'id'?: string;
 
@@ -18538,7 +20241,7 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentMerchantInformationMe
   constructor() {}
 
   /**
-   * Alternate contact information for your business,such as an email address or URL. This value might be displayed on the cardholder’s statement. When you do not include this value in your capture or credit request, CyberSource uses the merchant URL from your CyberSource account. Important This value must consist of English characters
+   * Alternate contact information for your business,such as an email address or URL. This value might be displayed on the cardholder’s statement. When you do not include this value in your capture or credit request, the merchant URL from your CyberSource account is used. Important This value must consist of English characters
    */
   'alternateName'?: string;
 
@@ -18554,7 +20257,7 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentMetadata {
   constructor() {}
 
   /**
-   * The creator of the Payment Instrument token.
+   * The creator of the Payment Instrument.
    */
   'creator'?: string;
 
@@ -18567,7 +20270,7 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentProcessingInformation
   constructor() {}
 
   /**
-   * Flag that indicates that this is a payment for a bill or for an existing contractual loan. For processor-specific details, see the `bill_payment` field description in [Credit Card Services Using the SCMP API.](https://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html/)  Valid values: - `true`: Bill payment or loan payment. - `false` (default): Not a bill payment or loan payment.
+   * Flag that indicates that this is a payment for a bill or for an existing contractual loan. For processor-specific details, see the `bill_payment` field description in [Credit Card Services Using the SCMP API.](https://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html/)  Possible Values: - `true`: Bill payment or loan payment. - `false` (default): Not a bill payment or loan payment.
    */
   'billPaymentProgramEnabled'?: boolean;
   'bankTransferOptions'?: Tmsv2customersEmbeddedDefaultPaymentInstrumentProcessingInformationBankTransferOptions;
@@ -18581,7 +20284,7 @@ export class Tmsv2customersEmbeddedDefaultPaymentInstrumentProcessingInformation
   constructor() {}
 
   /**
-   * Specifies the authorization method for the transaction.  #### TeleCheck Valid values: - `ARC`: account receivable conversion - `CCD`: corporate cash disbursement - `POP`: point of purchase conversion - `PPD`: prearranged payment and deposit entry - `TEL`: telephone-initiated entry - `WEB`: internet-initiated entry  For details, see `ecp_sec_code` field description in the [Electronic Check Services Using the SCMP API Guide.](https://apps.cybersource.com/library/documentation/dev_guides/EChecks_SCMP_API/html/)
+   * Specifies the authorization method for the transaction.  #### TeleCheck Possible Values: - `ARC`: account receivable conversion - `CCD`: corporate cash disbursement - `POP`: point of purchase conversion - `PPD`: prearranged payment and deposit entry - `TEL`: telephone-initiated entry - `WEB`: internet-initiated entry  For details, see `ecp_sec_code` field description in the [Electronic Check Services Using the SCMP API Guide.](https://apps.cybersource.com/library/documentation/dev_guides/EChecks_SCMP_API/html/)
    */
   'sECCode'?: string;
 
@@ -18598,11 +20301,11 @@ export class Tmsv2customersEmbeddedDefaultShippingAddress {
 
   'links'?: Tmsv2customersEmbeddedDefaultShippingAddressLinks;
   /**
-   * The id of the Shipping Address Token.
+   * The Id of the Shipping Address Token.
    */
   'id'?: string;
   /**
-   * Flag that indicates whether customer shipping address is the dafault. Valid values:  - `true`: Shipping Address is customer's default.  - `false`: Shipping Address is not customer's default.
+   * Flag that indicates whether customer shipping address is the dafault. Possible Values:  - `true`: Shipping Address is customer's default.  - `false`: Shipping Address is not customer's default.
    */
   '_default'?: boolean;
   'shipTo'?: Tmsv2customersEmbeddedDefaultShippingAddressShipTo;
@@ -18654,7 +20357,7 @@ export class Tmsv2customersEmbeddedDefaultShippingAddressMetadata {
   constructor() {}
 
   /**
-   * The creator of the Shipping Address token.
+   * The creator of the Shipping Address.
    */
   'creator'?: string;
 
@@ -18695,7 +20398,7 @@ export class Tmsv2customersEmbeddedDefaultShippingAddressShipTo {
    */
   'administrativeArea'?: string;
   /**
-   * Postal code for the shipping address. The postal code must consist of 5 to 9 digits.  When the billing country is the U.S., the 9-digit postal code must follow this format: [5 digits][dash][4 digits]  Example 12345-6789  When the billing country is Canada, the 6-digit postal code must follow this format: [alpha][numeric][alpha][space][numeric][alpha][numeric]  Example A1B 2C3  **American Express Direct**\\ Before sending the postal code to the processor, CyberSource removes all nonalphanumeric characters and, if the remaining value is longer than nine characters, truncates the value starting from the right side.
+   * Postal code for the shipping address. The postal code must consist of 5 to 9 digits.  When the billing country is the U.S., the 9-digit postal code must follow this format: [5 digits][dash][4 digits]  Example 12345-6789  When the billing country is Canada, the 6-digit postal code must follow this format: [alpha][numeric][alpha][space][numeric][alpha][numeric]  Example A1B 2C3  **American Express Direct**\\ Before sending the postal code to the processor, all nonalphanumeric characters are removed and, if the remaining value is longer than nine characters, truncates the value starting from the right side.
    */
   'postalCode'?: string;
   /**
@@ -18771,11 +20474,11 @@ export class Tmsv2customersMerchantDefinedInformation {
   constructor() {}
 
   /**
-   * The number you assign as the name for your merchant-defined data or secure field. Valid values are data1 to data4 and sensitive1 to sensitive4  For example, to set the name for merchant-defined data 2 field, you would reference merchantDefinedInformation[x].name as data2 Valid values: - data1 - data2 - data3 - data4 - sensitive1 - sensitive2 - sensitive3 - sensitive4
+   * The number you assign as the name for your merchant-defined data or secure field. Possible Values are data1 to data4 and sensitive1 to sensitive4  For example, to set the name for merchant-defined data 2 field, you would reference merchantDefinedInformation[x].name as data2 Possible Values: - data1 - data2 - data3 - data4 - sensitive1 - sensitive2 - sensitive3 - sensitive4
    */
   'name'?: string;
   /**
-   * The value you assign for your merchant-defined data field.  **Warning** Merchant-defined data fields are not intended to and must not be used to capture personally identifying information. Accordingly, merchants are prohibited from capturing, obtaining, and/or transmitting any personally identifying information in or via the merchant-defined data fields. Personally identifying information includes, but is not limited to, address, credit card number, social security number, driver's license number, state-issued identification number, passport number, and card verification numbers (CVV, CVC2, CVV2, CID, CVN). In the event CyberSource discovers that a merchant is capturing and/or transmitting personally identifying information via the merchant-defined data fields, whether or not intentionally, CyberSource will immediately suspend the merchant's account, which will result in a rejection of any and all transaction requests submitted by the merchant after the point of suspension.
+   * The value you assign for your merchant-defined data field.  **Warning** Merchant-defined data fields are not intended to and must not be used to capture personally identifying information. Accordingly, merchants are prohibited from capturing, obtaining, and/or transmitting any personally identifying information in or via the merchant-defined data fields. Personally identifying information includes, but is not limited to, address, credit card number, social security number, driver's license number, state-issued identification number, passport number, and card verification numbers (CVV, CVC2, CVV2, CID, CVN). In the event it is discovered a merchant is capturing and/or transmitting personally identifying information via the merchant-defined data fields, whether or not intentionally, the merchant's account will immediately be suspended, which will result in a rejection of any and all transaction requests submitted by the merchant after the point of suspension.
    */
   'value'?: string;
 
@@ -18788,7 +20491,7 @@ export class Tmsv2customersMetadata {
   constructor() {}
 
   /**
-   * The creator of the Customer token.
+   * The creator of the Customer.
    */
   'creator'?: string;
 
@@ -18811,20 +20514,6 @@ export class Tmsv2customersObjectInformation {
 
   static constructFromObject(data: Partial<Tmsv2customersObjectInformation>, obj?: Tmsv2customersObjectInformation): Tmsv2customersObjectInformation {
     return new Tmsv2customersObjectInformation();
-  }
-}
-
-export class TokenizeRequest {
-  constructor() {}
-
-  /**
-   * Unique identifier for the generated token. This is obtained from the Generate Key request. See the [Java Script and Java examples](http://apps.cybersource.com/library/documentation/dev_guides/Secure_Acceptance_Flex/Key/html) on how to import the key and encrypt using the imported key.
-   */
-  'keyId': string;
-  'cardInfo'?: Flexv1tokensCardInfo;
-
-  static constructFromObject(data: Partial<TokenizeRequest>, obj?: TokenizeRequest): TokenizeRequest {
-    return new TokenizeRequest();
   }
 }
 
@@ -19660,7 +21349,7 @@ export class TssV2TransactionsGet200ResponsePaymentInformationCard {
    */
   'issueNumber'?: string;
   /**
-   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
+   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay - '070': EFTPOS  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
    */
   'type'?: string;
   /**
@@ -20486,7 +22175,7 @@ export class TssV2TransactionsPost201ResponseEmbeddedPaymentInformationCard {
    */
   'prefix'?: string;
   /**
-   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
+   * Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1,4] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay - '070': EFTPOS  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. [^4]: For this card type, you must include the `paymentInformation.card.type` in your request for any payer authentication services.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### Google Pay transactions For PAN-based Google Pay transactions, this field is returned in the API response.  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International
    */
   'type'?: string;
 
@@ -20528,6 +22217,7 @@ export class TssV2TransactionsPost201ResponseEmbeddedPointOfSaleInformation {
    */
   'deviceId'?: string;
   'partner'?: TssV2TransactionsPost201ResponseEmbeddedPointOfSaleInformationPartner;
+  'emv'?: Ptsv2paymentsidreversalsPointOfSaleInformationEmv;
 
   static constructFromObject(data: Partial<TssV2TransactionsPost201ResponseEmbeddedPointOfSaleInformation>, obj?: TssV2TransactionsPost201ResponseEmbeddedPointOfSaleInformation): TssV2TransactionsPost201ResponseEmbeddedPointOfSaleInformation {
     return new TssV2TransactionsPost201ResponseEmbeddedPointOfSaleInformation();
@@ -20764,7 +22454,7 @@ export class UmsV1UsersGet200ResponseUsers {
   'accountInformation'?: UmsV1UsersGet200ResponseAccountInformation;
   'organizationInformation'?: UmsV1UsersGet200ResponseOrganizationInformation;
   'contactInformation'?: UmsV1UsersGet200ResponseContactInformation;
-  'customFields'?: any;
+  'customFields'?: { [key: string]: string };
 
   static constructFromObject(data: Partial<UmsV1UsersGet200ResponseUsers>, obj?: UmsV1UsersGet200ResponseUsers): UmsV1UsersGet200ResponseUsers {
     return new UmsV1UsersGet200ResponseUsers();
@@ -20860,6 +22550,32 @@ export class UpdatePasswordKeysRequest {
 
   static constructFromObject(data: Partial<UpdatePasswordKeysRequest>, obj?: UpdatePasswordKeysRequest): UpdatePasswordKeysRequest {
     return new UpdatePasswordKeysRequest();
+  }
+}
+
+export class UpdatePlanRequest {
+  constructor() {}
+
+  'planInformation'?: Rbsv1plansidPlanInformation;
+  'processingInformation'?: Rbsv1plansidProcessingInformation;
+  'orderInformation'?: InlineResponse200OrderInformation;
+
+  static constructFromObject(data: Partial<UpdatePlanRequest>, obj?: UpdatePlanRequest): UpdatePlanRequest {
+    return new UpdatePlanRequest();
+  }
+}
+
+export class UpdateSubscription {
+  constructor() {}
+
+  'clientReferenceInformation'?: Rbsv1subscriptionsClientReferenceInformation;
+  'processingInformation'?: Rbsv1subscriptionsProcessingInformation;
+  'planInformation'?: Rbsv1subscriptionsidPlanInformation;
+  'subscriptionInformation'?: Rbsv1subscriptionsidSubscriptionInformation;
+  'orderInformation'?: Rbsv1subscriptionsidOrderInformation;
+
+  static constructFromObject(data: Partial<UpdateSubscription>, obj?: UpdateSubscription): UpdateSubscription {
+    return new UpdateSubscription();
   }
 }
 
@@ -21392,11 +23108,11 @@ export class VasV2PaymentsPost201ResponseTaxInformation {
   constructor() {}
 
   /**
-   * Indicates whether this is a committed tax transaction. For a committed tax transaction, the status in the Tax Detail Report is “Committed.” For an uncommitted tax transaction, the status in the Tax Detail Report is “Uncommitted.” Possible values: - `true`: This is a committed tax transaction. - `false` (default): This is not a committed tax transaction.  A committed tax request is a tax service request that sets the status field in the Tax Detail Report to committed. The committed status indicates that the amount calculated by the tax service is included in the amount of a capture or credit.  Use a void service request to cancels a committed tax request or a committed refund tax request. The void transaction is included as a separate entry in the Tax Detail Report. The value of the status field is cancelled. The value of the link ID is the request ID of the committed tax request or refund tax request that was voided. You can use the value of the link ID to reconcile your orders.  Optional for U.S., Canadian, international tax, and value added taxes.
+   * Indicates whether this is a committed tax transaction. For a committed tax transaction, the status in the Tax Detail Report is “Committed.” For an uncommitted tax transaction, the status in the Tax Detail Report is “Uncommitted.” Possible values: - `true`: This is a committed tax transaction. - `false` (default): This is not a committed tax transaction.  A committed tax request is a tax service request that sets the status field in the Tax Detail Report to committed. The committed status indicates that the amount calculated by the tax service is included in the amount of a capture or credit.  Use a void service request to cancel a committed tax request or a committed refund tax request. The void transaction is included as a separate entry in the Tax Detail Report. The value of the status field is cancelled. The value of the link ID is the request ID of the committed tax request or refund tax request that was voided. You can use the value of the link ID to reconcile your orders.  Optional for U.S., Canadian, international tax, and value added taxes. For more information on Tax Detail Report features refer the [Tax Service Guide](https://developer.cybersource.com/docs/cybs/en-us/tax-calculation/developer/all/rest/tax-calculation/tax-overview.html).
    */
   'commitIndicator'?: boolean;
   /**
-   * Indicates whether this is a refund tax transaction. For a refund tax transaction, amounts in the Tax Detail Report will be negative. Possible values: - `true`: This is a refund tax transaction. - `false` (default): This is not a refund tax transaction.  A refund tax request is a tax service request that sets the transaction type field in the Tax Detail Report to refunded and makes the reported amount negative. Tax amounts are returned as positive amounts in reply messages, but they are saved in reports as negative amounts which enables the reporting software to accurately calculate the aggregate amounts.  Optional for U.S., Canadian, international tax, and value added taxes.
+   * Indicates whether this is a refund tax transaction. For a refund tax transaction, amounts in the Tax Detail Report will be negative. Possible values: - `true`: This is a refund tax transaction. - `false` (default): This is not a refund tax transaction.  A refund tax request is a tax service request that sets the transaction type field in the Tax Detail Report to refunded and makes the reported amount negative. Tax amounts are returned as positive amounts in reply messages, but they are saved in reports as negative amounts which enables the reporting software to accurately calculate the aggregate amounts.  Optional for U.S., Canadian, international tax, and value added taxes. For more information on Tax Detail Report features refer the [Tax Service Guide](https://developer.cybersource.com/docs/cybs/en-us/tax-calculation/developer/all/rest/tax-calculation/tax-overview.html).
    */
   'refundIndicator'?: boolean;
 
@@ -21417,7 +23133,7 @@ export class VasV2PaymentsPost400Response {
    */
   'status'?: string;
   /**
-   * The reason of the status.  Possible values:  - MISSING_FIELD  - INVALID_DATA  - DUPLICATE_REQUEST  - PROCESSOR_UNAVAILABLE  - AVS_FAILED  - INVALID_MERCHANT_CONFIGURATION
+   * The reason of the status.  Possible values:  - MISSING_FIELD  - INVALID_DATA  - INVALID_MERCHANT_CONFIGURATION  - INVALID_ADDRESS
    */
   'reason'?: string;
   /**
@@ -21612,7 +23328,7 @@ export class Vasv2taxOrderInformationLineItems {
    */
   'productSKU'?: string;
   /**
-   * Type of product. The value for this field is used to identify the product category (electronic, handling, physical, service, or shipping). The default value is `default`.  If you are performing an authorization transaction (`processingOptions.capture` is set to `false`), and you set this field to a value other than `default` or one of the values related to shipping and/or handling, then `orderInformation.lineItems[].quantity`, `orderInformation.lineItems[].productName`, and `orderInformation.lineItems[].productSku` fields are required.  Optional field.  For details, see the `product_code` field description in the [Credit Card Services Using the SCMP API Guide](https://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html/).  #### Tax Calculation Optional field for U.S., Canadian, international tax, and value added taxes.  To use the tax calculation service, use values listed in the Tax Product Code Guide. For information about this document, contact customer support. See \"Product Codes,\" page 14, for more information.
+   * Type of product. The value for this field is used to identify the product category (electronic, handling, physical, service, or shipping). The default value is `default`.  If you are performing an authorization transaction (`processingOptions.capture` is set to `false`), and you set this field to a value other than `default` or one of the values related to shipping and/or handling, then `orderInformation.lineItems[].quantity`, `orderInformation.lineItems[].productName`, and `orderInformation.lineItems[].productSku` fields are required.  Optional field.  For details, see the `product_code` field description in the [Credit Card Services Using the SCMP API Guide](https://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html/).  #### Tax Calculation Optional field for U.S., Canadian, international tax, and value added taxes.  The Product Codes for the tax service are located in the Cybersource Tax Codes guide. Contact Customer Support to request the guide. If you don’t send a tax service Product Code in your tax request, product-based rules or exemptions will not be applied and the transaction will default to fully taxable in the locations where you’ve indicated you need to collect tax [by way of nexus, no nexus, or seller registration number fields].
    */
   'productCode'?: string;
   /**
@@ -21664,25 +23380,25 @@ export class Vasv2taxOrderInformationLineItems {
 }
 
 /**
- * The place of business where you accept/approve the customer’s order, thereby becoming contractually obligated to make the sale.
+ * The Order Acceptance address fields may be used by the tax service to determine the taxability of the order or applicable taxing jurisdictions. You should consult your tax, legal and/or accounting advisors to determine if you should include an Order Acceptance address in your tax service request for some or all of your transactions based on your business.
  */
 export class Vasv2taxOrderInformationOrderAcceptance {
   constructor() {}
 
   /**
-   * Order acceptance city. This field is not used unless the `orderInformation.orderAcceptance.administrativeArea` and `orderInformation.orderAcceptance.country` fields are present.  **NOTE** If this field appears in a `lineItems` object, then the value of this field in the `lineItems` object overrides the value of the corresponding field at the request-level or order-level object.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. The place of business where you accept/approve the customer’s order, thereby becoming contractually obligated to make the sale.
+   * Order acceptance city. This field is not used unless the `orderInformation.orderAcceptance.administrativeArea` and `orderInformation.orderAcceptance.country` fields are present.  **NOTE** If this field appears in a `lineItems` object, then the value of this field in the `lineItems` object overrides the value of the corresponding field at the request-level or order-level object.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes.
    */
   'locality'?: string;
   /**
-   * Order acceptance state. This field is not used unless the `orderInformation.orderAcceptance.locality` and `orderInformation.orderAcceptance.country` fields are present. Use the [State, Province, and Territory Codes for the United States and Canada](https://developer.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf).  **NOTE** If this field appears in a `lineItems` object, then the value of this field in the `lineItems` object overrides the value of the corresponding field at the request-level or order-level object.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. The place of business where you accept/approve the customer’s order, thereby becoming contractually obligated to make the sale.
+   * Order acceptance state. This field is not used unless the `orderInformation.orderAcceptance.locality` and `orderInformation.orderAcceptance.country` fields are present. Use the [State, Province, and Territory Codes for the United States and Canada](https://developer.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf).  **NOTE** If this field appears in a `lineItems` object, then the value of this field in the `lineItems` object overrides the value of the corresponding field at the request-level or order-level object.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes.
    */
   'administrativeArea'?: string;
   /**
-   * Order acceptance postal code. This field is not used unless the `orderInformation.orderAcceptance.locality`, `orderInformation.orderAcceptance.administrativeArea`, and `orderInformation.orderAcceptance.country` fields are present. Must be sent at the line or offer level to be surfaced in the Tax Detail Report.  **NOTE** If this field appears in a `lineItems` object, then the value of this field in the `lineItems` object overrides the value of the corresponding field at the request-level or order-level object.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. The place of business where you accept/approve the customer’s order, thereby becoming contractually obligated to make the sale.
+   * Order acceptance postal code. This field is not used unless the `orderInformation.orderAcceptance.locality`, `orderInformation.orderAcceptance.administrativeArea`, and `orderInformation.orderAcceptance.country` fields are present. Must be sent at the line or offer level to be surfaced in the Tax Detail Report.  **NOTE** If this field appears in a `lineItems` object, then the value of this field in the `lineItems` object overrides the value of the corresponding field at the request-level or order-level object.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes.
    */
   'postalCode'?: string;
   /**
-   * Order acceptance country. This field is not used unless the `orderInformation.orderAcceptance.administrativeArea` and `orderInformation.orderAcceptance.locality` fields are present. Use the [ISO Standard Country Codes.](http://apps.cybersource.com/library/documentation/sbc/quickref/countries_alpha_list.pdf)  **NOTE** If this field appears in a `lineItems` object, then the value of this field in the `lineItems` object overrides the value of the corresponding field at the request-level or order-level object.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. The place of business where you accept/approve the customer’s order, thereby becoming contractually obligated to make the sale.
+   * Order acceptance country. This field is not used unless the `orderInformation.orderAcceptance.administrativeArea` and `orderInformation.orderAcceptance.locality` fields are present. Use the [ISO Standard Country Codes.](http://apps.cybersource.com/library/documentation/sbc/quickref/countries_alpha_list.pdf)  **NOTE** If this field appears in a `lineItems` object, then the value of this field in the `lineItems` object overrides the value of the corresponding field at the request-level or order-level object.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes.
    */
   'country'?: string;
 
@@ -21692,25 +23408,25 @@ export class Vasv2taxOrderInformationOrderAcceptance {
 }
 
 /**
- * The location of the buyer at the time of placing the order.
+ * The Order Origin address fields may be used by the tax service to determine the taxability of the order or applicable taxing jurisdictions. You should consult your tax, legal and/or accounting advisors to determine if you should include an Order Origin address in your tax service request for some or all of your transactions based on your business.
  */
 export class Vasv2taxOrderInformationOrderOrigin {
   constructor() {}
 
   /**
-   * Order origin city. This field is not used unless the `orderInformation.orderOrigin.administrativeArea` and `orderInformation.orderOrigin.country` fields are present.  **NOTE** If this field appears in a `lineItems` object, then the value of this field in the `lineItems` object overrides the value of the corresponding field at the request-level or order-level object.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. The location of the buyer at the time of placing the order.
+   * Order origin city. This field is not used unless the `orderInformation.orderOrigin.administrativeArea` and `orderInformation.orderOrigin.country` fields are present.  **NOTE** If this field appears in a `lineItems` object, then the value of this field in the `lineItems` object overrides the value of the corresponding field at the request-level or order-level object.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes.
    */
   'locality'?: string;
   /**
-   * Order origin state. This field is not used unless the `orderInformation.orderOrigin.locality` and `orderInformation.orderOrigin.country` fields are present. Use the [State, Province, and Territory Codes for the United States and Canada](http://apps.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf).  **NOTE** If this field appears in a `lineItems` object, then the value of this field in the `lineItems` object overrides the value of the corresponding field at the request-level or order-level object.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. The location of the buyer at the time of placing the order.
+   * Order origin state. This field is not used unless the `orderInformation.orderOrigin.locality` and `orderInformation.orderOrigin.country` fields are present. Use the [State, Province, and Territory Codes for the United States and Canada](http://apps.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf).  **NOTE** If this field appears in a `lineItems` object, then the value of this field in the `lineItems` object overrides the value of the corresponding field at the request-level or order-level object.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes.
    */
   'administrativeArea'?: string;
   /**
-   * Order origin postal code. This field is not used unless the `orderInformation.orderOrigin.locality`, `orderInformation.orderOrigin.administrativeArea` and `orderInformation.orderOrigin.country` fields are present. Must be sent at the lineItem level to appear in the Tax Detail Report.  **NOTE** If this field appears in a `lineItems` object, then the value of this field in the `lineItems` object overrides the value of the corresponding field at the request-level or order-level object.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. The location of the buyer at the time of placing the order.
+   * Order origin postal code. This field is not used unless the `orderInformation.orderOrigin.locality`, `orderInformation.orderOrigin.administrativeArea` and `orderInformation.orderOrigin.country` fields are present. Must be sent at the lineItem level to appear in the Tax Detail Report.  **NOTE** If this field appears in a `lineItems` object, then the value of this field in the `lineItems` object overrides the value of the corresponding field at the request-level or order-level object.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes.
    */
   'postalCode'?: string;
   /**
-   * Order origin country. This field is not used unless the `orderInformation.orderOrigin.administrativeArea` and `orderInformation.orderOrigin.locality` fields are present. Use the [ISO Standard Country Codes](http://apps.cybersource.com/library/documentation/sbc/quickref/countries_alpha_list.pdf).  **NOTE** If this field appears in a `lineItems` object, then the value of this field in the `lineItems` object overrides the value of the corresponding field at the request-level or order-level object.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. The location of the buyer at the time of placing the order.
+   * Order origin country. This field is not used unless the `orderInformation.orderOrigin.administrativeArea` and `orderInformation.orderOrigin.locality` fields are present. Use the [ISO Standard Country Codes](http://apps.cybersource.com/library/documentation/sbc/quickref/countries_alpha_list.pdf).  **NOTE** If this field appears in a `lineItems` object, then the value of this field in the `lineItems` object overrides the value of the corresponding field at the request-level or order-level object.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes.
    */
   'country'?: string;
 
@@ -21727,7 +23443,7 @@ export class Vasv2taxOrderInformationShipTo {
    */
   'country'?: string;
   /**
-   * State or province of the shipping address. Use the [State, Province, and Territory Codes for the United States and Canada](https://developer.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf)  Required field for authorization if any shipping address information is included in the request and shipping to the U.S. or Canada; otherwise, optional.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. Billing address objects will be used to determine the cardholder’s location when shipTo objects are not present.
+   * State or province of the shipping address. Use the [State, Province, and Territory Codes for the United States and Canada](https://developer.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf) (maximum length: 2)   Required field for authorization if any shipping address information is included in the request and shipping to the U.S. or Canada; otherwise, optional.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. Billing address objects will be used to determine the cardholder’s location when shipTo objects are not present.
    */
   'administrativeArea'?: string;
   /**
@@ -21785,7 +23501,7 @@ export class Vasv2taxTaxInformation {
   constructor() {}
 
   /**
-   * Reporting date of transaction. Format: YYYYMMDD. Defaults to current date if not specified. Also the default tax calculation date unless a different date is specified in `orderInformation.invoiceDetails.invoiceDate`.  Optional for U.S., Canadian, international tax, and value added taxes.
+   * Reporting date of transaction. Format: YYYYMMDD. Defaults to current date if not specified. Optional for U.S., Canadian, international tax, and value added taxes.
    */
   'reportingDate'?: string;
   /**
@@ -21805,11 +23521,11 @@ export class Vasv2taxTaxInformation {
    */
   'showTaxPerLineItem'?: string;
   /**
-   * Indicates whether this is a committed tax transaction. For a committed tax transaction, the status in the Tax Detail Report is “Committed.” For an uncommitted tax transaction, the status in the Tax Detail Report is “Uncommitted.” Possible values: - `true`: This is a committed tax transaction. - `false` (default): This is not a committed tax transaction.  A committed tax request is a tax service request that sets the status field in the Tax Detail Report to committed. The committed status indicates that the amount calculated by the tax service is included in the amount of a capture or credit.  Use a void service request to cancels a committed tax request or a committed refund tax request. The void transaction is included as a separate entry in the Tax Detail Report. The value of the status field is cancelled. The value of the link ID is the request ID of the committed tax request or refund tax request that was voided. You can use the value of the link ID to reconcile your orders.  Optional for U.S., Canadian, international tax, and value added taxes.
+   * Indicates whether this is a committed tax transaction. For a committed tax transaction, the status in the Tax Detail Report is “Committed.” For an uncommitted tax transaction, the status in the Tax Detail Report is “Uncommitted.” Possible values: - `true`: This is a committed tax transaction. - `false` (default): This is not a committed tax transaction.  A committed tax request is a tax service request that sets the status field in the Tax Detail Report to committed. The committed status indicates that the amount calculated by the tax service is included in the amount of a capture or credit.  Use a void service request to cancel a committed tax request or a committed refund tax request. The void transaction is included as a separate entry in the Tax Detail Report. The value of the status field is cancelled. The value of the link ID is the request ID of the committed tax request or refund tax request that was voided. You can use the value of the link ID to reconcile your orders.  Optional for U.S., Canadian, international tax, and value added taxes. For more information on Tax Detail Report features refer the [Tax Service Guide](https://developer.cybersource.com/docs/cybs/en-us/tax-calculation/developer/all/rest/tax-calculation/tax-overview.html).
    */
   'commitIndicator'?: boolean;
   /**
-   * Indicates whether this is a refund tax transaction. For a refund tax transaction, amounts in the Tax Detail Report will be negative. Possible values: - `true`: This is a refund tax transaction. - `false` (default): This is not a refund tax transaction.  A refund tax request is a tax service request that sets the transaction type field in the Tax Detail Report to refunded and makes the reported amount negative. Tax amounts are returned as positive amounts in reply messages, but they are saved in reports as negative amounts which enables the reporting software to accurately calculate the aggregate amounts.  Optional for U.S., Canadian, international tax, and value added taxes.
+   * Indicates whether this is a refund tax transaction. For a refund tax transaction, amounts in the Tax Detail Report will be negative. Possible values: - `true`: This is a refund tax transaction. - `false` (default): This is not a refund tax transaction.  A refund tax request is a tax service request that sets the transaction type field in the Tax Detail Report to refunded and makes the reported amount negative. Tax amounts are returned as positive amounts in reply messages, but they are saved in reports as negative amounts which enables the reporting software to accurately calculate the aggregate amounts.  Optional for U.S., Canadian, international tax, and value added taxes. For more information on Tax Detail Report features refer the [Tax Service Guide](https://developer.cybersource.com/docs/cybs/en-us/tax-calculation/developer/all/rest/tax-calculation/tax-overview.html).
    */
   'refundIndicator'?: boolean;
 

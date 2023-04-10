@@ -15,22 +15,41 @@ import {
   CreateInvoiceRequest,
   CreateP12KeysRequest,
   CreatePaymentRequest,
+  CreatePlanRequest,
   CreateReportSubscriptionRequest,
   CreateSearchRequest,
   CreateSharedSecretKeysRequest,
   CreateSharedSecretKeysVerifiRequest,
+  CreateSubscriptionRequest,
   DeleteBulkP12KeysRequest,
   DeleteBulkSymmetricKeysRequest,
-  FlexV1KeysPost200Response,
-  FlexV1TokensPost200Response,
   FraudMarkingActionRequest,
-  GeneratePublicKeyRequest,
+  GenerateCaptureContextRequest,
   GenerateUnifiedCheckoutCaptureContextRequest,
   IncrementAuthRequest,
   InlineResponse200,
+  InlineResponse2001,
+  InlineResponse20010,
+  InlineResponse20011,
+  InlineResponse20012,
+  InlineResponse20013,
+  InlineResponse20014,
+  InlineResponse2002,
+  InlineResponse2003,
+  InlineResponse2004,
+  InlineResponse2005,
+  InlineResponse2006,
+  InlineResponse2007,
+  InlineResponse2008,
+  InlineResponse2009,
+  InlineResponse201,
+  InlineResponse2011,
+  InlineResponse202,
+  InlineResponse2021,
+  InlineResponse2022,
   InvoiceSettingsRequest,
-  InvoicingV2InvoiceSettingsGet200Response,
   InvoicingV2InvoicesAllGet200Response,
+  InvoicingV2InvoiceSettingsGet200Response,
   InvoicingV2InvoicesGet200Response,
   InvoicingV2InvoicesPost201Response,
   KmsV2KeysAsymDeletesPost200Response,
@@ -83,10 +102,10 @@ import {
   ReportingV3PurchaseRefundDetailsGet200Response,
   ReportingV3ReportDefinitionsGet200Response,
   ReportingV3ReportDefinitionsNameGet200Response,
-  ReportingV3ReportSubscriptionsGet200Response,
-  ReportingV3ReportSubscriptionsGet200ResponseSubscriptions,
   ReportingV3ReportsGet200Response,
   ReportingV3ReportsIdGet200Response,
+  ReportingV3ReportSubscriptionsGet200Response,
+  ReportingV3ReportSubscriptionsGet200ResponseSubscriptions,
   ReportingV3RetrievalDetailsGet200Response,
   ReportingV3RetrievalSummariesGet200Response,
   RiskV1AddressVerificationsPost201Response,
@@ -99,7 +118,6 @@ import {
   SearchRequest,
   ShippingAddressListForCustomer,
   TaxRequest,
-  TokenizeRequest,
   TssV2GetEmvTags200Response,
   TssV2PostEmvTags200Response,
   TssV2TransactionsGet200Response,
@@ -107,9 +125,11 @@ import {
   UmsV1UsersGet200Response,
   UpdateAsymKeysRequest,
   UpdateInvoiceRequest,
+  UpdatePasswordKeysRequest,
   UpdatePGPKeysRequest,
   UpdatePGPKeysRequest1,
-  UpdatePasswordKeysRequest,
+  UpdatePlanRequest,
+  UpdateSubscription,
   V1FileDetailsGet200Response,
   ValidateExportComplianceRequest,
   ValidateRequest,
@@ -172,6 +192,60 @@ export class AsymmetricKeyManagementApi {
   public updateAsymKey(keyId: string, updateAsymKeysRequest: UpdateAsymKeysRequest, callback: ApiCallback<any>) {
     const any = null;
     return this.apiClient.callApi<any>('', '', {}, {}, {}, {}, {}, [], [], [], any, callback);
+  }
+}
+export class BatchesApi {
+  apiClient: ApiClient;
+
+  constructor(config: MerchantConfig, apiClient?: ApiClient) {}
+
+  /**
+   * **Get Batch Report**<br>This resource accepts a batch id and returns: - The batch status. - The total number of accepted, rejected, updated records. - The total number of card association responses. - The billable quantities of:   - New Account Numbers (NAN)   - New Expiry Dates (NED)   - Account Closures (ACL)   - Contact Card Holders (CCH) - Source record information including token ids, masked card number, expiration dates & card type. - Response record information including response code, reason, token ids, masked card number, expiration dates & card type. 
+   * @summary Retrieve a Batch Report
+   *
+   * @param {string} batchId Unique identification number assigned to the submitted request.
+   
+   */
+  public getBatchReport(batchId: string, callback: ApiCallback<InlineResponse20014>) {
+    const any = null;
+    return this.apiClient.callApi<InlineResponse20014>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse20014, callback);
+  }
+  /**
+   * **Get Batch Status**<br>This resource accepts a batch id and returns: - The batch status. - The total number of accepted, rejected, updated records. - The total number of card association responses. - The billable quantities of:   - New Account Numbers (NAN)   - New Expiry Dates (NED)   - Account Closures (ACL)   - Contact Card Holders (CCH) 
+   * @summary Retrieve a Batch Status
+   *
+   * @param {string} batchId Unique identification number assigned to the submitted request.
+   
+   */
+  public getBatchStatus(batchId: string, callback: ApiCallback<InlineResponse20013>) {
+    const any = null;
+    return this.apiClient.callApi<InlineResponse20013>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse20013, callback);
+  }
+  /**
+   * **List Batches**<br>This resource accepts a optional date range, record offset and limit, returning a paginated response of batches containing: - The batch id. - The batch status. - The batch created / modified dates. - The total number of accepted, rejected, updated records. - The total number of card association responses.
+   * @summary List Batches
+   *
+   * @param {Object} opts Optional parameters
+   * @param {number} opts.offset Starting record in zero-based dataset that should be returned as the first object in the array. (default to 0)
+   * @param {number} opts.limit The maximum number that can be returned in the array starting from the offset record in zero-based dataset. (default to 20)
+   * @param {string} opts.fromDate ISO-8601 format: yyyyMMddTHHmmssZ
+   * @param {string} opts.toDate ISO-8601 format: yyyyMMddTHHmmssZ
+   *
+   */
+  public getBatchesList(opts: { offset?: number; limit?: number; fromDate?: string; toDate?: string }, callback: ApiCallback<InlineResponse20012>) {
+    const any = null;
+    return this.apiClient.callApi<InlineResponse20012>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse20012, callback);
+  }
+  /**
+   * **Create a Batch**<br>This resource accepts TMS tokens ids of a Customer, Payment Instrument or Instrument Identifier. <br> The card numbers for the supplied tokens ids are then sent to the relevant card associations to check for updates.<br>The following type of batches can be submitted: -  **oneOff** batch containing tokens id for Visa or MasterCard card numbers. - **amexRegistration** batch containing tokens id for Amex card numbers.  A batch id will be returned on a successful response which can be used to get the batch status and the batch report. 
+   * @summary Create a Batch
+   *
+   * @param {Body} body 
+   
+   */
+  public postBatch(body: Body, callback: ApiCallback<InlineResponse2022>) {
+    const any = null;
+    return this.apiClient.callApi<InlineResponse2022>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse2022, callback);
   }
 }
 export class CaptureApi {
@@ -275,53 +349,53 @@ export class CustomerApi {
   constructor(config: MerchantConfig, apiClient?: ApiClient) {}
 
   /**
-   *
+   * |  |  |  | | --- | --- | --- | |**Customers**<br>A Customer represents your tokenized customer information.<br>You should associate the Customer Id with the customer account on your systems.<br>A Customer can have one or more [Payment Instruments](#token-management_customer-payment-instrument_create-a-customer-payment-instrumentl) or [Shipping Addresses](#token-management_customer-shipping-address_create-a-customer-shipping-address) with one allocated as the Customers default.|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Deleting a Customer**<br>Your system can use this API to delete a complete Customer.<br>When a Customer is deleted all associated Payment Instruments & Shipping Addresses are deleted.<br>Any Instrument Identifiers representing the card number will also be deleted if they are not associated with any other Payment Instruments.<br>Note: Individual [Payment Instruments](#token-management_customer-payment-instrument_delete-a-customer-payment-instrument) or [Shipping Addresses](#token-management_customer-shipping-address_delete-a-customer-shipping-address) can be deleted via their own dedicated API resources.
    * @summary Delete a Customer
    *
-   * @param {string} customerTokenId The TokenId of a customer.
+   * @param {string} customerId The Id of a Customer.
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    *
    */
-  public deleteCustomer(customerTokenId: string, opts: { profileId?: string }, callback: ApiCallback) {
+  public deleteCustomer(customerId: string, opts: { profileId?: string }, callback: ApiCallback) {
     const any = null;
     return this.apiClient.callApi('', '', {}, {}, {}, {}, {}, [], [], [], null, callback);
   }
   /**
-   *
+   * |  |  |  | | --- | --- | --- | |**Customers**<br>A Customer represents your tokenized customer information.<br>You should associate the Customer Id with the customer account on your systems.<br>A Customer can have one or more [Payment Instruments](#token-management_customer-payment-instrument_create-a-customer-payment-instrumentl) or [Shipping Addresses](#token-management_customer-shipping-address_create-a-customer-shipping-address) with one allocated as the Customers default.<br><br>**Retrieving a Customer**<br>When your customer signs into their account, your system can use this API to retrieve the Customers default Payment Instrument and Shipping Address.<br>**Note: the actual card data will be masked.**<br>If your customer wants to see other available Payment Instruments, your system can [retrieve all Payment Instruments](#token-management_customer-payment-instrument_list-payment-instruments-for-a-customer) associated with the Customer.<br>The same applies to [Shipping Addresses](#token-management_customer-shipping-address_list-shipping-addresses-for-a-customer).|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Payment Network Tokens**<br>Network tokens perform better than regular card numbers and they are not necessarily invalidated when a cardholder loses their card, or it expires.<br>A Payment Network Token will be automatically created and used in future payments if you are enabled for the service.<br>A Payment Network Token can also be [provisioned for an existing Instrument Identifier](#token-management_instrument-identifier_enroll-an-instrument-identifier-for-payment-network-token).<br>For more information about Payment Network Tokens see the Developer Guide.<br><br>**Payments with Customers**<br>To perform a payment with the Customers default details specify the [Customer Id in the payments request](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-using-tokens_authorization-with-customer-token-id_liveconsole-tab-request-body).<br>To perform a payment with a particular Payment Instrument or Shipping Address <br>specify the [Payment Instrument or Shipping Address Ids in the payments request](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-using-tokens_authorization-with-customer-payment-instrument-and-shipping-address-token-id_liveconsole-tab-request-body).
    * @summary Retrieve a Customer
    *
-   * @param {string} customerTokenId The TokenId of a customer.
+   * @param {string} customerId The Id of a Customer.
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    *
    */
-  public getCustomer(customerTokenId: string, opts: { profileId?: string }, callback: ApiCallback<PostCustomerRequest>) {
+  public getCustomer(customerId: string, opts: { profileId?: string }, callback: ApiCallback<PostCustomerRequest>) {
     const any = null;
     return this.apiClient.callApi<PostCustomerRequest>('', '', {}, {}, {}, {}, {}, [], [], [], PostCustomerRequest, callback);
   }
   /**
-   *
+   * |  |  |  | | --- | --- | --- | |**Customers**<br>A Customer represents your tokenized customer information.<br>You should associate the Customer Id with the customer account on your systems.<br>A Customer can have one or more [Payment Instruments](#token-management_customer-payment-instrument_create-a-customer-payment-instrumentl) or [Shipping Addresses](#token-management_customer-shipping-address_create-a-customer-shipping-address) with one allocated as the Customers default.|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Updating a Customer**<br>Your system can use this API to update a Customers details including selecting a  [default Payment Instrument](#token-management_customer_update-a-customer_samplerequests-dropdown_update-customers-default-payment-instrument_liveconsole-tab-request-body) or [default Shipping Address](#token-management_customer_update-a-customer_samplerequests-dropdown_update-customers-default-shipping-address_liveconsole-tab-request-body) for use in payments.<br>Note: Updating a Customers [Payment Instrument](#token-management_customer-payment-instrument_update-a-customer-payment-instrument) or [Shipping Address](#token-management_customer-shipping-address_update-a-customer-shipping-address) details is performed using their own dedicated API resources.
    * @summary Update a Customer
    *
-   * @param {string} customerTokenId The TokenId of a customer.
+   * @param {string} customerId The Id of a Customer.
    * @param {PatchCustomerRequest} patchCustomerRequest
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    * @param {string} opts.ifMatch Contains an ETag value from a GET request to make the request conditional.
    *
    */
-  public patchCustomer(customerTokenId: string, patchCustomerRequest: PatchCustomerRequest, opts: { profileId?: string; ifMatch?: string }, callback: ApiCallback<PatchCustomerRequest>) {
+  public patchCustomer(customerId: string, patchCustomerRequest: PatchCustomerRequest, opts: { profileId?: string; ifMatch?: string }, callback: ApiCallback<PatchCustomerRequest>) {
     const any = null;
     return this.apiClient.callApi<PatchCustomerRequest>('', '', {}, {}, {}, {}, {}, [], [], [], PatchCustomerRequest, callback);
   }
   /**
-   *
+   * |  |  |  | | --- | --- | --- | |**Customers**<br>A Customer represents your tokenized customer information.<br>You should associate the Customer Id with the customer account on your systems.<br>A Customer can have one or more [Payment Instruments](#token-management_customer-payment-instrument_create-a-customer-payment-instrumentl) or [Shipping Addresses](#token-management_customer-shipping-address_create-a-customer-shipping-address) with one allocated as the Customers default.<br><br>**Creating a Customer**<br>It is recommended you [create a Customer via a Payment Authorization](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-with-token-create_authorization-with-customer-token-creation_liveconsole-tab-request-body), this can be for a zero amount.<br>The Customer will be created with a Payment Instrument and Shipping Address.<br>You can also [add additional Payment Instruments to a Customer via a Payment Authorization](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-with-token-create_authorization-create-default-payment-instrument-shipping-address-for-existing-customer_liveconsole-tab-request-body).<br>In Europe: You should perform Payer Authentication alongside the Authorization.|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Payment Network Tokens**<br>Network tokens perform better than regular card numbers and they are not necessarily invalidated when a cardholder loses their card, or it expires.<br>A Payment Network Token will be automatically created and used in future payments if you are enabled for the service.<br>A Payment Network Token can also be [provisioned for an existing Instrument Identifier](#token-management_instrument-identifier_enroll-an-instrument-identifier-for-payment-network-token).<br>For more information about Payment Network Tokens see the Developer Guide.<br><br>**Payments with Customers**<br>To perform a payment with the Customers default details specify the [Customer Id in the payments request](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-using-tokens_authorization-with-customer-token-id_liveconsole-tab-request-body).<br>To perform a payment with a particular Payment Instrument or Shipping Address <br>specify the [Payment Instrument or Shipping Address Ids in the payments request](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-using-tokens_authorization-with-customer-payment-instrument-and-shipping-address-token-id_liveconsole-tab-request-body).
    * @summary Create a Customer
    *
    * @param {PostCustomerRequest} postCustomerRequest
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    *
    */
   public postCustomer(postCustomerRequest: PostCustomerRequest, opts: { profileId?: string }, callback: ApiCallback<PostCustomerRequest>) {
@@ -335,75 +409,75 @@ export class CustomerPaymentInstrumentApi {
   constructor(config: MerchantConfig, apiClient?: ApiClient) {}
 
   /**
-   *
+   * |  |  |  | | --- | --- | --- | |**Customer Payment Instrument**<br>A Customer Payment Instrument represents tokenized customer payment information such as expiration date, billing address & card type.<br>A [Customer](#token-management_customer_create-a-customer) can have [one or more Payment Instruments](#token-management_customer-payment-instrument_retrieve-a-customer-payment-instrument), with one allocated as the Customers default for use in payments.<br>A Payment Instrument token does not store the card number. A Payment Instrument is associated with an [Instrument Identifier](#token-management_instrument-identifier_create-an-instrument-identifier) that represents either a payment card number, or in the case of an ACH bank account, the routing and account number.<br>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Deleting a Customers Payment Instrument**<br>Your system can use this API to delete an existing Payment Instrument for a Customer.<br>Any Instrument Identifiers representing the card number will also be deleted if they are not associated with any other Payment Instruments.<br>If a customer has more than one Payment Instrument then the default Payment Instrument cannot be deleted without first selecting a [new default Payment Instrument](#token-management_customer-payment-instrument_update-a-customer-payment-instrument_samplerequests-dropdown_make-customer-payment-instrument-the-default_liveconsole-tab-request-body).
    * @summary Delete a Customer Payment Instrument
    *
-   * @param {string} customerTokenId The TokenId of a customer.
-   * @param {string} paymentInstrumentTokenId The TokenId of a payment instrument.
+   * @param {string} customerId The Id of a Customer.
+   * @param {string} paymentInstrumentId The Id of a payment instrument.
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    *
    */
-  public deleteCustomerPaymentInstrument(customerTokenId: string, paymentInstrumentTokenId: string, opts: { profileId?: string }, callback: ApiCallback) {
+  public deleteCustomerPaymentInstrument(customerId: string, paymentInstrumentId: string, opts: { profileId?: string }, callback: ApiCallback) {
     const any = null;
     return this.apiClient.callApi('', '', {}, {}, {}, {}, {}, [], [], [], null, callback);
   }
   /**
-   *
+   * |  |  |  | | --- | --- | --- | |**Customer Payment Instrument**<br>A Customer Payment Instrument represents tokenized customer payment information such as expiration date, billing address & card type.<br>A [Customer](#token-management_customer_create-a-customer) can have [one or more Payment Instruments](#token-management_customer-payment-instrument_retrieve-a-customer-payment-instrument), with one allocated as the Customers default for use in payments.<br>A Payment Instrument token does not store the card number. A Payment Instrument is associated with an [Instrument Identifier](#token-management_instrument-identifier_create-an-instrument-identifier) that represents either a payment card number, or in the case of an ACH bank account, the routing and account number.<br>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Retrieving a Customer Payment Instrument**<br>Your system can use this API to retrieve an existing Payment Instrument for a Customer.<br>To perform a payment with a particular Payment Instrument simply specify the [Payment Instrument Id in the payments request](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-using-tokens_authorization-with-customer-payment-instrument-and-shipping-address-token-id_liveconsole-tab-request-body).
    * @summary Retrieve a Customer Payment Instrument
    *
-   * @param {string} customerTokenId The TokenId of a customer.
-   * @param {string} paymentInstrumentTokenId The TokenId of a payment instrument.
+   * @param {string} customerId The Id of a Customer.
+   * @param {string} paymentInstrumentId The Id of a payment instrument.
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    *
    */
-  public getCustomerPaymentInstrument(customerTokenId: string, paymentInstrumentTokenId: string, opts: { profileId?: string }, callback: ApiCallback<PostCustomerPaymentInstrumentRequest>) {
+  public getCustomerPaymentInstrument(customerId: string, paymentInstrumentId: string, opts: { profileId?: string }, callback: ApiCallback<PostCustomerPaymentInstrumentRequest>) {
     const any = null;
     return this.apiClient.callApi<PostCustomerPaymentInstrumentRequest>('', '', {}, {}, {}, {}, {}, [], [], [], PostCustomerPaymentInstrumentRequest, callback);
   }
   /**
-   *
+   * |  |  |  | | --- | --- | --- | |**Customer Payment Instrument**<br>A Customer Payment Instrument represents tokenized customer payment information such as expiration date, billing address & card type.<br>A [Customer](#token-management_customer_create-a-customer) can have [one or more Payment Instruments](#token-management_customer-payment-instrument_retrieve-a-customer-payment-instrument), with one allocated as the Customers default for use in payments.<br>A Payment Instrument token does not store the card number. A Payment Instrument is associated with an [Instrument Identifier](#token-management_instrument-identifier_create-an-instrument-identifier) that represents either a payment card number, or in the case of an ACH bank account, the routing and account number.<br>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Retrieving all Customer Payment Instruments**<br>Your system can use this API to retrieve all existing Payment Instruments for a Customer.
    * @summary List Payment Instruments for a Customer
    *
-   * @param {string} customerTokenId The TokenId of a customer.
+   * @param {string} customerId The Id of a Customer.
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    * @param {number} opts.offset Starting record in zero-based dataset that should be returned as the first object in the array. Default is 0. (default to 0)
    * @param {number} opts.limit The maximum number that can be returned in the array starting from the offset record in zero-based dataset. Default is 20, maximum is 100. (default to 20)
    *
    */
-  public getCustomerPaymentInstrumentsList(customerTokenId: string, opts: { profileId?: string; offset?: number; limit?: number }, callback: ApiCallback<PaymentInstrumentList>) {
+  public getCustomerPaymentInstrumentsList(customerId: string, opts: { profileId?: string; offset?: number; limit?: number }, callback: ApiCallback<PaymentInstrumentList>) {
     const any = null;
     return this.apiClient.callApi<PaymentInstrumentList>('', '', {}, {}, {}, {}, {}, [], [], [], PaymentInstrumentList, callback);
   }
   /**
-   *
+   * |  |  |  | | --- | --- | --- | |**Customer Payment Instrument**<br>A Customer Payment Instrument represents tokenized customer payment information such as expiration date, billing address & card type.<br>A [Customer](#token-management_customer_create-a-customer) can have [one or more Payment Instruments](#token-management_customer-payment-instrument_retrieve-a-customer-payment-instrument), with one allocated as the Customers default for use in payments.<br>A Payment Instrument token does not store the card number. A Payment Instrument is associated with an [Instrument Identifier](#token-management_instrument-identifier_create-an-instrument-identifier) that represents either a payment card number, or in the case of an ACH bank account, the routing and account number.<br>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Updating a Customers Payment Instrument**<br>Your system can use this API to update an existing Payment Instrument for a Customer, including selecting a [default Payment Instrument](#token-management_customer-payment-instrument_update-a-customer-payment-instrument_samplerequests-dropdown_make-customer-payment-instrument-the-default_liveconsole-tab-request-body) for use in payments.
    * @summary Update a Customer Payment Instrument
    *
-   * @param {string} customerTokenId The TokenId of a customer.
-   * @param {string} paymentInstrumentTokenId The TokenId of a payment instrument.
+   * @param {string} customerId The Id of a Customer.
+   * @param {string} paymentInstrumentId The Id of a payment instrument.
    * @param {PatchCustomerPaymentInstrumentRequest} patchCustomerPaymentInstrumentRequest
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    * @param {string} opts.ifMatch Contains an ETag value from a GET request to make the request conditional.
    *
    */
-  public patchCustomersPaymentInstrument(customerTokenId: string, paymentInstrumentTokenId: string, patchCustomerPaymentInstrumentRequest: PatchCustomerPaymentInstrumentRequest, opts: { profileId?: string; ifMatch?: string }, callback: ApiCallback<PatchCustomerPaymentInstrumentRequest>) {
+  public patchCustomersPaymentInstrument(customerId: string, paymentInstrumentId: string, patchCustomerPaymentInstrumentRequest: PatchCustomerPaymentInstrumentRequest, opts: { profileId?: string; ifMatch?: string }, callback: ApiCallback<PatchCustomerPaymentInstrumentRequest>) {
     const any = null;
     return this.apiClient.callApi<PatchCustomerPaymentInstrumentRequest>('', '', {}, {}, {}, {}, {}, [], [], [], PatchCustomerPaymentInstrumentRequest, callback);
   }
   /**
-   * Include an existing TMS Customer & Instrument Identifier token id in the request. * A Customer token can be created by calling: **POST *_/tms/v2/customers*** * An Instrument Identifier token can be created by calling: **POST *_/tms/v1/instrumentidentifiers***
+   * |  |  |  | | --- | --- | --- | |**Customer Payment Instrument**<br>A Customer Payment Instrument represents tokenized customer payment information such as expiration date, billing address & card type.<br>A [Customer](#token-management_customer_create-a-customer) can have [one or more Payment Instruments](#token-management_customer-payment-instrument_retrieve-a-customer-payment-instrument), with one allocated as the Customers default for use in payments.<br>A Payment Instrument token does not store the card number. A Payment Instrument is associated with an [Instrument Identifier](#token-management_instrument-identifier_create-an-instrument-identifier) that represents either a payment card number, or in the case of an ACH bank account, the routing and account number.<br><br>**Creating a Customer Payment Instrument**<br>It is recommended you [create a Customer Payment Instrument via a Payment Authorization](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-with-token-create_authorization-create-default-payment-instrument-shipping-address-for-existing-customer_liveconsole-tab-request-body), this can be for a zero amount.<br>In Europe: You should perform Payer Authentication alongside the Authorization.|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Payment Network Tokens**<br>Network tokens perform better than regular card numbers and they are not necessarily invalidated when a cardholder loses their card, or it expires.<br>A Payment Network Token will be automatically created and used in future payments if you are enabled for the service.<br>A Payment Network Token can also be [provisioned for an existing Instrument Identifier](#token-management_instrument-identifier_enroll-an-instrument-identifier-for-payment-network-token).<br>For more information about Payment Network Tokens see the Developer Guide.<br><br>**Payments with Customers Payment Instrument**<br>To perform a payment with a particular Payment Instrument or Shipping Address specify the [Payment Instrument in the payment request](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-using-tokens_authorization-with-customer-payment-instrument-and-shipping-address-token-id_liveconsole-tab-request-body).
    * @summary Create a Customer Payment Instrument
    *
-   * @param {string} customerTokenId The TokenId of a customer.
+   * @param {string} customerId The Id of a Customer.
    * @param {PostCustomerPaymentInstrumentRequest} postCustomerPaymentInstrumentRequest
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    *
    */
-  public postCustomerPaymentInstrument(customerTokenId: string, postCustomerPaymentInstrumentRequest: PostCustomerPaymentInstrumentRequest, opts: { profileId?: string }, callback: ApiCallback<PostCustomerPaymentInstrumentRequest>) {
+  public postCustomerPaymentInstrument(customerId: string, postCustomerPaymentInstrumentRequest: PostCustomerPaymentInstrumentRequest, opts: { profileId?: string }, callback: ApiCallback<PostCustomerPaymentInstrumentRequest>) {
     const any = null;
     return this.apiClient.callApi<PostCustomerPaymentInstrumentRequest>('', '', {}, {}, {}, {}, {}, [], [], [], PostCustomerPaymentInstrumentRequest, callback);
   }
@@ -414,75 +488,75 @@ export class CustomerShippingAddressApi {
   constructor(config: MerchantConfig, apiClient?: ApiClient) {}
 
   /**
-   *
+   * |  |  |  | | --- | --- | --- | |**Customer Shipping Address**<br>A Customer Shipping Address represents tokenized customer shipping information.<br>A [Customer](#token-management_customer_create-a-customer) can have [one or more Shipping Addresses](#token-management_customer-shipping-address_list-shipping-addresses-for-a-customer), with one allocated as the Customers default for use in payments.|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Deleting a Customers Shipping Address**<br>Your system can use this API to delete an existing Shipping Address for a Customer.<br>If a customer has more than one Shipping Address then the default Shipping Address cannot be deleted without first selecting a [new default Shipping Address](#token-management_customer-shipping-address_update-a-customer-shipping-address_samplerequests-dropdown_make-customer-shipping-address-the-default_liveconsole-tab-request-body).
    * @summary Delete a Customer Shipping Address
    *
-   * @param {string} customerTokenId The TokenId of a customer.
-   * @param {string} shippingAddressTokenId The TokenId of an shipping address.
+   * @param {string} customerId The Id of a Customer.
+   * @param {string} shippingAddressId The Id of a shipping address.
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    *
    */
-  public deleteCustomerShippingAddress(customerTokenId: string, shippingAddressTokenId: string, opts: { profileId?: string }, callback: ApiCallback) {
+  public deleteCustomerShippingAddress(customerId: string, shippingAddressId: string, opts: { profileId?: string }, callback: ApiCallback) {
     const any = null;
     return this.apiClient.callApi('', '', {}, {}, {}, {}, {}, [], [], [], null, callback);
   }
   /**
-   *
+   * |  |  |  | | --- | --- | --- | |**Customer Shipping Address**<br>A Customer Shipping Address represents tokenized customer shipping information.<br>A [Customer](#token-management_customer_create-a-customer) can have [one or more Shipping Addresses](#token-management_customer-shipping-address_list-shipping-addresses-for-a-customer), with one allocated as the Customers default for use in payments.|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Retrieving a Customer Shipping Address**<br>Your system can use this API to retrieve an existing Shipping Address for a Customer.<br>To perform a payment with a particular Shipping Address simply specify the [Shipping Address Id in the payments request](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-using-tokens_authorization-with-customer-payment-instrument-and-shipping-address-token-id_liveconsole-tab-request-body).
    * @summary Retrieve a Customer Shipping Address
    *
-   * @param {string} customerTokenId The TokenId of a customer.
-   * @param {string} shippingAddressTokenId The TokenId of an shipping address.
+   * @param {string} customerId The Id of a Customer.
+   * @param {string} shippingAddressId The Id of a shipping address.
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    *
    */
-  public getCustomerShippingAddress(customerTokenId: string, shippingAddressTokenId: string, opts: { profileId?: string }, callback: ApiCallback<PostCustomerShippingAddressRequest>) {
+  public getCustomerShippingAddress(customerId: string, shippingAddressId: string, opts: { profileId?: string }, callback: ApiCallback<PostCustomerShippingAddressRequest>) {
     const any = null;
     return this.apiClient.callApi<PostCustomerShippingAddressRequest>('', '', {}, {}, {}, {}, {}, [], [], [], PostCustomerShippingAddressRequest, callback);
   }
   /**
-   *
+   * |  |  |  | | --- | --- | --- | |**Customer Shipping Address**<br>A Customer Shipping Address represents tokenized customer shipping information.<br>A [Customer](#token-management_customer_create-a-customer) can have [one or more Shipping Addresses](#token-management_customer-shipping-address_list-shipping-addresses-for-a-customer), with one allocated as the Customers default for use in payments.|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Retrieving all Customer Shipping Addresses**<br>Your system can use this API to retrieve all existing Shipping Addresses for a Customer.
    * @summary List Shipping Addresses for a Customer
    *
-   * @param {string} customerTokenId The TokenId of a customer.
+   * @param {string} customerId The Id of a Customer.
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    * @param {number} opts.offset Starting record in zero-based dataset that should be returned as the first object in the array. Default is 0. (default to 0)
    * @param {number} opts.limit The maximum number that can be returned in the array starting from the offset record in zero-based dataset. Default is 20, maximum is 100. (default to 20)
    *
    */
-  public getCustomerShippingAddressesList(customerTokenId: string, opts: { profileId?: string; offset?: number; limit?: number }, callback: ApiCallback<ShippingAddressListForCustomer>) {
+  public getCustomerShippingAddressesList(customerId: string, opts: { profileId?: string; offset?: number; limit?: number }, callback: ApiCallback<ShippingAddressListForCustomer>) {
     const any = null;
     return this.apiClient.callApi<ShippingAddressListForCustomer>('', '', {}, {}, {}, {}, {}, [], [], [], ShippingAddressListForCustomer, callback);
   }
   /**
-   *
+   * |  |  |  | | --- | --- | --- | |**Customer Shipping Address**<br>A Customer Shipping Address represents tokenized customer shipping information.<br>A [Customer](#token-management_customer_create-a-customer) can have [one or more Shipping Addresses](#token-management_customer-shipping-address_list-shipping-addresses-for-a-customer), with one allocated as the Customers default for use in payments.|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Updating a Customers Shipping Address**<br>Your system can use this API to update an existing Shipping Addresses for a Customer, including selecting a [default Shipping Address](#token-management_customer-shipping-address_update-a-customer-shipping-address_samplerequests-dropdown_make-customer-shipping-address-the-default_liveconsole-tab-request-body) for use in payments.
    * @summary Update a Customer Shipping Address
    *
-   * @param {string} customerTokenId The TokenId of a customer.
-   * @param {string} shippingAddressTokenId The TokenId of an shipping address.
+   * @param {string} customerId The Id of a Customer.
+   * @param {string} shippingAddressId The Id of a shipping address.
    * @param {PatchCustomerShippingAddressRequest} patchCustomerShippingAddressRequest
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    * @param {string} opts.ifMatch Contains an ETag value from a GET request to make the request conditional.
    *
    */
-  public patchCustomersShippingAddress(customerTokenId: string, shippingAddressTokenId: string, patchCustomerShippingAddressRequest: PatchCustomerShippingAddressRequest, opts: { profileId?: string; ifMatch?: string }, callback: ApiCallback<PatchCustomerShippingAddressRequest>) {
+  public patchCustomersShippingAddress(customerId: string, shippingAddressId: string, patchCustomerShippingAddressRequest: PatchCustomerShippingAddressRequest, opts: { profileId?: string; ifMatch?: string }, callback: ApiCallback<PatchCustomerShippingAddressRequest>) {
     const any = null;
     return this.apiClient.callApi<PatchCustomerShippingAddressRequest>('', '', {}, {}, {}, {}, {}, [], [], [], PatchCustomerShippingAddressRequest, callback);
   }
   /**
-   * Include an existing TMS Customer token id in the request URI. * A Customer token can be created by calling: **POST *_/tms/v2/customers***
+   * |  |  |  | | --- | --- | --- | |**Customer Shipping Address**<br>A Customer Shipping Address represents tokenized customer shipping information.<br>A [Customer](#token-management_customer_create-a-customer) can have [one or more Shipping Addresses](#token-management_customer-shipping-address_list-shipping-addresses-for-a-customer), with one allocated as the Customers default for use in payments.|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Creating a Customer Shipping Address**<br>Your system can use this API to create an existing Customers default or non default Shipping Address.<br>You can also create additional Customer Shipping Addresses via the [Payments API](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-with-token-create_authorization-create-default-payment-instrument-shipping-address-for-existing-customer_liveconsole-tab-request-body).
    * @summary Create a Customer Shipping Address
    *
-   * @param {string} customerTokenId The TokenId of a customer.
+   * @param {string} customerId The Id of a Customer.
    * @param {PostCustomerShippingAddressRequest} postCustomerShippingAddressRequest
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    *
    */
-  public postCustomerShippingAddress(customerTokenId: string, postCustomerShippingAddressRequest: PostCustomerShippingAddressRequest, opts: { profileId?: string }, callback: ApiCallback<PostCustomerShippingAddressRequest>) {
+  public postCustomerShippingAddress(customerId: string, postCustomerShippingAddressRequest: PostCustomerShippingAddressRequest, opts: { profileId?: string }, callback: ApiCallback<PostCustomerShippingAddressRequest>) {
     const any = null;
     return this.apiClient.callApi<PostCustomerShippingAddressRequest>('', '', {}, {}, {}, {}, {}, [], [], [], PostCustomerShippingAddressRequest, callback);
   }
@@ -595,68 +669,68 @@ export class InstrumentIdentifierApi {
   constructor(config: MerchantConfig, apiClient?: ApiClient) {}
 
   /**
-   *
+   * |  |  |  | | --- | --- | --- | |**Instrument Identifiers**<br>An Instrument Identifier represents either a card number, or in the case of an ACH bank account, the routing <br>and account numbers.<br>The same token Id is returned for a specific card number or bank account & routing number allowing the <br>Instrument Identifier Id to be used for cross-channel payment tracking.<br>An Instrument Identifier can exist independently but also be associated with a [Customer Payment Instrument](#token-management_customer-payment-instrument_create-a-customer-payment-instrument) <br>or [Standalone Payment Instrument](#token-management_payment-instrument_create-a-payment-instrument).|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Deleting an Instrument Identifier**<br>Your system can use this API to delete an existing Instrument Identifier.<br>An Instrument Identifier cannot be deleted if it is linked to any Payment Instruments.<br>You can [retrieve all Payment Instruments associated with an Instrument Identifier](#token-management_instrument-identifier_list-payment-instruments-for-an-instrument-identifier).
    * @summary Delete an Instrument Identifier
    *
-   * @param {string} instrumentIdentifierTokenId The TokenId of a Instrument Identifier.
+   * @param {string} instrumentIdentifierId The Id of an Instrument Identifier.
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    *
    */
-  public deleteInstrumentIdentifier(instrumentIdentifierTokenId: string, opts: { profileId?: string }, callback: ApiCallback) {
+  public deleteInstrumentIdentifier(instrumentIdentifierId: string, opts: { profileId?: string }, callback: ApiCallback) {
     const any = null;
     return this.apiClient.callApi('', '', {}, {}, {}, {}, {}, [], [], [], null, callback);
   }
   /**
-   *
+   * |  |  |  | | --- | --- | --- | |**Instrument Identifiers**<br>An Instrument Identifier represents either a card number, or in the case of an ACH bank account, the routing and account number.<br>The same token Id is returned for a specific card number or bank account & routing number allowing the Instrument Identifier Id to be used for cross-channel payment tracking.<br>An Instrument Identifier can exist independently but also be associated with a [Customer Payment Instrument](#token-management_customer-payment-instrument_create-a-customer-payment-instrument) or [Standalone Payment Instrument](#token-management_payment-instrument_create-a-payment-instrument).<br><br>**Retrieving an Instrument Identifier**<br>Your system can use this API to retrieve an Instrument Identifier.<br>**Note: the actual card data will be masked.**<br>The Instrument Identifier will also be returned when retrieving a [Customer](#token-management_customer_retrieve-a-customer), [Customer Payment Instrument](#token-management_customer-payment-instrument_retrieve-a-customer-payment-instrument) or [Standalone Payment Instrument](#token-management_payment-instrument_retrieve-a-payment-instrument).|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Payment Network Tokens**<br>Network tokens perform better than regular card numbers and they are not necessarily invalidated when a cardholder loses their card, or it expires.<br>A Payment Network Token will be automatically created and used in future payments if you are enabled for the service.<br>A Payment Network Token can also be [provisioned for an existing Instrument Identifier](#token-management_instrument-identifier_enroll-an-instrument-identifier-for-payment-network-token).<br>For more information about Payment Network Tokens see the Developer Guide.<br><br>**Payments with Instrument Identifiers**<br>To perform a payment with an Instrument Identifier simply specify the [Instrument Identifier Id in the payments request along with the expiration date, card type, & billing address](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-using-tokens_authorization-with-instrument-identifier-token-id_liveconsole-tab-request-body).<br>When an Instrument Identifier is used in a payment the **_previousTransactionId_** and **_originalAuthorizedAmount_** values are automatically recorded.<br>These values will be added for you to future Merchant Initiated Transaction payments.
    * @summary Retrieve an Instrument Identifier
    *
-   * @param {string} instrumentIdentifierTokenId The TokenId of a Instrument Identifier.
+   * @param {string} instrumentIdentifierId The Id of an Instrument Identifier.
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    *
    */
-  public getInstrumentIdentifier(instrumentIdentifierTokenId: string, opts: { profileId?: string }, callback: ApiCallback<PostInstrumentIdentifierRequest>) {
+  public getInstrumentIdentifier(instrumentIdentifierId: string, opts: { profileId?: string }, callback: ApiCallback<PostInstrumentIdentifierRequest>) {
     const any = null;
     return this.apiClient.callApi<PostInstrumentIdentifierRequest>('', '', {}, {}, {}, {}, {}, [], [], [], PostInstrumentIdentifierRequest, callback);
   }
   /**
-   *
+   * |  |  |  | | --- | --- | --- | |**Instrument Identifiers**<br>An Instrument Identifier represents either a card number, or in the case of an ACH bank account, the routing <br>and account numbers.<br>The same token Id is returned for a specific card number or bank account & routing number allowing the <br>Instrument Identifier Id to be used for cross-channel payment tracking.<br>An Instrument Identifier can exist independently but also be associated with a [Customer Payment Instrument](#token-management_customer-payment-instrument_create-a-customer-payment-instrument) <br>or [Standalone Payment Instrument](#token-management_payment-instrument_create-a-payment-instrument).|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Retrieving all Payment Instruments associated with an Instrument Identifier**<br>Your system can use this API to retrieve all Payment Instruments linked to an Instrument Identifier.
    * @summary List Payment Instruments for an Instrument Identifier
    *
-   * @param {string} instrumentIdentifierTokenId The TokenId of a Instrument Identifier.
+   * @param {string} instrumentIdentifierId The Id of an Instrument Identifier.
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    * @param {number} opts.offset Starting record in zero-based dataset that should be returned as the first object in the array. Default is 0. (default to 0)
    * @param {number} opts.limit The maximum number that can be returned in the array starting from the offset record in zero-based dataset. Default is 20, maximum is 100. (default to 20)
    *
    */
-  public getInstrumentIdentifierPaymentInstrumentsList(instrumentIdentifierTokenId: string, opts: { profileId?: string; offset?: number; limit?: number }, callback: ApiCallback<PaymentInstrumentList1>) {
+  public getInstrumentIdentifierPaymentInstrumentsList(instrumentIdentifierId: string, opts: { profileId?: string; offset?: number; limit?: number }, callback: ApiCallback<PaymentInstrumentList1>) {
     const any = null;
     return this.apiClient.callApi<PaymentInstrumentList1>('', '', {}, {}, {}, {}, {}, [], [], [], PaymentInstrumentList1, callback);
   }
   /**
-   *
+   * |  |  |  | | --- | --- | --- | |**Instrument Identifiers**<br>An Instrument Identifier represents either a card number, or in the case of an ACH bank account, the routing and account number.<br>The same token Id is returned for a specific card number or bank account & routing number allowing the Instrument Identifier Id to be used for cross-channel payment tracking.<br>An Instrument Identifier can exist independently but also be associated with a [Customer Payment Instrument](#token-management_customer-payment-instrument_create-a-customer-payment-instrument) or [Standalone Payment Instrument](#token-management_payment-instrument_create-a-payment-instrument).|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Updating an Instrument Identifier**<br>When an Instrument Identifier is used in a payment the **_previousTransactionId_** and **_originalAuthorizedAmount_** values are automatically recorded.<br>These values will be added for you to future Merchant Initiated Transaction payments.<br>Your system can use this API to update these values.
    * @summary Update an Instrument Identifier
    *
-   * @param {string} instrumentIdentifierTokenId The TokenId of a Instrument Identifier.
-   * @param {PatchInstrumentIdentifierRequest} patchInstrumentIdentifierRequest Specify the previous transaction ID to update.
+   * @param {string} instrumentIdentifierId The Id of an Instrument Identifier.
+   * @param {PatchInstrumentIdentifierRequest} patchInstrumentIdentifierRequest Specify the previous transaction Id to update.
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    * @param {string} opts.ifMatch Contains an ETag value from a GET request to make the request conditional.
    *
    */
-  public patchInstrumentIdentifier(instrumentIdentifierTokenId: string, patchInstrumentIdentifierRequest: PatchInstrumentIdentifierRequest, opts: { profileId?: string; ifMatch?: string }, callback: ApiCallback<PatchInstrumentIdentifierRequest>) {
+  public patchInstrumentIdentifier(instrumentIdentifierId: string, patchInstrumentIdentifierRequest: PatchInstrumentIdentifierRequest, opts: { profileId?: string; ifMatch?: string }, callback: ApiCallback<PatchInstrumentIdentifierRequest>) {
     const any = null;
     return this.apiClient.callApi<PatchInstrumentIdentifierRequest>('', '', {}, {}, {}, {}, {}, [], [], [], PatchInstrumentIdentifierRequest, callback);
   }
   /**
-   *
+   * |  |  |  | | --- | --- | --- | |**Instrument Identifiers**<br>An Instrument Identifier represents either a card number, or in the case of an ACH bank account, the routing and account number.<br>The same token Id is returned for a specific card number or bank account & routing number allowing the Instrument Identifier Id to be used for cross-channel payment tracking.<br>An Instrument Identifier can exist independently but also be associated with a [Customer Payment Instrument](#token-management_customer-payment-instrument_create-a-customer-payment-instrument) or [Standalone Payment Instrument](#token-management_payment-instrument_create-a-payment-instrument).<br><br>**Creating an Instrument Identifier**<br>It is recommended you [create an Instrument Identifier via a Payment Authorization](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-with-token-create_authorization-with-instrument-identifier-token-creation_liveconsole-tab-request-body), this can be for a zero amount.<br>An Instrument Identifier will also be created if you [create a Customer via a Payment Authorization](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-with-token-create_authorization-with-customer-token-creation_liveconsole-tab-request-body)<br>In Europe: You should perform Payer Authentication alongside the Authorization.|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Payment Network Tokens**<br>Network tokens perform better than regular card numbers and they are not necessarily invalidated when a cardholder loses their card, or it expires.<br>A Payment Network Token will be automatically created and used in future payments if you are enabled for the service.<br>A Payment Network Token can also be [provisioned for an existing Instrument Identifier](#token-management_instrument-identifier_enroll-an-instrument-identifier-for-payment-network-token).<br>For more information about Payment Network Tokens see the Developer Guide.<br><br>**Payments with Instrument Identifiers**<br>To perform a payment with an Instrument Identifier simply specify the [Instrument Identifier Id in the payments request along with the expiration date, card type, & billing address](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-using-tokens_authorization-with-instrument-identifier-token-id_liveconsole-tab-request-body).<br>When an Instrument Identifier is used in a payment the **_previousTransactionId_** and **_originalAuthorizedAmount_** values are automatically recorded.<br>These values will be added for you to future Merchant Initiated Transaction payments.
    * @summary Create an Instrument Identifier
    *
    * @param {PostInstrumentIdentifierRequest} postInstrumentIdentifierRequest Specify either a Card, Bank Account or Enrollable Card
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    *
    */
   public postInstrumentIdentifier(postInstrumentIdentifierRequest: PostInstrumentIdentifierRequest, opts: { profileId?: string }, callback: ApiCallback<PostInstrumentIdentifierRequest>) {
@@ -664,16 +738,16 @@ export class InstrumentIdentifierApi {
     return this.apiClient.callApi<PostInstrumentIdentifierRequest>('', '', {}, {}, {}, {}, {}, [], [], [], PostInstrumentIdentifierRequest, callback);
   }
   /**
+   * |  |  |  | | --- | --- | --- | |**Instrument Identifiers**<br>An Instrument Identifier represents either a card number, or in the case of an ACH bank account, the routing and account number.<br>The same token Id is returned for a specific card number or bank account & routing number allowing the Instrument Identifier Id to be used for cross-channel payment tracking.<br>An Instrument Identifier can exist independently but also be associated with a [Customer Payment Instrument](#token-management_customer-payment-instrument_create-a-customer-payment-instrument) or [Standalone Payment Instrument](#token-management_payment-instrument_create-a-payment-instrument).|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Enroll an Instrument Identifier for a Payment Network Token**<br>Your system can use this API to provision a Network token for an existing Instrument Identifier.<br>Network tokens perform better than regular card numbers and they are not necessarily invalidated when a cardholder loses their card, or it expires.<br>A Network token can be [provisioned when creating an Instrument Identifier](#token-management_instrument-identifier_create-an-instrument-identifier_samplerequests-dropdown_create-instrument-identifier-card-enroll-for-network-token_liveconsole-tab-request-body).This will occur automatically when creating a [Customer](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-with-token-create_authorization-with-customer-token-creation_liveconsole-tab-request-body), [Payment Instrument](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-with-token-create_authorization-create-default-payment-instrument-shipping-address-for-existing-customer_liveconsole-tab-request-body) or [Instrument Identifier](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-with-token-create_authorization-with-instrument-identifier-token-creation_liveconsole-tab-request-body) via the Payments API.<br>For more information about Payment Network Tokens see the Developer Guide.
+   * @summary Enroll an Instrument Identifier for Payment Network Token
    *
-   * @summary Enroll an Instrument Identifier for Network Tokenization
-   *
-   * @param {string} instrumentIdentifierTokenId The TokenId of a Instrument Identifier.
+   * @param {string} instrumentIdentifierId The Id of an Instrument Identifier.
    * @param {PostInstrumentIdentifierEnrollmentRequest} postInstrumentIdentifierEnrollmentRequest Specify Enrollable Card details
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    *
    */
-  public postInstrumentIdentifierEnrollment(instrumentIdentifierTokenId: string, postInstrumentIdentifierEnrollmentRequest: PostInstrumentIdentifierEnrollmentRequest, opts: { profileId?: string }, callback: ApiCallback) {
+  public postInstrumentIdentifierEnrollment(instrumentIdentifierId: string, postInstrumentIdentifierEnrollmentRequest: PostInstrumentIdentifierEnrollmentRequest, opts: { profileId?: string }, callback: ApiCallback) {
     const any = null;
     return this.apiClient.callApi('', '', {}, {}, {}, {}, {}, [], [], [], null, callback);
   }
@@ -801,24 +875,6 @@ export class InvoicesApi {
     return this.apiClient.callApi<InvoicingV2InvoicesPost201Response>('', '', {}, {}, {}, {}, {}, [], [], [], InvoicingV2InvoicesPost201Response, callback);
   }
 }
-export class KeyGenerationApi {
-  apiClient: ApiClient;
-
-  constructor(config: MerchantConfig, apiClient?: ApiClient) {}
-
-  /**
-   * Generate a one-time use public key and key ID to encrypt the card number in the follow-on Tokenize Card request. The key used to encrypt the card number on the cardholder’s device or browser is valid for 15 minutes and must be used to verify the signature in the response message. CyberSource recommends creating a new key for each order. Generating a key is an authenticated request initiated from your servers, prior to requesting to tokenize the card data from your customer’s device or browser.
-   * @summary Generate Key
-   *
-   * @param {string} format Indicator to enable the receipt of the Keys response in Flex 11+ format (JWT) or legacy (parameter not required)
-   * @param {GeneratePublicKeyRequest} generatePublicKeyRequest 
-   
-   */
-  public generatePublicKey(format: string, generatePublicKeyRequest: GeneratePublicKeyRequest, callback: ApiCallback<FlexV1KeysPost200Response>) {
-    const any = null;
-    return this.apiClient.callApi<FlexV1KeysPost200Response>('', '', {}, {}, {}, {}, {}, [], [], [], FlexV1KeysPost200Response, callback);
-  }
-}
 export class KeyManagementApi {
   apiClient: ApiClient;
 
@@ -839,9 +895,9 @@ export class KeyManagementApi {
    * @param {Date} opts.expirationEndDate Expiry Filter End Date. When Expiration Date filter is provided, atleast one more filter needs to be provided
    *
    */
-  public searchKeys(opts: { offset?: number; limit?: number; sort?: string; organizationIds?: Array<string>; keyIds?: Array<string>; keyTypes?: Array<string>; expirationStartDate?: Date; expirationEndDate?: Date }, callback: ApiCallback<InlineResponse200>) {
+  public searchKeys(opts: { offset?: number; limit?: number; sort?: string; organizationIds?: Array<string>; keyIds?: Array<string>; keyTypes?: Array<string>; expirationStartDate?: Date; expirationEndDate?: Date }, callback: ApiCallback<InlineResponse20011>) {
     const any = null;
-    return this.apiClient.callApi<InlineResponse200>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse200, callback);
+    return this.apiClient.callApi<InlineResponse20011>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse20011, callback);
   }
 }
 export class KeyManagementPasswordApi {
@@ -896,6 +952,24 @@ export class KeyManagementScmpApi {
   public updateSCMP(keyId: string, updatePGPKeysRequest: UpdatePGPKeysRequest1, callback: ApiCallback<any>) {
     const any = null;
     return this.apiClient.callApi<any>('', '', {}, {}, {}, {}, {}, [], [], [], any, callback);
+  }
+}
+export class MicroformIntegrationApi {
+  apiClient: ApiClient;
+
+  constructor(config: MerchantConfig, apiClient?: ApiClient) {}
+
+  /**
+   * This API is used to generate the Capture Context data structure for the Microform Integration.  Microform is a browser-based acceptance solution that allows a seller to capture payment information is a secure manner from their website.  For more information about Flex Microform transactions, see the [Flex Developer Guides Page](https://developer.cybersource.com/api/developer-guides/dita-flex/SAFlexibleToken.html). For examples on how to integrate Flex Microform within your webpage please see our [GitHub Flex Samples](https://github.com/CyberSource?q=flex&type=&language=) This API is a server-to-server API to generate the capture context that can be used to initiate instance of microform on a acceptance page.  The capture context is a digitally signed JWT that provides authentication, one-time keys, and the target origin to the Microform Integration application. 
+   * @summary Generate Capture Context
+   *
+   * @param {GenerateCaptureContextRequest} generateCaptureContextRequest 
+   
+   */
+  public generateCaptureContext(generateCaptureContextRequest: GenerateCaptureContextRequest, callback: ApiCallback<string>) {
+    const any = null;
+    const string = String;
+    return this.apiClient.callApi<string>('', '', {}, {}, {}, {}, {}, [], [], [], string, callback);
   }
 }
 export class NetFundingsApi {
@@ -1005,53 +1079,53 @@ export class PaymentInstrumentApi {
   constructor(config: MerchantConfig, apiClient?: ApiClient) {}
 
   /**
-   *
+   * |  |  |  | | --- | --- | --- | |**Standalone Payment Instruments**<br>A Payment Instrument represents tokenized payment information such as expiration date, billing address & card type.<br>A Payment Instrument token does not store the card number. A Payment Instrument is associated with an [Instrument Identifier](#token-management_instrument-identifier_create-an-instrument-identifier) that represents either a payment card number, or in the case of an ACH bank account, the routing and account number.<br>**Standalone Payment Instruments do not belong to a [Customer](#token-management_customer_create-a-customer).**|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Deleting a Payment Instrument**<br>Your system can use this API to delete an existing Payment Instrument.<br>Any Instrument Identifiers representing the card number will also be deleted if they are not associated with any other Payment Instruments.
    * @summary Delete a Payment Instrument
    *
-   * @param {string} paymentInstrumentTokenId The TokenId of a payment instrument.
+   * @param {string} paymentInstrumentId The Id of a payment instrument.
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    *
    */
-  public deletePaymentInstrument(paymentInstrumentTokenId: string, opts: { profileId?: string }, callback: ApiCallback) {
+  public deletePaymentInstrument(paymentInstrumentId: string, opts: { profileId?: string }, callback: ApiCallback) {
     const any = null;
     return this.apiClient.callApi('', '', {}, {}, {}, {}, {}, [], [], [], null, callback);
   }
   /**
-   *
+   * |  |  |  | | --- | --- | --- | |**Standalone Payment Instruments**<br>A Payment Instrument represents tokenized payment information such as expiration date, billing address & card type.<br>A Payment Instrument token does not store the card number. A Payment Instrument is associated with an [Instrument Identifier](#token-management_instrument-identifier_create-an-instrument-identifier) that represents either a payment card number, or in the case of an ACH bank account, the routing and account number.<br>**Standalone Payment Instruments do not belong to a [Customer](#token-management_customer_create-a-customer).**|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Retrieving a Payment Instrument**<br>Your system can use this API to retrieve an existing Payment Instrument.<br>To perform a payment with a particular Payment Instrument simply specify the [Payment Instrument Id in the payments request](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-using-tokens_authorization-with-customer-payment-instrument-and-shipping-address-token-id_liveconsole-tab-request-body).
    * @summary Retrieve a Payment Instrument
    *
-   * @param {string} paymentInstrumentTokenId The TokenId of a payment instrument.
+   * @param {string} paymentInstrumentId The Id of a payment instrument.
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    *
    */
-  public getPaymentInstrument(paymentInstrumentTokenId: string, opts: { profileId?: string }, callback: ApiCallback<PostPaymentInstrumentRequest>) {
+  public getPaymentInstrument(paymentInstrumentId: string, opts: { profileId?: string }, callback: ApiCallback<PostPaymentInstrumentRequest>) {
     const any = null;
     return this.apiClient.callApi<PostPaymentInstrumentRequest>('', '', {}, {}, {}, {}, {}, [], [], [], PostPaymentInstrumentRequest, callback);
   }
   /**
-   *
+   * |  |  |  | | --- | --- | --- | |**Standalone Payment Instruments**<br>A Payment Instrument represents tokenized payment information such as expiration date, billing address & card type.<br>A Payment Instrument token does not store the card number. A Payment Instrument is associated with an [Instrument Identifier](#token-management_instrument-identifier_create-an-instrument-identifier) that represents either a payment card number, or in the case of an ACH bank account, the routing and account number.<br>**Standalone Payment Instruments do not belong to a [Customer](#token-management_customer_create-a-customer).**|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Updating a Payment Instrument**<br>Your system can use this API to update an existing Payment Instrument.
    * @summary Update a Payment Instrument
    *
-   * @param {string} paymentInstrumentTokenId The TokenId of a payment instrument.
+   * @param {string} paymentInstrumentId The Id of a payment instrument.
    * @param {PatchPaymentInstrumentRequest} patchPaymentInstrumentRequest
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    * @param {string} opts.ifMatch Contains an ETag value from a GET request to make the request conditional.
    *
    */
-  public patchPaymentInstrument(paymentInstrumentTokenId: string, patchPaymentInstrumentRequest: PatchPaymentInstrumentRequest, opts: { profileId?: string; ifMatch?: string }, callback: ApiCallback<PatchPaymentInstrumentRequest>) {
+  public patchPaymentInstrument(paymentInstrumentId: string, patchPaymentInstrumentRequest: PatchPaymentInstrumentRequest, opts: { profileId?: string; ifMatch?: string }, callback: ApiCallback<PatchPaymentInstrumentRequest>) {
     const any = null;
     return this.apiClient.callApi<PatchPaymentInstrumentRequest>('', '', {}, {}, {}, {}, {}, [], [], [], PatchPaymentInstrumentRequest, callback);
   }
   /**
-   * Include an existing TMS Instrument Identifier id in the request body. * An Instrument Identifier token can be created by calling: **POST *_/tms/v1/instrumentidentifiers***
+   * |  |  |  | | --- | --- | --- | |**Standalone Payment Instruments**<br>A Payment Instrument represents tokenized payment information such as expiration date, billing address & card type.<br>A Payment Instrument token does not store the card number. A Payment Instrument is associated with an [Instrument Identifier](#token-management_instrument-identifier_create-an-instrument-identifier) that represents either a payment card number, or in the case of an ACH bank account, the routing and account number.<br>**Standalone Payment Instruments do not belong to a [Customer](#token-management_customer_create-a-customer).**<br><br>**Creating a Payment Instrument**<br>It is recommended you [create a Payment Instrument via a Payment Authorization](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-with-token-create_authorization-with-customer-token-creation_liveconsole-tab-request-body), this can be for a zero amount.<br>In Europe: You should perform Payer Authentication alongside the Authorization.|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Payment Network Tokens**<br>Network tokens perform better than regular card numbers and they are not necessarily invalidated when a cardholder loses their card, or it expires.<br>A Payment Network Token will be automatically created and used in future payments if you are enabled for the service.<br>A Payment Network Token can also be [provisioned for an existing Instrument Identifier](#token-management_instrument-identifier_enroll-an-instrument-identifier-for-payment-network-token).<br>For more information about Payment Network Tokens see the Developer Guide.<br><br>**Payments with Payment Instruments**<br>To perform a payment with a particular Payment Instrument specify the [Payment Instrument in the payment request](#payments_payments_process-a-payment_samplerequests-dropdown_authorization-using-tokens_authorization-with-customer-payment-instrument-and-shipping-address-token-id_liveconsole-tab-request-body).
    * @summary Create a Payment Instrument
    *
    * @param {PostPaymentInstrumentRequest} postPaymentInstrumentRequest
    * @param {Object} opts Optional parameters
-   * @param {string} opts.profileId The id of a profile containing user specific TMS configuration.
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
    *
    */
   public postPaymentInstrument(postPaymentInstrumentRequest: PostPaymentInstrumentRequest, opts: { profileId?: string }, callback: ApiCallback<PostPaymentInstrumentRequest>) {
@@ -1115,6 +1189,109 @@ export class PayoutsApi {
   public octCreatePayment(octCreatePaymentRequest: OctCreatePaymentRequest, callback: ApiCallback<PtsV2PayoutsPost201Response>) {
     const any = null;
     return this.apiClient.callApi<PtsV2PayoutsPost201Response>('', '', {}, {}, {}, {}, {}, [], [], [], PtsV2PayoutsPost201Response, callback);
+  }
+}
+export class PlansApi {
+  apiClient: ApiClient;
+
+  constructor(config: MerchantConfig, apiClient?: ApiClient) {}
+
+  /**
+   * Activate a Plan
+   * @summary Activate a Plan
+   *
+   * @param {string} id Plan Id
+   * @param {Object} opts Optional parameters
+   * @param {any} opts.activatePlanRequest
+   *
+   */
+  public activatePlan(id: string, opts: { activatePlanRequest?: any }, callback: ApiCallback<InlineResponse2004>) {
+    const any = null;
+    return this.apiClient.callApi<InlineResponse2004>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse2004, callback);
+  }
+  /**
+   * The recurring billing service enables you to manage payment plans and subscriptions for recurring payment schedules. It securely stores your customer's payment information and personal data within secure Visa data centers, reducing storage risks and PCI DSS scope through the use of *Token Management* (*TMS*).  The three key elements of *Cybersource* Recurring Billing are:  -  **Token**: stores customer billing, shipping, and payment details.  -  **Plan**: stores the billing schedule.  -  **Subscription**: combines the token and plan, and defines the subscription start date, name, and description.  The APIs in this section demonstrate the management of the Plans and Subscriptions. For Tokens please refer to [Token Management](#token-management) 
+   * @summary Create a Plan
+   *
+   * @param {CreatePlanRequest} createPlanRequest 
+   
+   */
+  public createPlan(createPlanRequest: CreatePlanRequest, callback: ApiCallback<InlineResponse201>) {
+    const any = null;
+    return this.apiClient.callApi<InlineResponse201>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse201, callback);
+  }
+  /**
+   * Deactivate a Plan
+   * @summary Deactivate a Plan
+   *
+   * @param {string} id Plan Id
+   * @param {Object} opts Optional parameters
+   * @param {any} opts.deactivatePlanRequest
+   *
+   */
+  public deactivatePlan(id: string, opts: { deactivatePlanRequest?: any }, callback: ApiCallback<InlineResponse2004>) {
+    const any = null;
+    return this.apiClient.callApi<InlineResponse2004>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse2004, callback);
+  }
+  /**
+   * Delete a Plan is only allowed: - plan status is in `DRAFT` - plan status is in `ACTIVE`, and `INACTIVE` only allowed when no subscriptions attached to a plan in the lifetime of a plan 
+   * @summary Delete a Plan
+   *
+   * @param {string} id Plan Id
+   
+   */
+  public deletePlan(id: string, callback: ApiCallback<InlineResponse2002>) {
+    const any = null;
+    return this.apiClient.callApi<InlineResponse2002>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse2002, callback);
+  }
+  /**
+   * Retrieve a Plan details by Plan Id.
+   * @summary Get a Plan
+   *
+   * @param {string} id Plan Id
+   
+   */
+  public getPlan(id: string, callback: ApiCallback<InlineResponse2001>) {
+    const any = null;
+    return this.apiClient.callApi<InlineResponse2001>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse2001, callback);
+  }
+  /**
+   * Get a Unique Plan Code
+   * @summary Get a Plan Code
+   *
+   
+   */
+  public getPlanCode(callback: ApiCallback<InlineResponse2005>) {
+    const any = null;
+    return this.apiClient.callApi<InlineResponse2005>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse2005, callback);
+  }
+  /**
+   * Retrieve Plans by Plan Code & Plan Status.
+   * @summary Get a List of Plans
+   *
+   * @param {Object} opts Optional parameters
+   * @param {number} opts.offset Page offset number.
+   * @param {number} opts.limit Number of items to be returned. Default - &#x60;20&#x60;, Max - &#x60;100&#x60;
+   * @param {string} opts.code Filter by Plan Code
+   * @param {string} opts.status Filter by Plan Status
+   * @param {string} opts.name Filter by Plan Name. (First sub string or full string) **[Not Recommended]**
+   *
+   */
+  public getPlans(opts: { offset?: number; limit?: number; code?: string; status?: string; name?: string }, callback: ApiCallback<InlineResponse200>) {
+    const any = null;
+    return this.apiClient.callApi<InlineResponse200>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse200, callback);
+  }
+  /**
+   * Update a Plan  Plan in `DRAFT` status - All updates are allowed on Plan with `DRAFT` status  Plan in `ACTIVE` status [Following fields are **Not Updatable**] - `planInformation.billingPeriod` - `planInformation.billingCycles` [Update is only allowed to **increase** billingCycles] - `orderInformation.amountDetails.currency` 
+   * @summary Update a Plan
+   *
+   * @param {string} id Plan Id
+   * @param {UpdatePlanRequest} updatePlanRequest 
+   
+   */
+  public updatePlan(id: string, updatePlanRequest: UpdatePlanRequest, callback: ApiCallback<InlineResponse2003>) {
+    const any = null;
+    return this.apiClient.callApi<InlineResponse2003>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse2003, callback);
   }
 }
 export class PurchaseAndRefundDetailsApi {
@@ -1502,6 +1679,110 @@ export class SecureFileShareApi {
     return this.apiClient.callApi<V1FileDetailsGet200Response>('', '', {}, {}, {}, {}, {}, [], [], [], V1FileDetailsGet200Response, callback);
   }
 }
+export class SubscriptionsApi {
+  apiClient: ApiClient;
+
+  constructor(config: MerchantConfig, apiClient?: ApiClient) {}
+
+  /**
+   * Activate a `CANCELLED` Or `SUSPENDED` Subscription
+   * @summary Activate a Subscription
+   *
+   * @param {string} id Subscription Id
+   * @param {Object} opts Optional parameters
+   * @param {any} opts.activateSubscriptionRequest
+   *
+   */
+  public activateSubscription(id: string, opts: { activateSubscriptionRequest?: any }, callback: ApiCallback<InlineResponse2009>) {
+    const any = null;
+    return this.apiClient.callApi<InlineResponse2009>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse2009, callback);
+  }
+  /**
+   * Cancel a Subscription
+   * @summary Cancel a Subscription
+   *
+   * @param {string} id Subscription Id
+   * @param {Object} opts Optional parameters
+   * @param {any} opts.cancelSubscriptionRequest
+   *
+   */
+  public cancelSubscription(id: string, opts: { cancelSubscriptionRequest?: any }, callback: ApiCallback<InlineResponse202>) {
+    const any = null;
+    return this.apiClient.callApi<InlineResponse202>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse202, callback);
+  }
+  /**
+   * Create a Recurring Billing Subscription
+   * @summary Create a Subscription
+   *
+   * @param {CreateSubscriptionRequest} createSubscriptionRequest 
+   
+   */
+  public createSubscription(createSubscriptionRequest: CreateSubscriptionRequest, callback: ApiCallback<InlineResponse2011>) {
+    const any = null;
+    return this.apiClient.callApi<InlineResponse2011>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse2011, callback);
+  }
+  /**
+   * Retrieve Subscriptions by Subscription Code & Subscription Status.
+   * @summary Get a List of Subscriptions
+   *
+   * @param {Object} opts Optional parameters
+   * @param {number} opts.offset Page offset number.
+   * @param {number} opts.limit Number of items to be returned. Default - &#x60;20&#x60;, Max - &#x60;100&#x60;
+   * @param {string} opts.code Filter by Subscription Code
+   * @param {string} opts.status Filter by Subscription Status
+   *
+   */
+  public getAllSubscriptions(opts: { offset?: number; limit?: number; code?: string; status?: string }, callback: ApiCallback<InlineResponse2006>) {
+    const any = null;
+    return this.apiClient.callApi<InlineResponse2006>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse2006, callback);
+  }
+  /**
+   * Get a Subscription by Subscription Id
+   * @summary Get a Subscription
+   *
+   * @param {string} id Subscription Id
+   
+   */
+  public getSubscription(id: string, callback: ApiCallback<InlineResponse2007>) {
+    const any = null;
+    return this.apiClient.callApi<InlineResponse2007>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse2007, callback);
+  }
+  /**
+   * Get a Unique Subscription Code
+   * @summary Get a Subscription Code
+   *
+   
+   */
+  public getSubscriptionCode(callback: ApiCallback<InlineResponse20010>) {
+    const any = null;
+    return this.apiClient.callApi<InlineResponse20010>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse20010, callback);
+  }
+  /**
+   * Suspend a Subscription
+   * @summary Suspend a Subscription
+   *
+   * @param {string} id Subscription Id
+   * @param {Object} opts Optional parameters
+   * @param {any} opts.suspendSubscriptionRequest
+   *
+   */
+  public suspendSubscription(id: string, opts: { suspendSubscriptionRequest?: any }, callback: ApiCallback<InlineResponse2021>) {
+    const any = null;
+    return this.apiClient.callApi<InlineResponse2021>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse2021, callback);
+  }
+  /**
+   * Update a Subscription by Subscription Id
+   * @summary Update a Subscription
+   *
+   * @param {string} id Subscription Id
+   * @param {UpdateSubscription} updateSubscription Update Subscription
+   
+   */
+  public updateSubscription(id: string, updateSubscription: UpdateSubscription, callback: ApiCallback<InlineResponse2008>) {
+    const any = null;
+    return this.apiClient.callApi<InlineResponse2008>('', '', {}, {}, {}, {}, {}, [], [], [], InlineResponse2008, callback);
+  }
+}
 export class SymmetricKeyManagementApi {
   apiClient: ApiClient;
 
@@ -1559,7 +1840,7 @@ export class TaxesApi {
   constructor(config: MerchantConfig, apiClient?: ApiClient) {}
 
   /**
-   * Get tax details for a transaction. 
+   * The tax calculation service provides real-time sales tax and VAT calculations for orders placed with your business worldwide.  It enhances your ability to conduct business globally and enables you to avoid the risk and complexity of managing online tax calculation.  The service supports product-based tax rules and exemptions for goods and services.  The tax rates are updated twice a month and calculations include sub-level detail (rates per taxing jurisdiction, names and types of jurisdictions). Implementation guidance, list of supported countries, and information on tax reporting are in the [Tax User Guide](https://developer.cybersource.com/docs/cybs/en-us/tax-calculation/developer/all/rest/tax-calculation/tax-overview.html). 
    * @summary Calculate Taxes
    *
    * @param {TaxRequest} taxRequest 
@@ -1582,21 +1863,24 @@ export class TaxesApi {
     return this.apiClient.callApi<VasV2TaxVoid200Response>('', '', {}, {}, {}, {}, {}, [], [], [], VasV2TaxVoid200Response, callback);
   }
 }
-export class TokenizationApi {
+export class TokenApi {
   apiClient: ApiClient;
 
   constructor(config: MerchantConfig, apiClient?: ApiClient) {}
 
   /**
-   * Returns a token representing the supplied card details. The token replaces card data and can be used as the Subscription ID in the CyberSource Simple Order API or SCMP API. This is an unauthenticated call that you should initiate from your customer’s device or browser.
-   * @summary Tokenize Card
+   * |  |  |  |     | --- | --- | --- |     |**Token**<br>A Token can represent your tokenized Customer, Payment Instrument or Instrument Identifier information.|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|**Payment Credentials**<br>Contains payment information such as the network token, generated cryptogram for Visa & MasterCard or dynamic CVV for Amex in a JSON Web Encryption (JWE) response.<br>Your system can use this API to retrieve the Payment Credentials for an existing Customer, Payment Instrument or Instrument Identifier.
+   * @summary Generate Payment Credentials for a TMS Token
    *
-   * @param {TokenizeRequest} tokenizeRequest 
-   
+   * @param {string} tokenId The Id of a token representing a Customer, Payment Instrument or Instrument Identifier.
+   * @param {Object} opts Optional parameters
+   * @param {string} opts.profileId The Id of a profile containing user specific TMS configuration.
+   *
    */
-  public tokenize(tokenizeRequest: TokenizeRequest, callback: ApiCallback<FlexV1TokensPost200Response>) {
+  public postTokenPaymentCredentials(tokenId: string, opts: { profileId?: string }, callback: ApiCallback<string>) {
     const any = null;
-    return this.apiClient.callApi<FlexV1TokensPost200Response>('', '', {}, {}, {}, {}, {}, [], [], [], FlexV1TokensPost200Response, callback);
+    const string = String;
+    return this.apiClient.callApi<string>('', '', {}, {}, {}, {}, {}, [], [], [], string, callback);
   }
 }
 export class TransactionBatchesApi {
@@ -1665,7 +1949,7 @@ export class TransientTokenDataApi {
   constructor(config: MerchantConfig, apiClient?: ApiClient) {}
 
   /**
-   * Retrieve the data captured by Unfied Checkout. This API is used to retrieve the detailed data represented by the Transient Token. This API will not return PCI payment data (PAN). Include the Request ID in the GET request to retrieve the transaction details.
+   * Retrieve the data captured by Unified Checkout. This API is used to retrieve the detailed data represented by the Transient Token. This API will not return PCI payment data (PAN). Include the Request ID in the GET request to retrieve the transaction details.
    * @summary Get Transient Token Data
    *
    * @param {string} transientToken Transient Token returned by the Unified Checkout application. 
@@ -1682,15 +1966,16 @@ export class UnifiedCheckoutCaptureContextApi {
   constructor(config: MerchantConfig, apiClient?: ApiClient) {}
 
   /**
-   * Generate a one-time use capture context used for the invocation of Unified Checkout. The Request wil contain all of the paramiters for how Unified Chkcout will operate within a client webpage. The resulting payload will be a JWT signed object that can be used to initate Unified Checkout within a merchnat web page
+   * Generate a one-time use capture context used for the invocation of Unified Checkout. The Request wil contain all of the parameters for how Unified Checkout will operate within a client webpage. The resulting payload will be a JWT signed object that can be used to initiate Unified Checkout within a merchant web page
    * @summary Generate Unified Checkout Capture Context
    *
    * @param {GenerateUnifiedCheckoutCaptureContextRequest} generateUnifiedCheckoutCaptureContextRequest 
    
    */
-  public generateUnifiedCheckoutCaptureContext(generateUnifiedCheckoutCaptureContextRequest: GenerateUnifiedCheckoutCaptureContextRequest, callback: ApiCallback) {
+  public generateUnifiedCheckoutCaptureContext(generateUnifiedCheckoutCaptureContextRequest: GenerateUnifiedCheckoutCaptureContextRequest, callback: ApiCallback<string>) {
     const any = null;
-    return this.apiClient.callApi('', '', {}, {}, {}, {}, {}, [], [], [], null, callback);
+    const string = String;
+    return this.apiClient.callApi<string>('', '', {}, {}, {}, {}, {}, [], [], [], string, callback);
   }
 }
 export class UserManagementApi {
